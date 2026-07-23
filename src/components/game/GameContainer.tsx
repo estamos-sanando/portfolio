@@ -48,12 +48,12 @@ export default function GameContainer() {
     // ---- Load Character Sprites ----
     const sideImg = new window.Image();
     sideImg.src = "/side_clean.png?v=9";
-    let sideLoaded = false;
+    let sideLoaded = sideImg.complete;
     sideImg.onload = () => { sideLoaded = true; };
 
     const idleImg = new window.Image();
     idleImg.src = "/idle_front.png?v=9";
-    let idleLoaded = false;
+    let idleLoaded = idleImg.complete;
     idleImg.onload = () => { idleLoaded = true; };
 
     // ---- Player State ----
@@ -117,18 +117,46 @@ export default function GameContainer() {
 
     // ---- Keyboard Input ----
     const keys: Record<string, boolean> = {};
+    const clearKeys = () => {
+      for (const k in keys) {
+        keys[k] = false;
+      }
+    };
+
     const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) {
+        return;
+      }
+
       keys[e.key] = true;
-      if (e.key === "e" || e.key === "E") {
+      if (e.key) keys[e.key.toLowerCase()] = true;
+      if (e.code) keys[e.code] = true;
+
+      if (e.key === "e" || e.key === "E" || e.code === "KeyE") {
         handleInteraction();
       }
-      if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","w","a","s","d"].includes(e.key)) {
+      if (
+        ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "w", "a", "s", "d", "W", "A", "S", "D"].includes(e.key) ||
+        ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyW", "KeyA", "KeyS", "KeyD"].includes(e.code)
+      ) {
         e.preventDefault();
       }
     };
-    const handleKeyUp = (e: KeyboardEvent) => { keys[e.key] = false; };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      keys[e.key] = false;
+      if (e.key) keys[e.key.toLowerCase()] = false;
+      if (e.code) keys[e.code] = false;
+    };
+
+    const handleBlur = () => {
+      clearKeys();
+    };
+
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
+    window.addEventListener("blur", handleBlur);
 
     // ---- Interaction ----
     function handleInteraction() {
@@ -333,20 +361,25 @@ export default function GameContainer() {
       // ---- Update player ----
       let dx = 0, dy = 0;
 
-      if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
+      const isLeft = !!(keys["ArrowLeft"] || keys["a"] || keys["A"] || keys["KeyA"]);
+      const isRight = !!(keys["ArrowRight"] || keys["d"] || keys["D"] || keys["KeyD"]);
+      const isUp = !!(keys["ArrowUp"] || keys["w"] || keys["W"] || keys["KeyW"]);
+      const isDown = !!(keys["ArrowDown"] || keys["s"] || keys["S"] || keys["KeyS"]);
+
+      if (isLeft && !isRight) {
         dx = -1;
         player.facing = "left";
-      } else if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
+      } else if (isRight && !isLeft) {
         dx = 1;
         player.facing = "right";
       }
 
-      if (keys["ArrowUp"] || keys["w"] || keys["W"]) {
+      if (isUp && !isDown) {
         dy = -1;
         if (player.facing !== "left" && player.facing !== "right") {
           player.facing = "right";
         }
-      } else if (keys["ArrowDown"] || keys["s"] || keys["S"]) {
+      } else if (isDown && !isUp) {
         dy = 1;
         if (player.facing !== "left" && player.facing !== "right") {
           player.facing = "right";
@@ -416,6 +449,7 @@ export default function GameContainer() {
       }
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
+      window.removeEventListener("blur", handleBlur);
       window.removeEventListener("resize", resize);
     };
   }, [gameStarted, isMuted]);
