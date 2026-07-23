@@ -316,7 +316,7 @@ export default function GameContainer() {
           // Label
           ctx!.fillStyle = "#FFF8EF";
           ctx!.font = `8px 'Press Start 2P'`;
-          ctx!.fillText(obj.label, hx + 8, hy + 2);
+          ctx!.fillText(obj.label || "", hx + 8, hy + 2);
 
           if (nearObjectRef.current !== obj.id) {
             nearObjectRef.current = obj.id;
