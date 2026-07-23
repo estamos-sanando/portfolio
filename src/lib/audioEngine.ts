@@ -5,12 +5,28 @@
 
 let audioCtx: AudioContext | null = null;
 let isMuted = false;
+let noiseBuffer: AudioBuffer | null = null;
 
 function getCtx(): AudioContext {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
   }
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume().catch(() => {});
+  }
   return audioCtx;
+}
+
+function getNoiseBuffer(ctx: AudioContext): AudioBuffer {
+  if (!noiseBuffer) {
+    const bufferSize = ctx.sampleRate * 0.2; // 200ms noise buffer
+    noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+  }
+  return noiseBuffer;
 }
 
 function playTone(
@@ -47,12 +63,7 @@ function playNoise(duration: number, gainValue = 0.05, delay = 0): void {
   if (isMuted) return;
   try {
     const ctx = getCtx();
-    const bufferSize = ctx.sampleRate * duration;
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = Math.random() * 2 - 1;
-    }
+    const buffer = getNoiseBuffer(ctx);
     const source = ctx.createBufferSource();
     source.buffer = buffer;
 

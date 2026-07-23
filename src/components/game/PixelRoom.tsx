@@ -21,6 +21,8 @@ export default function PixelRoom() {
         src="/room_bg.jpg"
         alt="Room Background"
         fill
+        sizes="100vw"
+        quality={85}
         style={{
           objectFit: "cover",
           objectPosition: "center bottom",

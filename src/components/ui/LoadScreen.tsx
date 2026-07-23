@@ -30,6 +30,21 @@ export default function LoadScreen() {
     );
   }, []);
 
+  // Preload essential assets into memory
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const imagesToPreload = [
+      "/room_bg.jpg",
+      "/side_clean.png?v=9",
+      "/idle_front.png?v=9",
+      "/antonella.png",
+    ];
+    imagesToPreload.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   // Simulated loading sequence
   useEffect(() => {
     if (!isLoading) return;

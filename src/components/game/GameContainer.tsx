@@ -72,48 +72,34 @@ export default function GameContainer() {
       footstepTimer: 0,
     };
 
-    // ---- Room Objects (collision + interaction zones) ----
-    const W = () => canvas.width;
-    const H = () => canvas.height;
+    // ---- Room Objects & Interactables Cache ----
+    let roomObjects: RoomObject[] = [];
+    let interactables: RoomObject[] = [];
 
-    const getRoomObjects = (): RoomObject[] => [
-      // Left wall
-      { id: "wall_left", x: 0, y: 0, w: W() * 0.04, h: H() },
-      // Right wall
-      { id: "wall_right", x: W() * 0.96, y: 0, w: W() * 0.04, h: H() },
-      // Top wall (now taking 70% of screen)
-      { id: "wall_top", x: 0, y: 0, w: W(), h: H() * 0.72 },
-      // Floor bottom limit
-      { id: "floor_bottom", x: 0, y: H() * 0.95, w: W(), h: H() * 0.05 },
-    ];
+    const updateObjects = () => {
+      const w = canvas.width;
+      const h = canvas.height;
+      roomObjects = [
+        { id: "wall_left", x: 0, y: 0, w: w * 0.04, h: h },
+        { id: "wall_right", x: w * 0.96, y: 0, w: w * 0.04, h: h },
+        { id: "wall_top", x: 0, y: 0, w: w, h: h * 0.72 },
+        { id: "floor_bottom", x: 0, y: h * 0.95, w: w, h: h * 0.05 },
+      ];
+      interactables = [
+        { id: "phone", x: w * 0.28, y: h * 0.70, w: w * 0.12, h: h * 0.30, label: "CELULAR" },
+        { id: "computer", x: w * 0.45, y: h * 0.70, w: w * 0.30, h: h * 0.30, label: "COMPUTADORA" },
+        { id: "door", x: w * 0.85, y: h * 0.70, w: w * 0.12, h: h * 0.30, label: "PUERTA" },
+      ];
+    };
 
-    // ---- Interactable Zones ----
-    const getInteractables = () => [
-      {
-        id: "phone", // Nightstand left of center
-        x: W() * 0.28,
-        y: H() * 0.70,
-        w: W() * 0.12,
-        h: H() * 0.30,
-        label: "CELULAR",
-      },
-      {
-        id: "computer", // Desk center
-        x: W() * 0.45,
-        y: H() * 0.70,
-        w: W() * 0.30,
-        h: H() * 0.30,
-        label: "COMPUTADORA",
-      },
-      {
-        id: "door", // Door on the right
-        x: W() * 0.85,
-        y: H() * 0.70,
-        w: W() * 0.12,
-        h: H() * 0.30,
-        label: "PUERTA",
-      }
-    ];
+    // Resize canvas & update objects
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      updateObjects();
+    };
+    resize();
+    window.addEventListener("resize", resize);
 
     // ---- Keyboard Input ----
     const keys: Record<string, boolean> = {};
@@ -160,8 +146,8 @@ export default function GameContainer() {
 
     // ---- Interaction ----
     function handleInteraction() {
-      const ints = getInteractables();
-      for (const obj of ints) {
+      for (let i = 0; i < interactables.length; i++) {
+        const obj = interactables[i];
         const dist = Math.hypot(
           player.x + player.w / 2 - (obj.x + obj.w / 2),
           player.y + player.h / 2 - (obj.y + obj.h / 2)
@@ -178,9 +164,9 @@ export default function GameContainer() {
 
     // ---- Collision Detection ----
     function checkCollision(nx: number, ny: number): boolean {
-      const objs = getRoomObjects();
       const margin = 4;
-      for (const obj of objs) {
+      for (let i = 0; i < roomObjects.length; i++) {
+        const obj = roomObjects[i];
         if (
           nx + margin < obj.x + obj.w &&
           nx + player.w - margin > obj.x &&
@@ -208,7 +194,8 @@ export default function GameContainer() {
     }
 
     function updateParticles() {
-      for (const p of particles) {
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
         p.x += p.vx;
         p.y += p.vy;
         p.life++;
@@ -225,6 +212,7 @@ export default function GameContainer() {
     function drawCharacter() {
       const px = player.x;
       const py = player.y;
+      const now = performance.now();
       ctx!.save();
 
       // Shadow
@@ -241,7 +229,7 @@ export default function GameContainer() {
       // ---- Render Character ----
       if (player.isMoving && sideLoaded) {
         // High-definition side illustration with smooth 2D walk bounce & tilt
-        const walkPhase = (Date.now() / 120) % (Math.PI * 2);
+        const walkPhase = (now / 120) % (Math.PI * 2);
         const stepBob = Math.abs(Math.sin(walkPhase)) * 8; // step bounce
         const tiltAngle = (player.facing === "left" ? -1 : 1) * Math.sin(walkPhase) * 0.035; // natural stride tilt
 
@@ -250,7 +238,7 @@ export default function GameContainer() {
         const totalFrames = 2;
         const frameW = sideImg.width / totalFrames;
         const frameH = sideImg.height;
-        const frameIdx = Math.floor((Date.now() / 150) % totalFrames);
+        const frameIdx = Math.floor((now / 150) % totalFrames);
         const frameX = frameIdx * frameW;
 
         const targetHeight = 449; 
@@ -272,7 +260,7 @@ export default function GameContainer() {
         ctx!.restore();
       } else if (!player.isMoving && idleLoaded) {
         // Idle front-facing pose with subtle breathing animation
-        const breatheBob = Math.sin(Date.now() / 450) * 2;
+        const breatheBob = Math.sin(now / 450) * 2;
         const targetHeight = 460;
         const dh = targetHeight;
         const dw = dh * (idleImg.width / idleImg.height);
@@ -295,17 +283,20 @@ export default function GameContainer() {
 
     // ---- Draw Particles ----
     function drawParticles() {
-      for (const p of particles) {
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
         const alpha = Math.sin((p.life / p.maxLife) * Math.PI) * 0.4;
-        ctx!.fillStyle = p.color + Math.round(alpha * 255).toString(16).padStart(2, "0");
+        ctx!.globalAlpha = alpha;
+        ctx!.fillStyle = p.color;
         ctx!.fillRect(Math.round(p.x), Math.round(p.y), 2, 2);
       }
+      ctx!.globalAlpha = 1.0;
     }
 
     // ---- Draw Hint Labels ----
     function drawHints() {
-      const ints = getInteractables();
-      for (const obj of ints) {
+      for (let i = 0; i < interactables.length; i++) {
+        const obj = interactables[i];
         const dist = Math.hypot(
           player.x + player.w / 2 - (obj.x + obj.w / 2),
           player.y + player.h / 2 - (obj.y + obj.h / 2)
