@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useGameStore } from "@/hooks/useGameStore";
 import { useAudio } from "@/hooks/useAudio";
@@ -299,10 +299,24 @@ function DoorWindow({ onClose }: { onClose: () => void }) {
 }
 
 export default function HomePage() {
-  const { gameStarted, openWindows, openWindow, closeWindow } = useGameStore();
+  const { gameStarted, openWindows, openWindow, closeWindow, closeAllWindows } = useGameStore();
   const { play } = useAudio();
   const [showHowTo, setShowHowTo] = useState(true);
   const [bootPC, setBootPC] = useState(false);
+
+  // Close all windows on ESC key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || e.code === "Escape") {
+        if (openWindows.length > 0) {
+          closeAllWindows();
+          play("closeWindow");
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [openWindows.length, closeAllWindows, play]);
 
   const handleOpenComputer = () => {
     if (!bootPC) {
@@ -404,12 +418,16 @@ export default function HomePage() {
           {/* Scrim when windows are open */}
           {openWindows.length > 0 && (
             <div
+              onClick={() => {
+                closeAllWindows();
+                play("closeWindow");
+              }}
               style={{
                 position: "fixed",
                 inset: 0,
                 background: "rgba(0,0,0,0.2)",
                 zIndex: 15,
-                pointerEvents: "none",
+                cursor: "pointer",
               }}
             />
           )}
