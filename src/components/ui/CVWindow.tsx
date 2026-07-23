@@ -125,7 +125,7 @@ export default function CVWindow({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* ACTION BAR */}
-        <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
+        <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", flexWrap: "wrap" }}>
           <button
             onClick={handleCopyEmail}
             style={{
@@ -144,8 +144,11 @@ export default function CVWindow({ onClose }: { onClose: () => void }) {
           >
             {copied ? "✓ Email Copiado!" : "📋 Copiar Email"}
           </button>
-          <button
-            onClick={handlePrint}
+          <a
+            href="/CV_Antonella_Costa.pdf"
+            download="CV_Antonella_Costa.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               padding: "6px 14px",
               background: "linear-gradient(135deg, var(--px-rose-dark), var(--px-violet-dark))",
@@ -159,9 +162,28 @@ export default function CVWindow({ onClose }: { onClose: () => void }) {
               alignItems: "center",
               gap: 6,
               boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+              textDecoration: "none",
             }}
           >
-            🖨️ Imprimir / PDF
+            📥 Descargar CV (PDF)
+          </a>
+          <button
+            onClick={handlePrint}
+            style={{
+              padding: "6px 14px",
+              background: "var(--px-beige)",
+              border: "1px solid var(--px-beige-dark)",
+              borderRadius: 8,
+              color: "var(--px-dark)",
+              fontSize: "12px",
+              fontWeight: 600,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+            }}
+          >
+            🖨️ Imprimir
           </button>
         </div>
 
