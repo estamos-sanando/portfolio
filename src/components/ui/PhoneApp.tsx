@@ -4,10 +4,13 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGameStore } from "@/hooks/useGameStore";
 import { useAudio } from "@/hooks/useAudio";
+import CVWindow from "./CVWindow";
 
 // ---- App Screens ----
 
 function SobreMiScreen() {
+  const [showCV, setShowCV] = useState(false);
+
   return (
     <div style={{ padding: "20px 24px", background: "var(--px-cream)", minHeight: "100%" }}>
       <div style={{ display: "flex", gap: "24px", alignItems: "flex-start" }}>
@@ -119,11 +122,38 @@ function SobreMiScreen() {
           <p style={{ marginBottom: 12 }}>
             Me especializo en transformar ideas en proyectos con impacto real, combinando sensibilidad estética, pensamiento estratégico y el dominio de herramientas digitales avanzadas e Inteligencia Artificial.
           </p>
-          <p>
+          <p style={{ marginBottom: 16 }}>
             Me destaco por entender a las personas, generar contenido auténtico, visual y funcional, y liderar proyectos completos desde la conceptualización inicial hasta su ejecución final.
           </p>
+
+          <button
+            onClick={() => setShowCV(true)}
+            style={{
+              width: "100%",
+              padding: "10px 14px",
+              background: "linear-gradient(135deg, var(--px-rose-dark), var(--px-violet-dark))",
+              border: "none",
+              borderRadius: "10px",
+              color: "white",
+              fontFamily: "var(--font-pixel)",
+              fontSize: "11px",
+              fontWeight: 700,
+              cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+            }}
+          >
+            📄 Ver Curriculum Vitae Completo
+          </button>
         </div>
       </div>
+
+      <AnimatePresence>
+        {showCV && <CVWindow onClose={() => setShowCV(false)} />}
+      </AnimatePresence>
     </div>
   );
 }

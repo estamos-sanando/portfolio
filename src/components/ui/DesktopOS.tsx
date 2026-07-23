@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAudio } from "@/hooks/useAudio";
 import PixelWindow from "./PixelWindow";
+import CVWindow from "./CVWindow";
 
 // ---- Project Definitions ----
 const PROJECTS = [
@@ -621,10 +622,11 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
   }, []);
 
   const FOLDERS = [
-    { id: "aplicaciones", label: "Aplicaciones", icon: "📁", x: 20, y: 20 },
-    { id: "estamos_sanando", label: "Estamos Sanando", icon: "📁", x: 100, y: 20 },
+    { id: "cv", label: "Curriculum Vitae", icon: "📄", x: 20, y: 20 },
+    { id: "aplicaciones", label: "Aplicaciones", icon: "📁", x: 110, y: 20 },
+    { id: "estamos_sanando", label: "Estamos Sanando", icon: "📁", x: 200, y: 20 },
     { id: "spot", label: "Spot Publicitario", icon: "📁", x: 20, y: 110 },
-    { id: "contenido", label: "Creación de Contenido", icon: "📁", x: 100, y: 110 },
+    { id: "contenido", label: "Creación de Contenido", icon: "📁", x: 110, y: 110 },
   ];
 
   const openFolderHandler = (id: string) => {
@@ -654,67 +656,96 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
             pointerEvents: "auto",
             position: "relative",
             height: 480,
-          zIndex: 40,
-          display: "flex",
-          flexDirection: "column",
-          boxShadow: "8px 8px 0 rgba(0,0,0,0.6)",
-        }}
-      >
-        {/* Title bar */}
-        <div
-          style={{
-            background: "linear-gradient(90deg, #000080, #1084D0)",
-            color: "white",
-            padding: "4px 8px",
+            zIndex: 40,
             display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            fontFamily: "VT323, monospace",
-            fontSize: 16,
-            cursor: "default",
-            userSelect: "none",
+            flexDirection: "column",
+            boxShadow: "8px 8px 0 rgba(0,0,0,0.6)",
           }}
         >
-          <span>💻 Mi Computadora — Portfolio</span>
-          <button
-            onClick={onClose}
+          {/* Title bar */}
+          <div
             style={{
-              width: 16,
-              height: 14,
-              background: "#C0C0C0",
-              border: "1px solid #fff",
-              borderRightColor: "#5F5F5F",
-              borderBottomColor: "#5F5F5F",
-              cursor: "pointer",
-              fontSize: 10,
+              background: "linear-gradient(90deg, #000080, #1084D0)",
+              color: "white",
+              padding: "4px 8px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
               fontFamily: "VT323, monospace",
-              color: "#000",
+              fontSize: 16,
+              cursor: "default",
+              userSelect: "none",
             }}
           >
-            ✕
-          </button>
-        </div>
-
-        {/* Desktop area */}
-        <div
-          className="win95-desktop"
-          style={{
-            flex: 1,
-            background: "linear-gradient(135deg, #3D8B99 0%, #2D6B77 100%)",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          {/* Folders */}
-          {FOLDERS.map((folder) => (
+            <span>💻 Mi Computadora — Portfolio</span>
             <button
-              key={folder.id}
-              onDoubleClick={() => openFolderHandler(folder.id)}
-              onClick={() => play("click")}
+              onClick={onClose}
+              style={{
+                width: 16,
+                height: 14,
+                background: "#C0C0C0",
+                border: "1px solid #fff",
+                borderRightColor: "#5F5F5F",
+                borderBottomColor: "#5F5F5F",
+                cursor: "pointer",
+                fontSize: 10,
+                fontFamily: "VT323, monospace",
+                color: "#000",
+              }}
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* Desktop area */}
+          <div
+            className="win95-desktop"
+            style={{
+              flex: 1,
+              background: "linear-gradient(135deg, #3D8B99 0%, #2D6B77 100%)",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            {/* Folders */}
+            {FOLDERS.map((folder) => (
+              <button
+                key={folder.id}
+                onDoubleClick={() => openFolderHandler(folder.id)}
+                onClick={() => play("click")}
+                style={{
+                  position: "absolute",
+                  left: folder.x,
+                  top: folder.y,
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 4,
+                  padding: "6px",
+                  color: "white",
+                  fontFamily: "VT323, monospace",
+                  fontSize: 14,
+                  textShadow: "1px 1px 2px rgba(0,0,0,0.8)",
+                  width: 76,
+                }}
+                title="Doble clic para abrir"
+              >
+                <div style={{ fontSize: 36 }}>{folder.icon}</div>
+                <span style={{ textAlign: "center", lineHeight: 1.3 }}>
+                  {folder.label}
+                </span>
+              </button>
+            ))}
+
+            {/* Recycle bin */}
+            <button
               style={{
                 position: "absolute",
-                left: folder.x,
-                top: folder.y,
+                right: 16,
+                bottom: 40,
                 background: "none",
                 border: "none",
                 cursor: "pointer",
@@ -722,78 +753,52 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
                 flexDirection: "column",
                 alignItems: "center",
                 gap: 4,
-                padding: "6px",
                 color: "white",
                 fontFamily: "VT323, monospace",
                 fontSize: 14,
                 textShadow: "1px 1px 2px rgba(0,0,0,0.8)",
-                width: 76,
               }}
-              title="Doble clic para abrir"
             >
-              <div style={{ fontSize: 36 }}>📁</div>
-              <span style={{ textAlign: "center", lineHeight: 1.3 }}>
-                {folder.label}
-              </span>
+              <div style={{ fontSize: 36 }}>🗑️</div>
+              <span>Papelera</span>
             </button>
-          ))}
-
-          {/* Recycle bin */}
-          <button
-            style={{
-              position: "absolute",
-              right: 16,
-              bottom: 40,
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 4,
-              color: "white",
-              fontFamily: "VT323, monospace",
-              fontSize: 14,
-              textShadow: "1px 1px 2px rgba(0,0,0,0.8)",
-            }}
-          >
-            <div style={{ fontSize: 36 }}>🗑️</div>
-            <span>Papelera</span>
-          </button>
-        </div>
-
-        {/* Taskbar */}
-        <div className="win95-taskbar">
-          <button className="win95-start-btn">
-            ⊞ Inicio
-          </button>
-          <div
-            style={{
-              flex: 1,
-              height: "100%",
-              borderLeft: "1px solid #fff",
-              borderRight: "1px solid #5F5F5F",
-              margin: "0 4px",
-            }}
-          />
-          <div
-            style={{
-              background: "#C0C0C0",
-              border: "1px inset #999",
-              padding: "2px 8px",
-              fontFamily: "VT323, monospace",
-              fontSize: 16,
-              color: "#000",
-            }}
-          >
-            {time || "21:47"}
           </div>
-        </div>
-      </motion.div>
-    </div>
+
+          {/* Taskbar */}
+          <div className="win95-taskbar">
+            <button className="win95-start-btn">
+              ⊞ Inicio
+            </button>
+            <div
+              style={{
+                flex: 1,
+                height: "100%",
+                borderLeft: "1px solid #fff",
+                borderRight: "1px solid #5F5F5F",
+                margin: "0 4px",
+              }}
+            />
+            <div
+              style={{
+                background: "#C0C0C0",
+                border: "1px inset #999",
+                padding: "2px 8px",
+                fontFamily: "VT323, monospace",
+                fontSize: 16,
+                color: "#000",
+              }}
+            >
+              {time || "21:47"}
+            </div>
+          </div>
+        </motion.div>
+      </div>
 
       {/* Sub-windows */}
       <AnimatePresence>
+        {openFolder === "cv" && (
+          <CVWindow onClose={() => setOpenFolder(null)} />
+        )}
         {openFolder === "aplicaciones" && (
           <AplicacionesWindow onClose={() => setOpenFolder(null)} />
         )}

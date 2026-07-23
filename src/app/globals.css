@@ -612,3 +612,31 @@ img {
 .hint-bar span {
   color: var(--px-rose);
 }
+
+/* =============================================
+   PRINT STYLES FOR CV PDF EXPORT
+   ============================================= */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .game-wrapper > *:not(.pixel-window) {
+    display: none !important;
+  }
+  .pixel-window {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: white !important;
+  }
+  .pixel-window-titlebar, button {
+    display: none !important;
+  }
+  .cv-content {
+    padding: 0 !important;
+  }
+}
