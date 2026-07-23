@@ -1,26 +1,612 @@
 @import "tailwindcss";
 
+
+
+/* =============================================
+   CSS CUSTOM PROPERTIES — Pixel Art Portfolio
+   ============================================= */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --px-rose: #F2A7BB;
+  --px-rose-dark: #D4748A;
+  --px-violet: #B39DDB;
+  --px-violet-dark: #7E57C2;
+  --px-cream: #FFF8EF;
+  --px-beige: #E8D5B7;
+  --px-beige-dark: #C9B08A;
+  --px-green: #A8C5A0;
+  --px-green-dark: #388E3C;
+  --px-dark: #2D2D3A;
+  --px-dark-mid: #3D3D4E;
+  --px-window-bg: #F5EDD5;
+  --px-window-border: #8B7355;
+  --px-taskbar: #C8A882;
+  --px-accent: #E8A0B4;
+  
+  --font-pixel: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-display: 'Pixelify Sans', sans-serif;
+  
+  /* Z-Index Scale */
+  --z-room: 1;
+  --z-ui: 10;
+  --z-window: 20;
+  --z-phone: 30;
+  --z-overlay: 40;
+  --z-loading: 100;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* =============================================
+   RESET & BASE
+   ============================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--px-dark);
+  color: var(--px-cream);
+  font-family: var(--font-body);
+  font-size: 18px;
+  height: 100%;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#__next, main {
+  height: 100%;
+}
+
+/* =============================================
+   PIXEL ART UTILITIES
+   ============================================= */
+
+/* Smooth rendering for all images by default */
+img {
+  image-rendering: auto;
+}
+
+.pixel-window {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 16px;
+  background: rgba(255, 248, 239, 0.92);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.pixel-window-titlebar {
+  background: linear-gradient(135deg, var(--px-rose-dark), var(--px-violet-dark));
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: grab;
+  user-select: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.pixel-window-titlebar:active {
+  cursor: grabbing;
+}
+
+.pixel-btn {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0,0,0,0.5);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-family: var(--font-pixel);
+  transition: filter 0.1s;
+}
+
+.pixel-btn:hover {
+  filter: brightness(1.2);
+}
+
+.pixel-btn-close {
+  background: #E57373;
+}
+
+.pixel-btn-min {
+  background: #FFB74D;
+}
+
+.pixel-btn-max {
+  background: #81C784;
+}
+
+/* =============================================
+   PIXEL ART SCROLLBAR
+   ============================================= */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--px-beige);
+  border-left: 1px solid var(--px-window-border);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--px-violet-dark);
+  border: 1px solid var(--px-window-border);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--px-violet);
+}
+
+/* =============================================
+   CURSOR BLINK
+   ============================================= */
+.cursor-blink::after {
+  content: '█';
+  animation: blink 1s step-end infinite;
+  color: var(--px-rose);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* =============================================
+   PIXEL BORDER UTILITY
+   ============================================= */
+.pixel-border {
+  border-style: solid;
+  border-width: 3px;
+  border-image: none;
+  border-color: var(--px-window-border);
+  box-shadow: 
+    inset 2px 2px 0 rgba(255,255,255,0.4),
+    inset -2px -2px 0 rgba(0,0,0,0.3),
+    4px 4px 0 rgba(0,0,0,0.5);
+}
+
+/* =============================================
+   HINT BUBBLE (E key indicator)
+   ============================================= */
+.hint-bubble {
+  background: var(--px-dark);
+  border: 2px solid var(--px-rose);
+  color: var(--px-cream);
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  padding: 4px 8px;
+  border-radius: 0;
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+  white-space: nowrap;
+  pointer-events: none;
+  animation: bouncePixel 0.6s steps(4, end) infinite;
+}
+
+@keyframes bouncePixel {
+  0%, 100% { transform: translateY(0) translateX(-50%); }
+  50% { transform: translateY(-4px) translateX(-50%); }
+}
+
+.hint-key {
+  display: inline-block;
+  background: var(--px-rose);
+  color: var(--px-dark);
+  padding: 1px 4px;
+  border: 1px solid var(--px-rose-dark);
+  margin-right: 4px;
+  font-weight: bold;
+}
+
+/* =============================================
+   PHONE COMPONENT (Aesthetic Upgrade)
+   ============================================= */
+.phone-frame {
+  background: #111;
+  border: 6px solid #222;
+  border-radius: 32px;
+  box-shadow: 
+    0 20px 40px rgba(0,0,0,0.5),
+    inset 0 0 0 2px #444;
+  position: relative;
+  overflow: hidden;
+}
+
+.phone-screen {
+  background: var(--px-cream);
+  overflow: hidden;
+  position: relative;
+}
+
+.phone-app-icon {
+  width: 52px;
+  height: 52px;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.1s steps(2, end);
+  font-size: 8px;
+  font-family: var(--font-pixel);
+  gap: 4px;
+}
+
+.phone-app-icon:hover {
+  transform: scale(1.05);
+  border-color: var(--px-rose);
+}
+
+.phone-app-icon:active {
+  transform: scale(0.95);
+}
+
+/* =============================================
+   WINDOWS 95 DESKTOP
+   ============================================= */
+.win95-desktop {
+  background: #008080; /* Classic teal, will be overridden */
+  position: relative;
+  overflow: hidden;
+  font-family: 'VT323', monospace;
+}
+
+.win95-window {
+  position: absolute;
+  min-width: 200px;
+  min-height: 150px;
+  background: #C0C0C0;
+  border: 2px solid #DFDFDF;
+  border-right-color: #5F5F5F;
+  border-bottom-color: #5F5F5F;
+  box-shadow: 2px 2px 0 #000;
+}
+
+.win95-titlebar {
+  background: linear-gradient(90deg, #000080, #1084D0);
+  color: white;
+  font-weight: bold;
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  cursor: grab;
+  user-select: none;
+  font-family: 'VT323', monospace;
+  letter-spacing: 0.05em;
+}
+
+.win95-titlebar:active {
+  cursor: grabbing;
+}
+
+.win95-btn {
+  width: 16px;
+  height: 14px;
+  background: #C0C0C0;
+  border: 1px solid #DFDFDF;
+  border-right-color: #5F5F5F;
+  border-bottom-color: #5F5F5F;
+  color: #000;
+  font-size: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'VT323', monospace;
+}
+
+.win95-btn:hover {
+  background: #D4D0C8;
+}
+
+.win95-btn:active {
+  border-color: #5F5F5F;
+  border-right-color: #DFDFDF;
+  border-bottom-color: #DFDFDF;
+}
+
+.win95-taskbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  background: linear-gradient(180deg, #D4D0C8, #C0C0C0);
+  border-top: 1px solid #fff;
+  display: flex;
+  align-items: center;
+  padding: 2px 4px;
+  gap: 4px;
+  z-index: 50;
+}
+
+.win95-start-btn {
+  background: linear-gradient(180deg, #D4D0C8, #C0C0C0);
+  border: 1px solid #DFDFDF;
+  border-right-color: #5F5F5F;
+  border-bottom-color: #5F5F5F;
+  padding: 2px 8px;
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #000;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.win95-start-btn:active {
+  border-color: #5F5F5F;
+  border-right-color: #DFDFDF;
+  border-bottom-color: #DFDFDF;
+}
+
+/* =============================================
+   GAME CANVAS CONTAINER
+   ============================================= */
+#phaser-game-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-room);
+}
+
+#phaser-game-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* =============================================
+   CRT EFFECT (optional, applied to game)
+   ============================================= */
+.crt-effect::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* =============================================
+   RESPONSIVE MOBILE D-PAD
+   ============================================= */
+.dpad-container {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: var(--z-ui);
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .dpad-container {
+    display: block;
+  }
+}
+
+.dpad-btn {
+  width: 44px;
+  height: 44px;
+  background: rgba(45, 45, 58, 0.85);
+  border: 2px solid var(--px-rose);
+  color: var(--px-cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dpad-btn:active {
+  background: var(--px-rose-dark);
+}
+
+/* =============================================
+   PARTICLES
+   ============================================= */
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 0;
+  pointer-events: none;
+  animation: floatParticle 6s ease-in-out infinite;
+}
+
+@keyframes floatParticle {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 0.6; }
+  50% { transform: translate(10px, -30px); opacity: 0.3; }
+  100% { transform: translate(-5px, -60px); opacity: 0; }
+}
+
+/* =============================================
+   LOADING SCREEN
+   ============================================= */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background: #0a0a0f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-loading);
+  font-family: var(--font-pixel);
+}
+
+.loading-logo {
+  font-size: 14px;
+  color: var(--px-rose);
+  text-shadow: 0 0 20px var(--px-rose), 0 0 40px var(--px-rose-dark);
+  letter-spacing: 0.1em;
+  text-align: center;
+  line-height: 2;
+}
+
+.loading-sub {
+  font-size: 7px;
+  color: var(--px-violet);
+  margin-top: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.loading-prompt {
+  font-size: 8px;
+  color: var(--px-beige);
+  margin-top: 40px;
+  animation: blink 1s step-end infinite;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+.loading-progress-bar {
+  width: 240px;
+  height: 12px;
+  border: 2px solid var(--px-rose-dark);
+  margin-top: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--px-rose-dark), var(--px-rose), var(--px-violet));
+  transition: width 0.3s steps(10, end);
+}
+
+/* =============================================
+   GENERAL LAYOUT
+   ============================================= */
+.game-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--px-dark);
+}
+
+/* =============================================
+   SKILL TAGS
+   ============================================= */
+.skill-tag {
+  display: inline-block;
+  background: var(--px-violet);
+  color: var(--px-dark);
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  padding: 3px 8px;
+  border: 1px solid var(--px-violet-dark);
+  margin: 2px;
+  cursor: default;
+}
+
+.skill-tag:hover {
+  background: var(--px-violet-dark);
+  color: var(--px-cream);
+}
+
+/* =============================================
+   PROJECT CARD GALLERY
+   ============================================= */
+.gallery-thumb {
+  aspect-ratio: 16/9;
+  background: var(--px-dark-mid);
+  border: 2px solid var(--px-window-border);
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+
+.gallery-thumb:hover {
+  border-color: var(--px-rose);
+}
+
+.gallery-thumb::after {
+  content: '▶';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: white;
+  background: rgba(0,0,0,0.4);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.gallery-thumb:hover::after {
+  opacity: 1;
+}
+
+/* =============================================
+   TOOLTIP ANIMATIONS
+   ============================================= */
+@keyframes windowOpen {
+  from { opacity: 0; transform: scale(0.85) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.window-animate-in {
+  animation: windowOpen 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* =============================================
+   BOTTOM HINT BAR
+   ============================================= */
+.hint-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 38px;
+  background: rgba(30, 30, 42, 0.92);
+  border-top: 1px solid rgba(242, 167, 187, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-family: var(--font-pixel);
+  font-size: 13px;
+  font-weight: 500;
+  color: #E2D9F3;
+  z-index: var(--z-ui);
+  padding: 0 16px;
+  backdrop-filter: blur(10px);
+}
+
+.hint-bar span {
+  color: var(--px-rose);
 }

@@ -1,65 +1,420 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useGameStore } from "@/hooks/useGameStore";
+import { useAudio } from "@/hooks/useAudio";
+import LoadScreen from "@/components/ui/LoadScreen";
+import PixelRoom from "@/components/game/PixelRoom";
+import GameContainer from "@/components/game/GameContainer";
+import PhoneApp from "@/components/ui/PhoneApp";
+import DesktopOS from "@/components/ui/DesktopOS";
+import AudioControls from "@/components/ui/AudioControls";
+import MobileControls from "@/components/ui/MobileControls";
+import PixelWindow from "@/components/ui/PixelWindow";
+
+// Controls legend
+function ControlsOverlay() {
+  const [visible, setVisible] = useState(true);
+
+  if (!visible) return (
+    <button
+      onClick={() => setVisible(true)}
+      style={{
+        position: "fixed",
+        top: 12,
+        left: 12,
+        zIndex: 50,
+        padding: "4px 10px",
+        background: "rgba(45,45,58,0.85)",
+        border: "2px solid var(--px-rose-dark)",
+        color: "var(--px-cream)",
+        fontFamily: "var(--font-pixel)",
+        fontSize: "7px",
+        cursor: "pointer",
+      }}
+    >
+      ?
+    </button>
+  );
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      style={{
+        position: "fixed",
+        top: 16,
+        left: 16,
+        zIndex: 50,
+        background: "rgba(30, 30, 42, 0.85)",
+        border: "1px solid rgba(242, 167, 187, 0.3)",
+        borderRadius: 12,
+        padding: "14px 16px",
+        backdropFilter: "blur(10px)",
+        boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
+        minWidth: 180,
+      }}
+    >
+      <div style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 10,
+        borderBottom: "1px solid rgba(242,167,187,0.2)",
+        paddingBottom: 6,
+      }}>
+        <span style={{
+          fontFamily: "var(--font-pixel)",
+          fontSize: "12px",
+          fontWeight: 700,
+          color: "var(--px-rose)",
+          letterSpacing: "0.05em",
+        }}>CONTROLES</span>
+        <button
+          onClick={() => setVisible(false)}
+          style={{
+            background: "none",
+            border: "none",
+            color: "var(--px-beige)",
+            cursor: "pointer",
+            fontSize: "14px",
+          }}
+        >✕</button>
+      </div>
+
+      {[
+        ["← → / A D", "Moverse (Izq/Der)"],
+        ["↑ ↓ / W S", "Profundidad"],
+        ["E", "Interactuar"],
+        ["ESC", "Cerrar"],
+      ].map(([key, action]) => (
+        <div key={key} style={{
+          display: "flex",
+          justifyContent: "space-between",
+          gap: 12,
+          marginBottom: 6,
+          alignItems: "center",
+        }}>
+          <span style={{
+            fontFamily: "var(--font-pixel)",
+            fontSize: "11px",
+            fontWeight: 600,
+            color: "var(--px-rose)",
+            background: "rgba(242,167,187,0.15)",
+            padding: "2px 6px",
+            borderRadius: 4,
+            border: "1px solid rgba(242,167,187,0.3)",
+          }}>{key}</span>
+          <span style={{
+            fontFamily: "var(--font-pixel)",
+            fontSize: "12px",
+            color: "#E2D9F3",
+          }}>{action}</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      ))}
+    </motion.div>
+  );
+}
+
+// How to interact tutorial overlay (first-time only)
+function HowToPlay({ onDismiss }: { onDismiss: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      style={{
+        position: "fixed",
+        bottom: 48,
+        right: 20,
+        zIndex: 50,
+        background: "rgba(30, 30, 42, 0.9)",
+        border: "1px solid rgba(242, 167, 187, 0.4)",
+        borderRadius: 16,
+        padding: "18px 20px",
+        maxWidth: 280,
+        backdropFilter: "blur(12px)",
+        boxShadow: "0 12px 32px rgba(0,0,0,0.35)",
+      }}
+    >
+      <div style={{
+        fontFamily: "var(--font-pixel)",
+        fontSize: "13px",
+        fontWeight: 700,
+        color: "var(--px-rose)",
+        marginBottom: 10,
+        letterSpacing: "0.05em",
+      }}>
+        CÓMO INTERACTUAR
+      </div>
+      {[
+        "• Movéte de izquierda a derecha",
+        "• Acercate a los objetos en la habitación",
+        "• Presioná E para interactuar",
+        "• ESC para cerrar ventanas",
+      ].map((tip) => (
+        <div key={tip} style={{
+          fontFamily: "var(--font-body)",
+          fontSize: "14px",
+          color: "#E2D9F3",
+          marginBottom: 6,
+          lineHeight: 1.4,
+        }}>{tip}</div>
+      ))}
+
+      <div style={{
+        marginTop: 12,
+        borderTop: "1px solid rgba(242,167,187,0.2)",
+        paddingTop: 10,
+        fontFamily: "var(--font-body)",
+        fontSize: "14px",
+        color: "var(--px-rose)",
+        fontStyle: "italic",
+      }}>
+        Explorá, descubrí y conocé mi trabajo.
+      </div>
+
+      <button
+        onClick={onDismiss}
+        style={{
+          marginTop: 12,
+          width: "100%",
+          padding: "10px",
+          background: "linear-gradient(135deg, var(--px-rose-dark), var(--px-violet-dark))",
+          border: "none",
+          borderRadius: 8,
+          color: "white",
+          fontFamily: "var(--font-pixel)",
+          fontSize: "12px",
+          fontWeight: 600,
+          cursor: "pointer",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+        }}
+      >
+        ¡Gracias por visitar! →
+      </button>
+
+      {/* Small cat pixel */}
+      <div style={{
+        position: "absolute",
+        bottom: -14,
+        right: 12,
+        fontSize: "24px",
+      }}>🐱</div>
+    </motion.div>
+  );
+}
+
+// Hint bar at bottom
+function HintBar() {
+  const { nearObject } = useGameStore();
+
+  const hints: Record<string, string> = {
+    phone: "📱 Celular · Presioná E para ver mis apps",
+    computer: "💻 Computadora · Presioná E para encender",
+    door: "🚪 Puerta · Presioná E para contactarme",
+    radio: "🎵 Radio · Presioná E para escuchar",
+  };
+
+  const hint = nearObject ? hints[nearObject] : "💡 Consejo: acercate a los objetos y presioná E para interactuar";
+
+  return (
+    <div className="hint-bar">
+      <span>💡</span>
+      <span style={{ color: "var(--px-cream)" }}>{hint}</span>
     </div>
+  );
+}
+
+// Door interaction — contact shortcut
+function DoorWindow({ onClose }: { onClose: () => void }) {
+  return (
+    <PixelWindow
+      id="door"
+      title="🚪 Salida / Contacto"
+      onClose={onClose}
+      defaultX={120}
+      defaultY={80}
+      width={320}
+      icon="🚪"
+    >
+      <div style={{ padding: 20, textAlign: "center" }}>
+        <div style={{ fontSize: "48px", marginBottom: 12 }}>🌟</div>
+        <div style={{
+          fontFamily: "var(--font-pixel)",
+          fontSize: "8px",
+          color: "var(--px-dark)",
+          marginBottom: 16,
+          lineHeight: 2,
+        }}>
+          ¡Gracias por visitar<br />mi portfolio!
+        </div>
+        <div style={{
+          fontFamily: "var(--font-body)",
+          fontSize: "18px",
+          color: "var(--px-dark)",
+          marginBottom: 20,
+          lineHeight: 1.6,
+        }}>
+          Si llegaste hasta acá,<br />espero que te haya gustado.<br />
+          ¡Me encantaría charlar!
+        </div>
+        <a
+          href="mailto:antonella.creativa@gmail.com"
+          style={{
+            display: "block",
+            padding: "12px",
+            background: "linear-gradient(135deg, var(--px-rose), var(--px-violet))",
+            color: "white",
+            border: "2px solid var(--px-rose-dark)",
+            fontFamily: "var(--font-pixel)",
+            fontSize: "8px",
+            cursor: "pointer",
+            textDecoration: "none",
+            boxShadow: "3px 3px 0 rgba(0,0,0,0.3)",
+            marginBottom: 8,
+          }}
+        >
+          ✉️ Escribirme →
+        </a>
+        <button
+          onClick={onClose}
+          style={{
+            width: "100%",
+            padding: "8px",
+            background: "var(--px-beige)",
+            border: "2px solid var(--px-window-border)",
+            fontFamily: "var(--font-pixel)",
+            fontSize: "7px",
+            cursor: "pointer",
+            color: "var(--px-dark)",
+          }}
+        >
+          Seguir explorando
+        </button>
+      </div>
+    </PixelWindow>
+  );
+}
+
+export default function HomePage() {
+  const { gameStarted, openWindows, openWindow, closeWindow } = useGameStore();
+  const { play } = useAudio();
+  const [showHowTo, setShowHowTo] = useState(true);
+  const [bootPC, setBootPC] = useState(false);
+
+  const handleOpenComputer = () => {
+    if (!bootPC) {
+      setBootPC(true);
+      play("bootPC");
+      setTimeout(() => {
+        openWindow("computer");
+      }, 800);
+    } else {
+      openWindow("computer");
+      play("openWindow");
+    }
+  };
+
+  const handleOpenPhone = () => {
+    openWindow("phone");
+    play("openWindow");
+  };
+
+  const handleOpenDoor = () => {
+    openWindow("door");
+    play("openWindow");
+  };
+
+  // Override openWindow to handle side effects
+  // The game container calls openWindow from the store directly
+  // We intercept it here via the window list
+  const isPhoneOpen = openWindows.includes("phone");
+  const isComputerOpen = openWindows.includes("computer");
+  const isDoorOpen = openWindows.includes("door");
+
+  return (
+    <main
+      className="game-wrapper"
+      style={{ position: "relative", width: "100vw", height: "100dvh" }}
+    >
+      {/* ---- LOADING SCREEN ---- */}
+      <LoadScreen />
+
+      {/* ---- ROOM + GAME (only shown when started) ---- */}
+      {gameStarted && (
+        <>
+          {/* Pixel art room background */}
+          <PixelRoom />
+
+          {/* Game engine (character + collisions + interaction hints) */}
+          <GameContainer />
+
+          {/* ---- UI OVERLAYS ---- */}
+          <ControlsOverlay />
+          <AudioControls />
+          <MobileControls />
+          <HintBar />
+
+          {/* How to play tooltip */}
+          <AnimatePresence>
+            {showHowTo && (
+              <HowToPlay onDismiss={() => setShowHowTo(false)} />
+            )}
+          </AnimatePresence>
+
+          {/* ---- INTERACTIVE WINDOWS ---- */}
+          <AnimatePresence>
+            {isPhoneOpen && (
+              <PhoneApp
+                key="phone"
+                onClose={() => {
+                  closeWindow("phone");
+                  play("closeWindow");
+                }}
+              />
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {isComputerOpen && (
+              <DesktopOS
+                key="computer"
+                onClose={() => {
+                  closeWindow("computer");
+                  play("closeWindow");
+                }}
+              />
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {isDoorOpen && (
+              <DoorWindow
+                key="door"
+                onClose={() => {
+                  closeWindow("door");
+                  play("closeWindow");
+                }}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Scrim when windows are open */}
+          {openWindows.length > 0 && (
+            <div
+              style={{
+                position: "fixed",
+                inset: 0,
+                background: "rgba(0,0,0,0.2)",
+                zIndex: 15,
+                pointerEvents: "none",
+              }}
+            />
+          )}
+        </>
+      )}
+    </main>
   );
 }
