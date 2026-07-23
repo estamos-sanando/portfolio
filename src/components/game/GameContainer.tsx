@@ -37,13 +37,6 @@ export default function GameContainer() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Resize canvas
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resize();
-    window.addEventListener("resize", resize);
 
     // ---- Load Character Sprites ----
     const sideImg = new window.Image();
