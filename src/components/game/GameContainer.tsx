@@ -451,7 +451,7 @@ export default function GameContainer() {
         );
         ctx!.restore();
       } else if (!player.isMoving && idleLoaded) {
-        const breatheBob = Math.sin(now / 450) * 2;
+        const breatheBob = 0;
         const targetHeight = 515;
         const dh = targetHeight;
         const dw = dh * (idleImg.width / idleImg.height);
@@ -492,7 +492,7 @@ export default function GameContainer() {
           const targetH = 270;
           const dh = targetH;
           const dw = dh * (dogHappyImg.width / dogHappyImg.height);
-          const happyBob = Math.sin(now / 150) * 4;
+          const happyBob = Math.sin(now / 150) * 3;
 
           ctx!.translate(dx, dy + happyBob);
           if (dog.facing === "right") {
@@ -501,13 +501,12 @@ export default function GameContainer() {
 
           ctx!.drawImage(dogHappyImg, -dw / 2, -dh + 32, dw, dh);
         } else {
-          // Attentive sitting pose with subtle breathing animation
+          // Attentive sitting pose - completely solid on floor
           const targetH = 270;
           const dh = targetH;
           const dw = dh * (dogImg.width / dogImg.height);
-          const breatheBob = Math.sin(now / 450) * 2;
 
-          ctx!.translate(dx, dy + breatheBob);
+          ctx!.translate(dx, dy);
           if (dog.facing === "right") {
             ctx!.scale(-1, 1);
           }
@@ -553,7 +552,7 @@ export default function GameContainer() {
         const distToDog = Math.hypot(player.x - dog.x, player.y - dog.y);
         if (distToDog < 240) {
           const hx = dog.x;
-          const hy = dog.y - 180;
+          const hy = dog.y - 275; // Positioned cleanly above ears & face
           const bubbleW = 120;
           const bubbleH = 26;
 
