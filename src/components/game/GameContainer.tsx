@@ -76,6 +76,11 @@ export default function GameContainer() {
     let dogLoaded = dogImg.complete;
     dogImg.onload = () => { dogLoaded = true; };
 
+    const dogSideImg = new window.Image();
+    dogSideImg.src = "/dog_side_clean.png";
+    let dogSideLoaded = dogSideImg.complete;
+    dogSideImg.onload = () => { dogSideLoaded = true; };
+
     // ---- Player & Dog State ----
     const player = {
       x: canvas.width * 0.5,
@@ -430,22 +435,49 @@ export default function GameContainer() {
         // Shadow under dog
         ctx!.fillStyle = "rgba(0, 0, 0, 0.25)";
         ctx!.beginPath();
-        ctx!.ellipse(dx, dy + 22, 34, 8, 0, 0, Math.PI * 2);
+        ctx!.ellipse(dx, dy + 22, 36, 8, 0, 0, Math.PI * 2);
         ctx!.fill();
 
-        const targetH = 270;
-        const dh = targetH;
-        const dw = dh * (dogImg.width / dogImg.height);
-        const dogBob = dog.isMoving
-          ? Math.sin(now / 100) * 4
-          : Math.sin(now / 450) * 1.5;
+        if (dog.isMoving && dogSideLoaded) {
+          // Multi-frame walk cycle from sprite sheet
+          const totalDogFrames = 2;
+          const frameW = dogSideImg.width / totalDogFrames;
+          const frameH = dogSideImg.height;
+          const frameIdx = Math.floor((now / 120) % totalDogFrames);
+          const frameX = frameIdx * frameW;
 
-        ctx!.translate(dx, dy + dogBob);
-        if (dog.facing === "right") {
-          ctx!.scale(-1, 1);
+          const targetH = 270;
+          const dh = targetH;
+          const dw = dh * (frameW / frameH);
+          const walkPhase = (now / 100) % (Math.PI * 2);
+          const stepBob = Math.abs(Math.sin(walkPhase)) * 6;
+          const tiltAngle = (dog.facing === "left" ? -1 : 1) * Math.sin(walkPhase) * 0.04;
+
+          ctx!.translate(dx, dy + 32 - stepBob);
+          if (dog.facing === "right") {
+            ctx!.scale(-1, 1);
+          }
+          ctx!.rotate(tiltAngle);
+
+          ctx!.drawImage(
+            dogSideImg,
+            frameX, 0, frameW, frameH,
+            -dw / 2, -dh, dw, dh
+          );
+        } else {
+          // Idle pose with subtle breathing animation
+          const targetH = 270;
+          const dh = targetH;
+          const dw = dh * (dogImg.width / dogImg.height);
+          const breatheBob = Math.sin(now / 450) * 2;
+
+          ctx!.translate(dx, dy + breatheBob);
+          if (dog.facing === "right") {
+            ctx!.scale(-1, 1);
+          }
+
+          ctx!.drawImage(dogImg, -dw / 2, -dh + 32, dw, dh);
         }
-
-        ctx!.drawImage(dogImg, -dw / 2, -dh + 32, dw, dh);
         ctx!.restore();
       }
     }
