@@ -415,7 +415,7 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
         {/* Video Player */}
         <video
           controls
-          preload="metadata"
+          preload="auto"
           playsInline
           style={{
             width: "100%",
@@ -427,7 +427,7 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
           }}
         >
           <source src="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4" type="video/mp4" />
-          Tu navegador no soporta el reproductor de video HTML5.
+          Tu navegador no soporta la reproducción de video HTML5.
         </video>
 
         <Section title="Descripción">
