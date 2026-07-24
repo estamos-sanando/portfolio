@@ -243,20 +243,18 @@ export default function GameContainer() {
           clickY <= obj.y + obj.h
         ) {
           if (obj.id === "computer") {
-            if (!isPcOnRef.current) {
-              togglePcPower();
-              audioEngine.bootPC();
-            } else {
+            if (isPcOnRef.current) {
               audioEngine.interact();
               openWindow("computer");
+            } else {
+              audioEngine.click();
             }
           } else if (obj.id === "phone") {
-            if (!isPhoneOnRef.current) {
-              togglePhonePower();
-              audioEngine.powerOnPhone();
-            } else {
+            if (isPhoneOnRef.current) {
               audioEngine.interact();
               openWindow("phone");
+            } else {
+              audioEngine.click();
             }
           } else if (obj.id === "door") {
             audioEngine.interact();

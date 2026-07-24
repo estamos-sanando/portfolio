@@ -1,13 +1,24 @@
 "use client";
 
-import Image from "next/image";
 import { useGameStore } from "@/hooks/useGameStore";
 
 /**
- * PixelRoom — Renderiza la habitación con superposición perfecta sin parpadeo.
+ * PixelRoom — Renderiza la habitación con superposición absoluta directa de <img>.
+ * Evita cualquier rescalado de envoltorios de Next.js para un cambio de capas 100% imperceptible.
  */
 export default function PixelRoom() {
   const { isPcOn, isPhoneOn } = useGameStore();
+
+  const commonStyle: React.CSSProperties = {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    objectPosition: "center bottom",
+    pointerEvents: "none",
+  };
 
   return (
     <div
@@ -20,110 +31,51 @@ export default function PixelRoom() {
         backgroundColor: "#1E1A29",
       }}
     >
-      {/* 1. BASE CAPA ESTÁTICA: Habitación apagada (Siempre visible 100% sin desvanecer) */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 1,
-          pointerEvents: "none",
-        }}
-      >
-        <Image
-          src="/room_off_off.jpg"
-          alt="Room Base Off"
-          fill
-          sizes="100vw"
-          quality={90}
-          style={{
-            objectFit: "cover",
-            objectPosition: "center bottom",
-            imageRendering: "auto",
-          }}
-          priority
-        />
-      </div>
+      {/* 1. BASE ESTÁTICA: Habitación Apagada (Siempre 100% opaca) */}
+      <img
+        src="/room_off_off.jpg"
+        alt="Habitación Apagada"
+        style={{ ...commonStyle, zIndex: 1 }}
+      />
 
-      {/* 2. CAPA SOLO PC PRENDIDA */}
-      <div
+      {/* 2. SOLO PC PRENDIDA */}
+      <img
+        src="/room_pc_off.jpg"
+        alt="PC Prendida"
         style={{
-          position: "absolute",
-          inset: 0,
+          ...commonStyle,
           zIndex: 2,
           opacity: isPcOn && !isPhoneOn ? 1 : 0,
-          transition: "opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1)",
-          pointerEvents: "none",
+          transition: "opacity 0.25s ease-in-out",
           willChange: "opacity",
         }}
-      >
-        <Image
-          src="/room_pc_off.jpg"
-          alt="Room PC ON"
-          fill
-          sizes="100vw"
-          quality={90}
-          style={{
-            objectFit: "cover",
-            objectPosition: "center bottom",
-            imageRendering: "auto",
-          }}
-          priority
-        />
-      </div>
+      />
 
-      {/* 3. CAPA SOLO CELULAR PRENDIDO */}
-      <div
+      {/* 3. SOLO CELULAR PRENDIDO */}
+      <img
+        src="/room_off_phone.jpg"
+        alt="Celular Prendido"
         style={{
-          position: "absolute",
-          inset: 0,
+          ...commonStyle,
           zIndex: 3,
           opacity: !isPcOn && isPhoneOn ? 1 : 0,
-          transition: "opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1)",
-          pointerEvents: "none",
+          transition: "opacity 0.25s ease-in-out",
           willChange: "opacity",
         }}
-      >
-        <Image
-          src="/room_off_phone.jpg"
-          alt="Room Phone ON"
-          fill
-          sizes="100vw"
-          quality={90}
-          style={{
-            objectFit: "cover",
-            objectPosition: "center bottom",
-            imageRendering: "auto",
-          }}
-          priority
-        />
-      </div>
+      />
 
-      {/* 4. CAPA AMBOS PRENDIDOS */}
-      <div
+      {/* 4. AMBOS PRENDIDOS */}
+      <img
+        src="/room_pc_phone.jpg"
+        alt="Ambos Prendidos"
         style={{
-          position: "absolute",
-          inset: 0,
+          ...commonStyle,
           zIndex: 4,
           opacity: isPcOn && isPhoneOn ? 1 : 0,
-          transition: "opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1)",
-          pointerEvents: "none",
+          transition: "opacity 0.25s ease-in-out",
           willChange: "opacity",
         }}
-      >
-        <Image
-          src="/room_pc_phone.jpg"
-          alt="Room Both ON"
-          fill
-          sizes="100vw"
-          quality={90}
-          style={{
-            objectFit: "cover",
-            objectPosition: "center bottom",
-            imageRendering: "auto",
-          }}
-          priority
-        />
-      </div>
+      />
     </div>
   );
 }
