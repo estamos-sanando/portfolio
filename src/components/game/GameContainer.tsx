@@ -30,16 +30,22 @@ export default function GameContainer() {
     isPhoneOn,
     togglePcPower,
     togglePhonePower,
+    dogUnlocked,
+    activeCharacter,
   } = useGameStore();
 
   const nearObjectRef = useRef<string | null>(null);
   const isPcOnRef = useRef(isPcOn);
   const isPhoneOnRef = useRef(isPhoneOn);
+  const dogUnlockedRef = useRef<boolean>(dogUnlocked);
+  const activeCharacterRef = useRef<"antonella" | "dog">(activeCharacter);
 
   useEffect(() => {
     isPcOnRef.current = isPcOn;
     isPhoneOnRef.current = isPhoneOn;
-  }, [isPcOn, isPhoneOn]);
+    dogUnlockedRef.current = dogUnlocked;
+    activeCharacterRef.current = activeCharacter;
+  }, [isPcOn, isPhoneOn, dogUnlocked, activeCharacter]);
 
   useEffect(() => {
     if (!gameStarted) return;
@@ -65,7 +71,12 @@ export default function GameContainer() {
     let idleLoaded = idleImg.complete;
     idleImg.onload = () => { idleLoaded = true; };
 
-    // ---- Player State ----
+    const dogImg = new window.Image();
+    dogImg.src = "/dog_character.png";
+    let dogLoaded = dogImg.complete;
+    dogImg.onload = () => { dogLoaded = true; };
+
+    // ---- Player & Dog State ----
     const player = {
       x: canvas.width * 0.5,
       y: canvas.height * 0.82,
@@ -79,6 +90,18 @@ export default function GameContainer() {
       frameTimer: 0,
       isMoving: false,
       footstepTimer: 0,
+    };
+
+    const dog = {
+      x: canvas.width * 0.95,
+      targetX: canvas.width * 0.58,
+      y: canvas.height * 0.85,
+      w: 32,
+      h: 32,
+      speed: 4.0,
+      facing: "left" as "left" | "right",
+      isMoving: false,
+      hasEntered: false,
     };
 
     // ---- Room Objects & Interactables Cache ----
@@ -318,40 +341,39 @@ export default function GameContainer() {
       }
     }
 
-    // ---- Draw Pixel Character ----
+    // ---- Draw Pixel Character & Dog ----
     function drawCharacter() {
+      const now = performance.now();
+
+      // 1. Draw Antonella
       const px = player.x;
       const py = player.y;
-      const now = performance.now();
       ctx!.save();
 
-      // Realistic ground shadow aligned directly with soles of shoes on floor/carpet
+      // Realistic ground shadow
       ctx!.fillStyle = "rgba(0, 0, 0, 0.28)";
       ctx!.beginPath();
       ctx!.ellipse(px, py + 22, 38, 9, 0, 0, Math.PI * 2);
       ctx!.fill();
 
       const f = player.frame % 4;
-      const bobY = player.isMoving ? Math.sin(f * Math.PI / 2) * 2 : 0;
+      const bobY = player.isMoving ? Math.sin((f * Math.PI) / 2) * 2 : 0;
       const bx = px;
       const by = py + bobY;
 
-      // ---- Render Character ----
       if (player.isMoving && sideLoaded) {
-        // High-definition side illustration with smooth 2D walk bounce & tilt
         const walkPhase = (now / 120) % (Math.PI * 2);
-        const stepBob = Math.abs(Math.sin(walkPhase)) * 8; // step bounce
-        const tiltAngle = (player.facing === "left" ? -1 : 1) * Math.sin(walkPhase) * 0.035; // natural stride tilt
+        const stepBob = Math.abs(Math.sin(walkPhase)) * 8;
+        const tiltAngle =
+          (player.facing === "left" ? -1 : 1) * Math.sin(walkPhase) * 0.035;
 
-        // sideImg contains 2 walking frames side-by-side.
-        // We crop to 1 frame at a time (alternating steps)
         const totalFrames = 2;
         const frameW = sideImg.width / totalFrames;
         const frameH = sideImg.height;
         const frameIdx = Math.floor((now / 150) % totalFrames);
         const frameX = frameIdx * frameW;
 
-        const targetHeight = 504; 
+        const targetHeight = 504;
         const dh = targetHeight;
         const dw = dh * (frameW / frameH);
 
@@ -364,12 +386,17 @@ export default function GameContainer() {
 
         ctx!.drawImage(
           sideImg,
-          frameX, 0, frameW, frameH,
-          -dw / 2, -dh, dw, dh
+          frameX,
+          0,
+          frameW,
+          frameH,
+          -dw / 2,
+          -dh,
+          dw,
+          dh
         );
         ctx!.restore();
       } else if (!player.isMoving && idleLoaded) {
-        // Idle front-facing pose with subtle breathing animation
         const breatheBob = Math.sin(now / 450) * 2;
         const targetHeight = 515;
         const dh = targetHeight;
@@ -378,17 +405,49 @@ export default function GameContainer() {
         ctx!.save();
         ctx!.drawImage(
           idleImg,
-          0, 0, idleImg.width, idleImg.height,
-          bx - dw / 2, by - dh + 44 + breatheBob, dw, dh
+          0,
+          0,
+          idleImg.width,
+          idleImg.height,
+          bx - dw / 2,
+          by - dh + 44 + breatheBob,
+          dw,
+          dh
         );
         ctx!.restore();
       } else {
-        // Fallback cube if loading fails
         ctx!.fillStyle = "#2D2D2D";
         ctx!.fillRect(bx, by, 30, 40);
       }
-
       ctx!.restore();
+
+      // 2. Draw Dog Character (when unlocked)
+      if (dogUnlockedRef.current && dogLoaded) {
+        const dx = dog.x;
+        const dy = dog.y;
+        ctx!.save();
+
+        // Shadow under dog
+        ctx!.fillStyle = "rgba(0, 0, 0, 0.25)";
+        ctx!.beginPath();
+        ctx!.ellipse(dx, dy + 22, 34, 8, 0, 0, Math.PI * 2);
+        ctx!.fill();
+
+        const targetH = 150;
+        const dh = targetH;
+        const dw = dh * (dogImg.width / dogImg.height);
+        const dogBob = dog.isMoving
+          ? Math.sin(now / 100) * 4
+          : Math.sin(now / 450) * 1.5;
+
+        ctx!.translate(dx, dy + dogBob);
+        if (dog.facing === "right") {
+          ctx!.scale(-1, 1);
+        }
+
+        ctx!.drawImage(dogImg, -dw / 2, -dh + 22, dw, dh);
+        ctx!.restore();
+      }
     }
 
     // ---- Draw Particles ----
@@ -405,11 +464,12 @@ export default function GameContainer() {
 
     // ---- Draw Hint Labels ----
     function drawHints() {
+      const activePos = activeCharacterRef.current === "dog" ? dog : player;
       for (let i = 0; i < interactables.length; i++) {
         const obj = interactables[i];
         const dist = Math.hypot(
-          player.x + player.w / 2 - (obj.x + obj.w / 2),
-          player.y + player.h / 2 - (obj.y + obj.h / 2)
+          activePos.x + activePos.w / 2 - (obj.x + obj.w / 2),
+          activePos.y + activePos.h / 2 - (obj.y + obj.h / 2)
         );
         if (dist < 180) {
           const hx = obj.x + obj.w / 2;
@@ -422,7 +482,6 @@ export default function GameContainer() {
           const bubbleW = isPc || isPhone ? 150 : 110;
           const bubbleH = 26;
 
-          // Bubble background
           ctx!.fillStyle = "rgba(25,25,35,0.92)";
           ctx!.fillRect(hx - bubbleW / 2, hy - bubbleH / 2, bubbleW, bubbleH);
           ctx!.strokeStyle = isOn ? "#F2A7BB" : "#B39DDB";
@@ -430,7 +489,6 @@ export default function GameContainer() {
           ctx!.strokeRect(hx - bubbleW / 2, hy - bubbleH / 2, bubbleW, bubbleH);
 
           if (isPc || isPhone) {
-            // [F] Power key badge
             ctx!.fillStyle = isOn ? "#E74C3C" : "#2ECC71";
             ctx!.fillRect(hx - bubbleW / 2 + 6, hy - 9, 18, 16);
             ctx!.fillStyle = "#FFFFFF";
@@ -444,7 +502,6 @@ export default function GameContainer() {
             ctx!.fillText(isOn ? "APAGAR" : "PRENDER", hx - bubbleW / 2 + 28, hy + 3);
 
             if (isOn) {
-              // [E] Use key badge
               ctx!.fillStyle = "#F2A7BB";
               ctx!.fillRect(hx + 10, hy - 9, 18, 16);
               ctx!.fillStyle = "#2D2D3A";
@@ -452,25 +509,23 @@ export default function GameContainer() {
               ctx!.textAlign = "center";
               ctx!.fillText("E", hx + 19, hy + 3);
 
-              ctx!.fillStyle = "#FFF8EF";
+              ctx!.fillStyle = "#F0E8FF";
               ctx!.font = `7px 'Press Start 2P'`;
               ctx!.textAlign = "left";
               ctx!.fillText("USAR", hx + 32, hy + 3);
             }
           } else {
-            // Key indicator for door / other
-            ctx!.fillStyle = "#F2A7BB";
-            ctx!.fillRect(hx - 48, hy - 8, 16, 14);
+            ctx!.fillStyle = "#B39DDB";
+            ctx!.fillRect(hx - bubbleW / 2 + 6, hy - 9, 18, 16);
             ctx!.fillStyle = "#2D2D3A";
             ctx!.font = `bold 9px 'Press Start 2P'`;
             ctx!.textAlign = "center";
-            ctx!.fillText("E", hx - 40, hy + 3);
+            ctx!.fillText("E", hx - bubbleW / 2 + 15, hy + 3);
 
-            // Label
-            ctx!.fillStyle = "#FFF8EF";
-            ctx!.font = `8px 'Press Start 2P'`;
+            ctx!.fillStyle = "#F0E8FF";
+            ctx!.font = `7px 'Press Start 2P'`;
             ctx!.textAlign = "left";
-            ctx!.fillText(obj.label || "", hx - 18, hy + 3);
+            ctx!.fillText("CONTACTAR", hx - bubbleW / 2 + 28, hy + 3);
           }
 
           if (nearObjectRef.current !== obj.id) {
@@ -497,51 +552,107 @@ export default function GameContainer() {
       // Clear
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // ---- Update player ----
-      let dx = 0, dy = 0;
+      // 1. Dog Entrance & Walk Animation (when unlocked)
+      if (dogUnlockedRef.current) {
+        if (!dog.hasEntered) {
+          if (dog.x > dog.targetX) {
+            dog.x -= 2.5;
+            dog.facing = "left";
+            dog.isMoving = true;
+          } else {
+            dog.x = dog.targetX;
+            dog.hasEntered = true;
+            dog.isMoving = false;
+          }
+        }
+      }
 
-      const isLeft = !!(keys["ArrowLeft"] || keys["a"] || keys["A"] || keys["KeyA"]);
-      const isRight = !!(keys["ArrowRight"] || keys["d"] || keys["D"] || keys["KeyD"]);
+      // 2. Player Input Movement (Active Character)
+      let dx = 0,
+        dy = 0;
+
+      const isLeft = !!(
+        keys["ArrowLeft"] ||
+        keys["a"] ||
+        keys["A"] ||
+        keys["KeyA"]
+      );
+      const isRight = !!(
+        keys["ArrowRight"] ||
+        keys["d"] ||
+        keys["D"] ||
+        keys["KeyD"]
+      );
       const isUp = !!(keys["ArrowUp"] || keys["w"] || keys["W"] || keys["KeyW"]);
-      const isDown = !!(keys["ArrowDown"] || keys["s"] || keys["S"] || keys["KeyS"]);
+      const isDown = !!(
+        keys["ArrowDown"] ||
+        keys["s"] ||
+        keys["S"] ||
+        keys["KeyS"]
+      );
 
       if (isLeft && !isRight) {
         dx = -1;
-        player.facing = "left";
       } else if (isRight && !isLeft) {
         dx = 1;
-        player.facing = "right";
       }
 
       if (isUp && !isDown) {
         dy = -1;
-        if (player.facing !== "left" && player.facing !== "right") {
-          player.facing = "right";
-        }
       } else if (isDown && !isUp) {
         dy = 1;
-        if (player.facing !== "left" && player.facing !== "right") {
-          player.facing = "right";
-        }
       }
 
-      // Normalize diagonal
       if (dx !== 0 && dy !== 0) {
         dx *= 0.707;
         dy *= 0.707;
       }
 
-      player.isMoving = dx !== 0 || dy !== 0;
+      if (activeCharacterRef.current === "dog") {
+        // Control Dog
+        dog.isMoving = dx !== 0 || dy !== 0;
+        if (dx < 0) dog.facing = "left";
+        if (dx > 0) dog.facing = "right";
 
-      const nx = player.x + dx * player.speed;
-      const ny = player.y + dy * player.speed;
+        dog.x += dx * dog.speed;
+        dog.y += dy * dog.speed;
 
-      if (!checkCollision(nx, player.y)) player.x = nx;
-      if (!checkCollision(player.x, ny)) player.y = ny;
+        // Clamp dog inside floor bounds
+        dog.x = Math.max(
+          dog.w / 2,
+          Math.min(canvas.width - dog.w * 1.5, dog.x)
+        );
+        dog.y = Math.max(
+          canvas.height * 0.72,
+          Math.min(canvas.height * 0.9, dog.y)
+        );
+        player.isMoving = false;
+      } else {
+        // Control Antonella
+        if (dx < 0) player.facing = "left";
+        if (dx > 0) player.facing = "right";
 
-      // Clamp to canvas floor zone
-      player.x = Math.max(player.w / 2, Math.min(canvas.width - player.w * 1.5, player.x));
-      player.y = Math.max(canvas.height * 0.72, Math.min(canvas.height * 0.90, player.y));
+        player.isMoving = dx !== 0 || dy !== 0;
+
+        const nx = player.x + dx * player.speed;
+        const ny = player.y + dy * player.speed;
+
+        if (!checkCollision(nx, player.y)) player.x = nx;
+        if (!checkCollision(player.x, ny)) player.y = ny;
+
+        player.x = Math.max(
+          player.w / 2,
+          Math.min(canvas.width - player.w * 1.5, player.x)
+        );
+        player.y = Math.max(
+          canvas.height * 0.72,
+          Math.min(canvas.height * 0.9, player.y)
+        );
+
+        if (dog.hasEntered && (activeCharacterRef.current as string) !== "dog") {
+          dog.isMoving = false;
+        }
+      }
 
       // Frame animation
       if (player.isMoving) {

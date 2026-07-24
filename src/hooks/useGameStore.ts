@@ -58,6 +58,15 @@ interface GameState {
   isGuideDocked: boolean;
   hasSeenGuide: boolean;
 
+  // Quests & Character Unlocks
+  visitedPhone: boolean;
+  visitedPC: boolean;
+  visitedDoor: boolean;
+  dogUnlocked: boolean;
+  activeCharacter: "antonella" | "dog";
+  showQuestModal: boolean;
+  showUnlockBanner: boolean;
+
   // Actions
   setLoading: (loading: boolean) => void;
   setLoadProgress: (progress: number) => void;
@@ -70,6 +79,11 @@ interface GameState {
   openGuideModal: () => void;
   closeGuideModal: () => void;
   toggleGuideModal: () => void;
+  openQuestModal: () => void;
+  closeQuestModal: () => void;
+  toggleQuestModal: () => void;
+  dismissUnlockBanner: () => void;
+  setActiveCharacter: (char: "antonella" | "dog") => void;
   openWindow: (id: WindowId) => void;
   closeWindow: (id: WindowId) => void;
   setActiveWindow: (id: WindowId) => void;
@@ -80,7 +94,7 @@ interface GameState {
   closeAllWindows: () => void;
 }
 
-export const useGameStore = create<GameState>((set) => ({
+export const useGameStore = create<GameState>((set, get) => ({
   isLoading: true,
   loadProgress: 0,
   gameStarted: false,
@@ -96,6 +110,15 @@ export const useGameStore = create<GameState>((set) => ({
   showHint: false,
   currentPhoneApp: null,
   desktopOpenWindows: [],
+
+  // Quests initial values
+  visitedPhone: false,
+  visitedPC: false,
+  visitedDoor: false,
+  dogUnlocked: false,
+  activeCharacter: "antonella" as "antonella" | "dog",
+  showQuestModal: false,
+  showUnlockBanner: false,
 
   setLoading: (loading) => set({ isLoading: loading }),
   setLoadProgress: (progress) => set({ loadProgress: progress }),
@@ -201,13 +224,42 @@ export const useGameStore = create<GameState>((set) => ({
       return { isPhoneOn: true };
     }),
 
+  openQuestModal: () => set({ showQuestModal: true }),
+  closeQuestModal: () => set({ showQuestModal: false }),
+  toggleQuestModal: () => set((s) => ({ showQuestModal: !s.showQuestModal })),
+  dismissUnlockBanner: () => set({ showUnlockBanner: false }),
+
+  setActiveCharacter: (char) => set({ activeCharacter: char }),
+
   openWindow: (id) =>
-    set((state) => ({
-      openWindows: state.openWindows.includes(id)
+    set((state) => {
+      const nextOpenWindows = state.openWindows.includes(id)
         ? state.openWindows
-        : [...state.openWindows, id],
-      activeWindow: id,
-    })),
+        : [...state.openWindows, id];
+
+      // Update visited checkpoints
+      let vPhone = state.visitedPhone;
+      let vPC = state.visitedPC;
+      let vDoor = state.visitedDoor;
+
+      if (id === "phone") vPhone = true;
+      if (id === "computer" || id === "desktop_os") vPC = true;
+      if (id === "door" || id === "contacto") vDoor = true;
+
+      const allCompleted = vPhone && vPC && vDoor;
+      const justUnlocked = allCompleted && !state.dogUnlocked;
+
+      return {
+        openWindows: nextOpenWindows,
+        activeWindow: id,
+        visitedPhone: vPhone,
+        visitedPC: vPC,
+        visitedDoor: vDoor,
+        dogUnlocked: state.dogUnlocked || allCompleted,
+        showUnlockBanner: state.showUnlockBanner || justUnlocked,
+        showQuestModal: justUnlocked ? true : state.showQuestModal,
+      };
+    }),
 
   closeWindow: (id) =>
     set((state) => ({

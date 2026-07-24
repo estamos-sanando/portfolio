@@ -11,113 +11,9 @@ import PhoneApp from "@/components/ui/PhoneApp";
 import DesktopOS from "@/components/ui/DesktopOS";
 import AudioControls from "@/components/ui/AudioControls";
 import MobileControls from "@/components/ui/MobileControls";
+import QuestModal from "@/components/ui/QuestModal";
 import PixelWindow from "@/components/ui/PixelWindow";
 import GameTutorialModal from "@/components/ui/GameTutorialModal";
-
-// Controls legend
-function ControlsOverlay() {
-  const [visible, setVisible] = useState(true);
-
-  if (!visible) return (
-    <button
-      onClick={() => setVisible(true)}
-      style={{
-        position: "fixed",
-        top: 12,
-        left: 12,
-        zIndex: 50,
-        padding: "4px 10px",
-        background: "rgba(45,45,58,0.85)",
-        border: "2px solid var(--px-rose-dark)",
-        color: "var(--px-cream)",
-        fontFamily: "var(--font-pixel)",
-        fontSize: "7px",
-        cursor: "pointer",
-      }}
-    >
-      ?
-    </button>
-  );
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      style={{
-        position: "fixed",
-        top: 16,
-        left: 16,
-        zIndex: 50,
-        background: "rgba(30, 30, 42, 0.85)",
-        border: "1px solid rgba(242, 167, 187, 0.3)",
-        borderRadius: 12,
-        padding: "14px 16px",
-        backdropFilter: "blur(10px)",
-        boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
-        minWidth: 180,
-      }}
-    >
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 10,
-        borderBottom: "1px solid rgba(242,167,187,0.2)",
-        paddingBottom: 6,
-      }}>
-        <span style={{
-          fontFamily: "var(--font-pixel)",
-          fontSize: "12px",
-          fontWeight: 700,
-          color: "var(--px-rose)",
-          letterSpacing: "0.05em",
-        }}>CONTROLES</span>
-        <button
-          onClick={() => setVisible(false)}
-          style={{
-            background: "none",
-            border: "none",
-            color: "var(--px-beige)",
-            cursor: "pointer",
-            fontSize: "14px",
-          }}
-        >✕</button>
-      </div>
-
-      {[
-        ["← → / A D", "Moverse (Izq/Der)"],
-        ["↑ ↓ / W S", "Profundidad"],
-        ["F", "Prender / Apagar"],
-        ["E", "Usar dispositivo"],
-        ["ESC", "Cerrar"],
-      ].map(([key, action]) => (
-        <div key={key} style={{
-          display: "flex",
-          justifyContent: "space-between",
-          gap: 12,
-          marginBottom: 6,
-          alignItems: "center",
-        }}>
-          <span style={{
-            fontFamily: "var(--font-pixel)",
-            fontSize: "11px",
-            fontWeight: 600,
-            color: "var(--px-rose)",
-            background: "rgba(242,167,187,0.15)",
-            padding: "2px 6px",
-            borderRadius: 4,
-            border: "1px solid rgba(242,167,187,0.3)",
-          }}>{key}</span>
-          <span style={{
-            fontFamily: "var(--font-pixel)",
-            fontSize: "12px",
-            color: "#E2D9F3",
-          }}>{action}</span>
-        </div>
-      ))}
-    </motion.div>
-  );
-}
 
 // How to interact tutorial overlay (first-time only)
 function HowToPlay({ onDismiss }: { onDismiss: () => void }) {
@@ -205,33 +101,6 @@ function HowToPlay({ onDismiss }: { onDismiss: () => void }) {
         fontSize: "24px",
       }}>🐱</div>
     </motion.div>
-  );
-}
-
-// Hint bar at bottom
-function HintBar() {
-  const { nearObject, isPcOn, isPhoneOn } = useGameStore();
-
-  const hints: Record<string, string> = {
-    phone: isPhoneOn
-      ? "📱 Celular [PRENDIDO] · Presioná E para usar o F para apagar"
-      : "📱 Celular [APAGADO] · Presioná F (o clic / E) para prenderlo primero",
-    computer: isPcOn
-      ? "💻 Computadora [PRENDIDA] · Presioná E para usar o F para apagar"
-      : "💻 Computadora [APAGADA] · Presioná F (o clic / E) para prenderla primero",
-    door: "🚪 Puerta · Presioná E para contactarme",
-    radio: "🎵 Radio · Presioná E para escuchar",
-  };
-
-  const hint = nearObject
-    ? hints[nearObject]
-    : "💡 Consejo: acercate a la PC o celular y prendelos (F o clic) para interactuar";
-
-  return (
-    <div className="hint-bar">
-      <span>💡</span>
-      <span style={{ color: "var(--px-cream)" }}>{hint}</span>
-    </div>
   );
 }
 
@@ -374,10 +243,9 @@ export default function HomePage() {
           <GameContainer />
 
           {/* ---- UI OVERLAYS ---- */}
-          <ControlsOverlay />
+          <QuestModal />
           <AudioControls />
           <MobileControls />
-          <HintBar />
 
           {/* Game Tutorial Modal with Waving Character Portrait & Docked Widget */}
           <GameTutorialModal />
