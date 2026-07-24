@@ -12,6 +12,7 @@ import DesktopOS from "@/components/ui/DesktopOS";
 import AudioControls from "@/components/ui/AudioControls";
 import MobileControls from "@/components/ui/MobileControls";
 import PixelWindow from "@/components/ui/PixelWindow";
+import GameTutorialModal from "@/components/ui/GameTutorialModal";
 
 // Controls legend
 function ControlsOverlay() {
@@ -378,12 +379,8 @@ export default function HomePage() {
           <MobileControls />
           <HintBar />
 
-          {/* How to play tooltip */}
-          <AnimatePresence>
-            {showHowTo && (
-              <HowToPlay onDismiss={() => setShowHowTo(false)} />
-            )}
-          </AnimatePresence>
+          {/* Game Tutorial Modal with Waving Character Portrait & Docked Widget */}
+          <GameTutorialModal />
 
           {/* ---- INTERACTIVE WINDOWS ---- */}
           <AnimatePresence>

@@ -53,6 +53,10 @@ interface GameState {
   isPcOn: boolean;
   isPhoneOn: boolean;
 
+  // Game Guide Modal
+  showGuideModal: boolean;
+  isGuideDocked: boolean;
+
   // Actions
   setLoading: (loading: boolean) => void;
   setLoadProgress: (progress: number) => void;
@@ -62,6 +66,9 @@ interface GameState {
   togglePhonePower: () => void;
   setPcPower: (on: boolean) => void;
   setPhonePower: (on: boolean) => void;
+  openGuideModal: () => void;
+  closeGuideModal: () => void;
+  toggleGuideModal: () => void;
   openWindow: (id: WindowId) => void;
   closeWindow: (id: WindowId) => void;
   setActiveWindow: (id: WindowId) => void;
@@ -79,6 +86,8 @@ export const useGameStore = create<GameState>((set) => ({
   isMuted: false,
   isPcOn: false,
   isPhoneOn: false,
+  showGuideModal: true,
+  isGuideDocked: false,
   openWindows: [],
   activeWindow: null,
   nearObject: null,
@@ -89,7 +98,11 @@ export const useGameStore = create<GameState>((set) => ({
   setLoading: (loading) => set({ isLoading: loading }),
   setLoadProgress: (progress) => set({ loadProgress: progress }),
 
-  startGame: () => set({ isLoading: false, gameStarted: true }),
+  startGame: () => set({ isLoading: false, gameStarted: true, showGuideModal: true }),
+
+  openGuideModal: () => set({ showGuideModal: true }),
+  closeGuideModal: () => set({ showGuideModal: false, isGuideDocked: true }),
+  toggleGuideModal: () => set((state) => ({ showGuideModal: !state.showGuideModal, isGuideDocked: state.showGuideModal })),
 
   toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
 

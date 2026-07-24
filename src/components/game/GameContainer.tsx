@@ -319,10 +319,10 @@ export default function GameContainer() {
       const now = performance.now();
       ctx!.save();
 
-      // Shadow
-      ctx!.fillStyle = "rgba(0,0,0,0.18)";
+      // Realistic ground shadow aligned directly with soles of shoes (no gap)
+      ctx!.fillStyle = "rgba(0, 0, 0, 0.26)";
       ctx!.beginPath();
-      ctx!.ellipse(px, py + 40, 45, 10, 0, 0, Math.PI * 2);
+      ctx!.ellipse(px, py + 18, 34, 8, 0, 0, Math.PI * 2);
       ctx!.fill();
 
       const f = player.frame % 4;
