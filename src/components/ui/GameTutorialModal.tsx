@@ -87,11 +87,11 @@ export default function GameTutorialModal() {
                     }}
                   />
                   <span style={{ color: "var(--px-rose)", fontWeight: 700, fontSize: "9px" }}>
-                    GUÍA DE JUEGO
+                    GUÍA DEL ESPACIO
                   </span>
                 </div>
                 <span style={{ fontSize: "7px", color: "var(--px-beige)", opacity: 0.8 }}>
-                  Haz clic para ver ❓
+                  Clic para ver instrucciones ✨
                 </span>
               </div>
             </button>
@@ -99,7 +99,7 @@ export default function GameTutorialModal() {
         )}
       </AnimatePresence>
 
-      {/* 2. TUTORIAL MODAL POPUP (Estilo Videojuego RPG) */}
+      {/* 2. TUTORIAL MODAL POPUP */}
       <AnimatePresence>
         {showGuideModal && (
           <motion.div
@@ -269,17 +269,16 @@ export default function GameTutorialModal() {
                         letterSpacing: "0.04em",
                       }}
                     >
-                      🎮 ¡BIENVENIDO/A A MI ESPACIO!
+                      ✨ ¡TE DOY LA BIENVENIDA A MI ESPACIO!
                     </h2>
                     <p
                       style={{
                         fontSize: "13px",
-                        lineHeight: 1.5,
+                        lineHeight: 1.55,
                         color: "#E2D9F3",
                       }}
                     >
-                      ¡Hola! Te doy la bienvenida a mi portfolio 2D interactivo.
-                      Explorá la habitación y utilizá los dispositivos para descubrir mis proyectos y trayectoria:
+                      ¡Hola! Qué alegría tenerte por acá. Diseñé este espacio interactivo para compartir mi universo creativo: explorá la habitación y utilizá los dispositivos para descubrir mis proyectos, ideas y trayectoria.
                     </p>
                   </div>
 
@@ -296,10 +295,10 @@ export default function GameTutorialModal() {
                     }}
                   >
                     {[
-                      { key: "A / D o ← →", text: "Moverse de izquierda a derecha" },
+                      { key: "A / D o ← →", text: "Moverte por la habitación" },
                       { key: "F", text: "PRENDER / APAGAR (PC o Celular)" },
-                      { key: "E", text: "USAR Celular / PC (solo prendidos)" },
-                      { key: "🚪 Puerta", text: "Acercate para enviarme un mensaje" },
+                      { key: "E", text: "USAR Celular / PC (solo encendidos)" },
+                      { key: "Puerta", text: "Acercate para conectarte y enviarme un mensaje" },
                     ].map((item) => (
                       <div
                         key={item.key}
@@ -353,7 +352,7 @@ export default function GameTutorialModal() {
                     }}
                     className="hover:brightness-110 active:scale-95"
                   >
-                    ¡ENTENDIDO! EMPEZAR A JUGAR 🎮
+                    ✨ INGRESAR Y EXPLORAR ✨
                   </button>
                 </div>
               </div>
