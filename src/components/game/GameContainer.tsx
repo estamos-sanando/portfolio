@@ -81,6 +81,14 @@ export default function GameContainer() {
     let dogSideLoaded = dogSideImg.complete;
     dogSideImg.onload = () => { dogSideLoaded = true; };
 
+    const dogHappyImg = new window.Image();
+    dogHappyImg.src = "/dog_happy.png";
+    let dogHappyLoaded = dogHappyImg.complete;
+    dogHappyImg.onload = () => { dogHappyLoaded = true; };
+
+    let petTimer = 0;
+    const petHearts: Array<{x: number; y: number; vy: number; alpha: number; icon: string; size: number}> = [];
+
     // ---- Player & Dog State ----
     const player = {
       x: canvas.width * 0.5,
@@ -99,11 +107,11 @@ export default function GameContainer() {
 
     const dog = {
       x: canvas.width * 0.95,
-      targetX: canvas.width * 0.58,
+      targetX: canvas.width * 0.18, // Next to the bed
       y: canvas.height * 0.85,
       w: 32,
       h: 32,
-      speed: 4.0,
+      speed: 4.5,
       facing: "left" as "left" | "right",
       isMoving: false,
       hasEntered: false,
@@ -127,6 +135,17 @@ export default function GameContainer() {
         { id: "computer", x: w * 0.45, y: h * 0.70, w: w * 0.30, h: h * 0.30, label: "COMPUTADORA" },
         { id: "door", x: w * 0.85, y: h * 0.70, w: w * 0.12, h: h * 0.30, label: "PUERTA" },
       ];
+
+      if (dogUnlockedRef.current) {
+        interactables.push({
+          id: "pet_dog",
+          x: dog.x - 40,
+          y: dog.y - 120,
+          w: 80,
+          h: 140,
+          label: "ACARICIAR",
+        });
+      }
     };
 
     // Resize canvas & update objects
@@ -256,6 +275,20 @@ export default function GameContainer() {
           } else if (obj.id === "door") {
             audioEngine.interact();
             openWindow("door");
+          } else if (obj.id === "pet_dog") {
+            audioEngine.click();
+            petTimer = 180; // 3 seconds of happy smiling pose
+            // Spawn floating hearts
+            for (let k = 0; k < 6; k++) {
+              petHearts.push({
+                x: dog.x + (Math.random() - 0.5) * 50,
+                y: dog.y - 120 + (Math.random() - 0.5) * 25,
+                vy: -1.2 - Math.random() * 1.2,
+                alpha: 1.0,
+                icon: ["💖", "✨", "🌸", "💕"][Math.floor(Math.random() * 4)],
+                size: 16 + Math.floor(Math.random() * 8),
+              });
+            }
           }
           return;
         }
@@ -293,6 +326,19 @@ export default function GameContainer() {
           } else if (obj.id === "door") {
             audioEngine.interact();
             openWindow("door");
+          } else if (obj.id === "pet_dog") {
+            audioEngine.click();
+            petTimer = 180;
+            for (let k = 0; k < 6; k++) {
+              petHearts.push({
+                x: dog.x + (Math.random() - 0.5) * 50,
+                y: dog.y - 120 + (Math.random() - 0.5) * 25,
+                vy: -1.2 - Math.random() * 1.2,
+                alpha: 1.0,
+                icon: ["💖", "✨", "🌸", "💕"][Math.floor(Math.random() * 4)],
+                size: 16 + Math.floor(Math.random() * 8),
+              });
+            }
           }
           break;
         }
@@ -438,7 +484,20 @@ export default function GameContainer() {
         ctx!.ellipse(dx, dy + 22, 36, 8, 0, 0, Math.PI * 2);
         ctx!.fill();
 
-        if (dog.isMoving && dogSideLoaded) {
+        if (petTimer > 0 && dogHappyLoaded) {
+          petTimer--;
+          const targetH = 270;
+          const dh = targetH;
+          const dw = dh * (dogHappyImg.width / dogHappyImg.height);
+          const happyBob = Math.sin(now / 150) * 4;
+
+          ctx!.translate(dx, dy + happyBob);
+          if (dog.facing === "right") {
+            ctx!.scale(-1, 1);
+          }
+
+          ctx!.drawImage(dogHappyImg, -dw / 2, -dh + 32, dw, dh);
+        } else if (dog.isMoving && dogSideLoaded) {
           // Multi-frame walk cycle from sprite sheet
           const totalDogFrames = 2;
           const frameW = dogSideImg.width / totalDogFrames;
@@ -492,6 +551,22 @@ export default function GameContainer() {
         ctx!.fillRect(Math.round(p.x), Math.round(p.y), 2, 2);
       }
       ctx!.globalAlpha = 1.0;
+
+      // Draw floating heart & sparkle particles when petted
+      for (let i = petHearts.length - 1; i >= 0; i--) {
+        const h = petHearts[i];
+        h.y += h.vy;
+        h.alpha -= 0.015;
+        if (h.alpha <= 0) {
+          petHearts.splice(i, 1);
+          continue;
+        }
+        ctx!.save();
+        ctx!.globalAlpha = Math.max(0, h.alpha);
+        ctx!.font = `${h.size}px sans-serif`;
+        ctx!.fillText(h.icon, h.x, h.y);
+        ctx!.restore();
+      }
     }
 
     // ---- Draw Hint Labels ----
@@ -546,6 +621,18 @@ export default function GameContainer() {
               ctx!.textAlign = "left";
               ctx!.fillText("USAR", hx + 32, hy + 3);
             }
+          } else if (obj.id === "pet_dog") {
+            ctx!.fillStyle = "#F2A7BB";
+            ctx!.fillRect(hx - bubbleW / 2 + 6, hy - 9, 18, 16);
+            ctx!.fillStyle = "#2D2D3A";
+            ctx!.font = `bold 9px 'Press Start 2P'`;
+            ctx!.textAlign = "center";
+            ctx!.fillText("E", hx - bubbleW / 2 + 15, hy + 3);
+
+            ctx!.fillStyle = "#FFF8EF";
+            ctx!.font = `7px 'Press Start 2P'`;
+            ctx!.textAlign = "left";
+            ctx!.fillText("ACARICIAR 🐾", hx - bubbleW / 2 + 28, hy + 3);
           } else {
             ctx!.fillStyle = "#B39DDB";
             ctx!.fillRect(hx - bubbleW / 2 + 6, hy - 9, 18, 16);
@@ -597,6 +684,13 @@ export default function GameContainer() {
             dog.isMoving = false;
           }
         }
+      }
+
+      // Update pet_dog interactable position dynamically
+      const petObj = interactables.find((o) => o.id === "pet_dog");
+      if (petObj) {
+        petObj.x = dog.x - 40;
+        petObj.y = dog.y - 120;
       }
 
       // 2. Player Input Movement (Active Character)
