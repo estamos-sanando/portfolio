@@ -107,8 +107,8 @@ export default function GameContainer() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       if (!initialPositionSet) {
-        player.x = canvas.width * 0.5;
-        player.y = canvas.height * 0.81;
+        player.x = canvas.width * 0.65;
+        player.y = canvas.height * 0.85;
         initialPositionSet = true;
       }
       updateObjects();
@@ -325,10 +325,10 @@ export default function GameContainer() {
       const now = performance.now();
       ctx!.save();
 
-      // Realistic ground shadow aligned directly with soles of shoes (no gap)
-      ctx!.fillStyle = "rgba(0, 0, 0, 0.26)";
+      // Realistic ground shadow aligned directly with soles of shoes on floor/carpet
+      ctx!.fillStyle = "rgba(0, 0, 0, 0.28)";
       ctx!.beginPath();
-      ctx!.ellipse(px, py + 18, 34, 8, 0, 0, Math.PI * 2);
+      ctx!.ellipse(px, py + 22, 38, 9, 0, 0, Math.PI * 2);
       ctx!.fill();
 
       const f = player.frame % 4;
@@ -351,12 +351,12 @@ export default function GameContainer() {
         const frameIdx = Math.floor((now / 150) % totalFrames);
         const frameX = frameIdx * frameW;
 
-        const targetHeight = 449; 
+        const targetHeight = 504; 
         const dh = targetHeight;
         const dw = dh * (frameW / frameH);
 
         ctx!.save();
-        ctx!.translate(bx, by + 40 - stepBob);
+        ctx!.translate(bx, by + 44 - stepBob);
         if (player.facing === "left") {
           ctx!.scale(-1, 1);
         }
@@ -371,7 +371,7 @@ export default function GameContainer() {
       } else if (!player.isMoving && idleLoaded) {
         // Idle front-facing pose with subtle breathing animation
         const breatheBob = Math.sin(now / 450) * 2;
-        const targetHeight = 460;
+        const targetHeight = 515;
         const dh = targetHeight;
         const dw = dh * (idleImg.width / idleImg.height);
 
@@ -379,7 +379,7 @@ export default function GameContainer() {
         ctx!.drawImage(
           idleImg,
           0, 0, idleImg.width, idleImg.height,
-          bx - dw / 2, by - dh + 40 + breatheBob, dw, dh
+          bx - dw / 2, by - dh + 44 + breatheBob, dw, dh
         );
         ctx!.restore();
       } else {
