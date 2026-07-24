@@ -19,18 +19,18 @@ export default function GameTutorialModal() {
 
   return (
     <>
-      {/* 1. DOCKED SIDEBAR WIDGET (Plegable en el costado) */}
+      {/* 1. DOCKED WIDGET (Plegable en el costado derecho) */}
       <AnimatePresence>
         {isGuideDocked && !showGuideModal && (
           <motion.div
-            initial={{ opacity: 0, x: -50, scale: 0.8 }}
+            initial={{ opacity: 0, x: 50, scale: 0.8 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -50, scale: 0.8 }}
+            exit={{ opacity: 0, x: 50, scale: 0.8 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
             style={{
               position: "fixed",
               top: 72,
-              left: 16,
+              right: 20,
               zIndex: 40,
             }}
           >

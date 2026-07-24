@@ -56,6 +56,7 @@ interface GameState {
   // Game Guide Modal
   showGuideModal: boolean;
   isGuideDocked: boolean;
+  hasSeenGuide: boolean;
 
   // Actions
   setLoading: (loading: boolean) => void;
@@ -88,6 +89,7 @@ export const useGameStore = create<GameState>((set) => ({
   isPhoneOn: false,
   showGuideModal: true,
   isGuideDocked: false,
+  hasSeenGuide: false,
   openWindows: [],
   activeWindow: null,
   nearObject: null,
@@ -98,11 +100,28 @@ export const useGameStore = create<GameState>((set) => ({
   setLoading: (loading) => set({ isLoading: loading }),
   setLoadProgress: (progress) => set({ loadProgress: progress }),
 
-  startGame: () => set({ isLoading: false, gameStarted: true, showGuideModal: true }),
+  startGame: () =>
+    set((state) => ({
+      isLoading: false,
+      gameStarted: true,
+      showGuideModal: !state.hasSeenGuide,
+    })),
 
   openGuideModal: () => set({ showGuideModal: true }),
-  closeGuideModal: () => set({ showGuideModal: false, isGuideDocked: true }),
-  toggleGuideModal: () => set((state) => ({ showGuideModal: !state.showGuideModal, isGuideDocked: state.showGuideModal })),
+
+  closeGuideModal: () =>
+    set({
+      showGuideModal: false,
+      isGuideDocked: true,
+      hasSeenGuide: true,
+    }),
+
+  toggleGuideModal: () =>
+    set((state) => ({
+      showGuideModal: !state.showGuideModal,
+      isGuideDocked: state.showGuideModal,
+      hasSeenGuide: true,
+    })),
 
   toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
 

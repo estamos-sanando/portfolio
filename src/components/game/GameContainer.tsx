@@ -102,9 +102,15 @@ export default function GameContainer() {
     };
 
     // Resize canvas & update objects
+    let initialPositionSet = false;
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      if (!initialPositionSet) {
+        player.x = canvas.width * 0.5;
+        player.y = canvas.height * 0.81;
+        initialPositionSet = true;
+      }
       updateObjects();
     };
     resize();
