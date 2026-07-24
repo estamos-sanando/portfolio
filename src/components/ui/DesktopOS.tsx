@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAudio } from "@/hooks/useAudio";
 import PixelWindow from "./PixelWindow";
-import CVWindow from "./CVWindow";
 
 // ---- Project Definitions ----
 const PROJECTS = [

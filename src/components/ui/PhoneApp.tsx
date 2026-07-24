@@ -4,16 +4,13 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGameStore } from "@/hooks/useGameStore";
 import { useAudio } from "@/hooks/useAudio";
-import CVWindow from "./CVWindow";
 
 // ---- App Screens ----
 
 function SobreMiScreen() {
-  const [showCV, setShowCV] = useState(false);
-
   return (
     <div style={{ padding: "20px 24px", background: "var(--px-cream)", minHeight: "100%" }}>
-      <div style={{ display: "flex", gap: "24px", alignItems: "flex-start" }}>
+      <div style={{ display: "flex", gap: "24px", alignItems: "flex-start", marginBottom: 20 }}>
         {/* Left Column: Avatar & Quick Info */}
         <div
           style={{
@@ -117,18 +114,20 @@ function SobreMiScreen() {
             Perfil Profesional
           </h3>
           <p style={{ marginBottom: 12 }}>
-            Creativa digital con amplia experiencia en producción de contenidos, comunicación estratégica y diseño de experiencias digitales.
-          </p>
-          <p style={{ marginBottom: 12 }}>
-            Me especializo en transformar ideas en proyectos con impacto real, combinando sensibilidad estética, pensamiento estratégico y el dominio de herramientas digitales avanzadas e Inteligencia Artificial.
+            Creativa digital con experiencia en producción de contenidos, comunicación estratégica y diseño de experiencias digitales. Me especializo en transformar ideas en proyectos con impacto, combinando creatividad, pensamiento estratégico y dominio de herramientas digitales e Inteligencia Artificial.
           </p>
           <p style={{ marginBottom: 16 }}>
-            Me destaco por entender a las personas, generar contenido auténtico, visual y funcional, y liderar proyectos completos desde la conceptualización inicial hasta su ejecución final.
+            Me destaco por entender a las personas, generar contenido auténtico, visual y funcional, y liderar proyectos desde la conceptualización hasta su ejecución.
           </p>
 
-          <button
-            onClick={() => setShowCV(true)}
+          <a
+            href="/cv-antonella.pdf"
+            download
             style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
               width: "100%",
               padding: "10px 14px",
               background: "linear-gradient(135deg, var(--px-rose-dark), var(--px-violet-dark))",
@@ -138,22 +137,133 @@ function SobreMiScreen() {
               fontFamily: "var(--font-pixel)",
               fontSize: "11px",
               fontWeight: 700,
-              cursor: "pointer",
+              textDecoration: "none",
               boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 8,
+              cursor: "pointer",
             }}
           >
-            📄 Ver Curriculum Vitae Completo
-          </button>
+            📄 ↓ Descargar Curriculum Vitae Oficial (PDF)
+          </a>
         </div>
       </div>
 
-      <AnimatePresence>
-        {showCV && <CVWindow onClose={() => setShowCV(false)} />}
-      </AnimatePresence>
+      {/* Educación & Formación Section (Directly inside Sobre Mí Window) */}
+      <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid rgba(0,0,0,0.08)" }}>
+        <h3
+          style={{
+            fontFamily: "var(--font-pixel)",
+            fontSize: "16px",
+            fontWeight: 800,
+            color: "var(--px-rose-dark)",
+            marginBottom: 16,
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          🎓 Educación & Formación
+        </h3>
+
+        {/* Degree Card */}
+        <div
+          style={{
+            background: "white",
+            borderRadius: "16px",
+            padding: "18px 22px",
+            borderLeft: "5px solid #7E57C2",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.04)",
+            marginBottom: 16,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            gap: 16,
+          }}
+        >
+          <div>
+            <div
+              style={{
+                fontFamily: "var(--font-pixel)",
+                fontSize: "15px",
+                fontWeight: 800,
+                color: "var(--px-dark)",
+                marginBottom: 4,
+              }}
+            >
+              Universidad Nacional de La Matanza (UNLaM)
+            </div>
+            <div
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "14px",
+                fontWeight: 600,
+                color: "#7E57C2",
+              }}
+            >
+              Tecnicatura en Producción de Contenidos para la Comunicación
+            </div>
+          </div>
+          <span
+            style={{
+              fontFamily: "var(--font-pixel)",
+              fontSize: "11px",
+              fontWeight: 600,
+              color: "#7E57C2",
+              background: "rgba(126, 87, 194, 0.12)",
+              padding: "4px 12px",
+              borderRadius: "12px",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Previsto 2027
+          </span>
+        </div>
+
+        {/* Formación Complementaria Card */}
+        <div
+          style={{
+            background: "white",
+            borderRadius: "16px",
+            padding: "18px 22px",
+            borderLeft: "5px solid #D4748A",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.04)",
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "var(--font-pixel)",
+              fontSize: "14px",
+              fontWeight: 700,
+              color: "var(--px-dark)",
+              marginBottom: 12,
+            }}
+          >
+            Formación Complementaria
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {[
+              "• IA Aplicada al Marketing",
+              "• Producción de Eventos y Periodística",
+              "• Oratoria: El Arte de Hablar",
+              "• Introducción a la IA",
+            ].map((course) => (
+              <span
+                key={course}
+                style={{
+                  background: "rgba(242, 167, 187, 0.15)",
+                  color: "var(--px-rose-dark)",
+                  border: "1px solid rgba(242, 167, 187, 0.4)",
+                  borderRadius: "10px",
+                  padding: "6px 14px",
+                  fontSize: "13px",
+                  fontWeight: 600,
+                }}
+              >
+                {course}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -535,7 +645,7 @@ const APPS = [
   { id: "experiencia", label: "Experiencia", icon: "💼", color: "#B39DDB", Screen: ExperienciaScreen },
   { id: "habilidades", label: "Habilidades", icon: "🛠️", color: "#A8C5A0", Screen: HabilidadesScreen },
   { id: "contacto", label: "Contacto", icon: "✉️", color: "#E8D5B7", Screen: ContactoScreen },
-  { id: "cv", label: "Descargar CV", icon: "📄", color: "#D4748A", Screen: CVScreen },
+  { id: "cv", label: "Descargar CV", icon: "📄", color: "#D4748A", Screen: () => null },
 ];
 
 // ---- Main Phone Component ----
@@ -558,6 +668,16 @@ export default function PhoneApp({ onClose }: { onClose: () => void }) {
   }, [activeApp, onClose]);
 
   const openApp = (id: string) => {
+    if (id === "cv") {
+      play("click");
+      const link = document.createElement("a");
+      link.href = "/cv-antonella.pdf";
+      link.download = "cv-antonella.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      return;
+    }
     play("click");
     setActiveApp(id);
   };
