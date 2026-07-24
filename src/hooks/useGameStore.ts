@@ -49,11 +49,19 @@ interface GameState {
   // Desktop OS state
   desktopOpenWindows: string[];
 
+  // Device Power State
+  isPcOn: boolean;
+  isPhoneOn: boolean;
+
   // Actions
   setLoading: (loading: boolean) => void;
   setLoadProgress: (progress: number) => void;
   startGame: () => void;
   toggleMute: () => void;
+  togglePcPower: () => void;
+  togglePhonePower: () => void;
+  setPcPower: (on: boolean) => void;
+  setPhonePower: (on: boolean) => void;
   openWindow: (id: WindowId) => void;
   closeWindow: (id: WindowId) => void;
   setActiveWindow: (id: WindowId) => void;
@@ -69,6 +77,8 @@ export const useGameStore = create<GameState>((set) => ({
   loadProgress: 0,
   gameStarted: false,
   isMuted: false,
+  isPcOn: false,
+  isPhoneOn: false,
   openWindows: [],
   activeWindow: null,
   nearObject: null,
@@ -82,6 +92,82 @@ export const useGameStore = create<GameState>((set) => ({
   startGame: () => set({ isLoading: false, gameStarted: true }),
 
   toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
+
+  togglePcPower: () =>
+    set((state) => {
+      const nextState = !state.isPcOn;
+      if (!nextState) {
+        // If turning OFF, close computer and desktop OS windows
+        const filteredWindows = state.openWindows.filter(
+          (w) => w !== "computer" && w !== "desktop_os"
+        );
+        return {
+          isPcOn: false,
+          openWindows: filteredWindows,
+          activeWindow:
+            state.activeWindow === "computer" || state.activeWindow === "desktop_os"
+              ? filteredWindows[filteredWindows.length - 1] ?? null
+              : state.activeWindow,
+          desktopOpenWindows: [],
+        };
+      }
+      return { isPcOn: true };
+    }),
+
+  togglePhonePower: () =>
+    set((state) => {
+      const nextState = !state.isPhoneOn;
+      if (!nextState) {
+        // If turning OFF, close phone window
+        const filteredWindows = state.openWindows.filter((w) => w !== "phone");
+        return {
+          isPhoneOn: false,
+          openWindows: filteredWindows,
+          activeWindow:
+            state.activeWindow === "phone"
+              ? filteredWindows[filteredWindows.length - 1] ?? null
+              : state.activeWindow,
+          currentPhoneApp: null,
+        };
+      }
+      return { isPhoneOn: true };
+    }),
+
+  setPcPower: (on) =>
+    set((state) => {
+      if (!on) {
+        const filteredWindows = state.openWindows.filter(
+          (w) => w !== "computer" && w !== "desktop_os"
+        );
+        return {
+          isPcOn: false,
+          openWindows: filteredWindows,
+          activeWindow:
+            state.activeWindow === "computer" || state.activeWindow === "desktop_os"
+              ? filteredWindows[filteredWindows.length - 1] ?? null
+              : state.activeWindow,
+          desktopOpenWindows: [],
+        };
+      }
+      return { isPcOn: true };
+    }),
+
+  setPhonePower: (on) =>
+    set((state) => {
+      if (!on) {
+        const filteredWindows = state.openWindows.filter((w) => w !== "phone");
+        return {
+          isPhoneOn: false,
+          openWindows: filteredWindows,
+          activeWindow:
+            state.activeWindow === "phone"
+              ? filteredWindows[filteredWindows.length - 1] ?? null
+              : state.activeWindow,
+          currentPhoneApp: null,
+        };
+      }
+      return { isPhoneOn: true };
+    }),
 
   openWindow: (id) =>
     set((state) => ({

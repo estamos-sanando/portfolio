@@ -21,8 +21,25 @@ interface RoomObject {
 export default function GameContainer() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationIdRef = useRef<number | null>(null);
-  const { setNearObject, openWindow, gameStarted, isMuted } = useGameStore();
+  const {
+    setNearObject,
+    openWindow,
+    gameStarted,
+    isMuted,
+    isPcOn,
+    isPhoneOn,
+    togglePcPower,
+    togglePhonePower,
+  } = useGameStore();
+
   const nearObjectRef = useRef<string | null>(null);
+  const isPcOnRef = useRef(isPcOn);
+  const isPhoneOnRef = useRef(isPhoneOn);
+
+  useEffect(() => {
+    isPcOnRef.current = isPcOn;
+    isPhoneOnRef.current = isPhoneOn;
+  }, [isPcOn, isPhoneOn]);
 
   useEffect(() => {
     if (!gameStarted) return;
@@ -36,7 +53,6 @@ export default function GameContainer() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-
 
     // ---- Load Character Sprites ----
     const sideImg = new window.Image();
@@ -116,6 +132,16 @@ export default function GameContainer() {
         handleInteraction();
       }
       if (
+        e.key === "f" ||
+        e.key === "F" ||
+        e.code === "KeyF" ||
+        e.key === "p" ||
+        e.key === "P" ||
+        e.code === "KeyP"
+      ) {
+        handlePowerToggle();
+      }
+      if (
         ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "w", "a", "s", "d", "W", "A", "S", "D"].includes(e.key) ||
         ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyW", "KeyA", "KeyS", "KeyD"].includes(e.code)
       ) {
@@ -137,7 +163,38 @@ export default function GameContainer() {
     window.addEventListener("keyup", handleKeyUp);
     window.addEventListener("blur", handleBlur);
 
-    // ---- Interaction ----
+    // ---- Power Toggle Handler ----
+    function handlePowerToggle() {
+      for (let i = 0; i < interactables.length; i++) {
+        const obj = interactables[i];
+        const dist = Math.hypot(
+          player.x + player.w / 2 - (obj.x + obj.w / 2),
+          player.y + player.h / 2 - (obj.y + obj.h / 2)
+        );
+        if (dist < 180) {
+          if (obj.id === "computer") {
+            const turningOn = !isPcOnRef.current;
+            togglePcPower();
+            if (turningOn) {
+              audioEngine.bootPC();
+            } else {
+              audioEngine.powerOff();
+            }
+          } else if (obj.id === "phone") {
+            const turningOn = !isPhoneOnRef.current;
+            togglePhonePower();
+            if (turningOn) {
+              audioEngine.powerOnPhone();
+            } else {
+              audioEngine.powerOff();
+            }
+          }
+          return;
+        }
+      }
+    }
+
+    // ---- Interaction Handler ----
     function handleInteraction() {
       for (let i = 0; i < interactables.length; i++) {
         const obj = interactables[i];
@@ -146,14 +203,72 @@ export default function GameContainer() {
           player.y + player.h / 2 - (obj.y + obj.h / 2)
         );
         if (dist < 180) {
-          audioEngine.interact();
-          if (obj.id === "phone") openWindow("phone");
-          else if (obj.id === "computer") openWindow("computer");
-          else if (obj.id === "door") openWindow("door");
+          if (obj.id === "phone") {
+            if (isPhoneOnRef.current) {
+              audioEngine.interact();
+              openWindow("phone");
+            } else {
+              // Turn phone on first if off
+              togglePhonePower();
+              audioEngine.powerOnPhone();
+            }
+          } else if (obj.id === "computer") {
+            if (isPcOnRef.current) {
+              audioEngine.interact();
+              openWindow("computer");
+            } else {
+              // Turn PC on first if off
+              togglePcPower();
+              audioEngine.bootPC();
+            }
+          } else if (obj.id === "door") {
+            audioEngine.interact();
+            openWindow("door");
+          }
           return;
         }
       }
     }
+
+    // ---- Canvas Direct Click Handler ----
+    const handleCanvasClick = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      for (let i = 0; i < interactables.length; i++) {
+        const obj = interactables[i];
+        if (
+          clickX >= obj.x &&
+          clickX <= obj.x + obj.w &&
+          clickY >= obj.y &&
+          clickY <= obj.y + obj.h
+        ) {
+          if (obj.id === "computer") {
+            if (!isPcOnRef.current) {
+              togglePcPower();
+              audioEngine.bootPC();
+            } else {
+              audioEngine.interact();
+              openWindow("computer");
+            }
+          } else if (obj.id === "phone") {
+            if (!isPhoneOnRef.current) {
+              togglePhonePower();
+              audioEngine.powerOnPhone();
+            } else {
+              audioEngine.interact();
+              openWindow("phone");
+            }
+          } else if (obj.id === "door") {
+            audioEngine.interact();
+            openWindow("door");
+          }
+          break;
+        }
+      }
+    };
+    canvas.addEventListener("click", handleCanvasClick);
 
     // ---- Collision Detection ----
     function checkCollision(nx: number, ny: number): boolean {
@@ -296,27 +411,65 @@ export default function GameContainer() {
         );
         if (dist < 180) {
           const hx = obj.x + obj.w / 2;
-          const hy = obj.y - 20;
+          const hy = obj.y - 25;
+
+          const isPc = obj.id === "computer";
+          const isPhone = obj.id === "phone";
+          const isOn = isPc ? isPcOnRef.current : isPhone ? isPhoneOnRef.current : true;
+
+          const bubbleW = isPc || isPhone ? 150 : 110;
+          const bubbleH = 26;
 
           // Bubble background
-          ctx!.fillStyle = "rgba(45,45,58,0.92)";
-          ctx!.fillRect(hx - 55, hy - 14, 110, 22);
-          ctx!.strokeStyle = "#F2A7BB";
+          ctx!.fillStyle = "rgba(25,25,35,0.92)";
+          ctx!.fillRect(hx - bubbleW / 2, hy - bubbleH / 2, bubbleW, bubbleH);
+          ctx!.strokeStyle = isOn ? "#F2A7BB" : "#B39DDB";
           ctx!.lineWidth = 2;
-          ctx!.strokeRect(hx - 55, hy - 14, 110, 22);
+          ctx!.strokeRect(hx - bubbleW / 2, hy - bubbleH / 2, bubbleW, bubbleH);
 
-          // Key indicator
-          ctx!.fillStyle = "#F2A7BB";
-          ctx!.fillRect(hx - 50, hy - 10, 16, 14);
-          ctx!.fillStyle = "#2D2D3A";
-          ctx!.font = `bold 9px 'Press Start 2P'`;
-          ctx!.textAlign = "center";
-          ctx!.fillText("E", hx - 42, hy + 2);
+          if (isPc || isPhone) {
+            // [F] Power key badge
+            ctx!.fillStyle = isOn ? "#E74C3C" : "#2ECC71";
+            ctx!.fillRect(hx - bubbleW / 2 + 6, hy - 9, 18, 16);
+            ctx!.fillStyle = "#FFFFFF";
+            ctx!.font = `bold 9px 'Press Start 2P'`;
+            ctx!.textAlign = "center";
+            ctx!.fillText("F", hx - bubbleW / 2 + 15, hy + 3);
 
-          // Label
-          ctx!.fillStyle = "#FFF8EF";
-          ctx!.font = `8px 'Press Start 2P'`;
-          ctx!.fillText(obj.label || "", hx + 8, hy + 2);
+            ctx!.fillStyle = isOn ? "#FFD1D1" : "#D4EFDF";
+            ctx!.font = `7px 'Press Start 2P'`;
+            ctx!.textAlign = "left";
+            ctx!.fillText(isOn ? "APAGAR" : "PRENDER", hx - bubbleW / 2 + 28, hy + 3);
+
+            if (isOn) {
+              // [E] Use key badge
+              ctx!.fillStyle = "#F2A7BB";
+              ctx!.fillRect(hx + 10, hy - 9, 18, 16);
+              ctx!.fillStyle = "#2D2D3A";
+              ctx!.font = `bold 9px 'Press Start 2P'`;
+              ctx!.textAlign = "center";
+              ctx!.fillText("E", hx + 19, hy + 3);
+
+              ctx!.fillStyle = "#FFF8EF";
+              ctx!.font = `7px 'Press Start 2P'`;
+              ctx!.textAlign = "left";
+              ctx!.fillText("USAR", hx + 32, hy + 3);
+            }
+          } else {
+            // Key indicator for door / other
+            ctx!.fillStyle = "#F2A7BB";
+            ctx!.fillRect(hx - 48, hy - 8, 16, 14);
+            ctx!.fillStyle = "#2D2D3A";
+            ctx!.font = `bold 9px 'Press Start 2P'`;
+            ctx!.textAlign = "center";
+            ctx!.fillText("E", hx - 40, hy + 3);
+
+            // Label
+            ctx!.fillStyle = "#FFF8EF";
+            ctx!.font = `8px 'Press Start 2P'`;
+            ctx!.textAlign = "left";
+            ctx!.fillText(obj.label || "", hx - 18, hy + 3);
+          }
 
           if (nearObjectRef.current !== obj.id) {
             nearObjectRef.current = obj.id;
@@ -431,6 +584,7 @@ export default function GameContainer() {
         cancelAnimationFrame(animationIdRef.current);
         animationIdRef.current = null;
       }
+      canvas.removeEventListener("click", handleCanvasClick);
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
       window.removeEventListener("blur", handleBlur);

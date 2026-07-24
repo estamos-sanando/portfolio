@@ -16,6 +16,11 @@ export default function MobileControls() {
     window.dispatchEvent(event);
   };
 
+  const handlePower = () => {
+    const event = new KeyboardEvent("keydown", { key: "f" });
+    window.dispatchEvent(event);
+  };
+
   return (
     <>
       {/* D-PAD */}
@@ -77,22 +82,52 @@ export default function MobileControls() {
         </div>
       </div>
 
-      {/* INTERACT BUTTON (mobile) */}
+      {/* ACTION BUTTONS (mobile) */}
       <div
         style={{
           position: "fixed",
-          bottom: 56,
-          right: 24,
+          bottom: 44,
+          right: 20,
           zIndex: 20,
           display: "none",
+          flexDirection: "row",
+          gap: 12,
         }}
         className="mobile-interact-btn"
       >
+        {/* POWER BUTTON */}
+        <button
+          onClick={handlePower}
+          style={{
+            width: 58,
+            height: 58,
+            background: "rgba(231,76,60,0.85)",
+            border: "3px solid #C0392B",
+            color: "#FFF",
+            fontFamily: "var(--font-pixel)",
+            fontSize: "10px",
+            cursor: "pointer",
+            boxShadow: "3px 3px 0 rgba(0,0,0,0.4)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 2,
+            touchAction: "manipulation",
+            borderRadius: 8,
+          }}
+          aria-label="Prender o apagar"
+        >
+          <span style={{ fontSize: "18px" }}>⏻</span>
+          <span style={{ fontSize: "6px" }}>ON/OFF [F]</span>
+        </button>
+
+        {/* INTERACT BUTTON */}
         <button
           onClick={handleInteract}
           style={{
-            width: 64,
-            height: 64,
+            width: 58,
+            height: 58,
             background: "rgba(242,167,187,0.9)",
             border: "3px solid var(--px-rose-dark)",
             color: "var(--px-dark)",
@@ -106,11 +141,12 @@ export default function MobileControls() {
             justifyContent: "center",
             gap: 2,
             touchAction: "manipulation",
+            borderRadius: 8,
           }}
           aria-label="Interactuar"
         >
-          <span style={{ fontSize: "20px" }}>⚡</span>
-          <span style={{ fontSize: "7px" }}>ACTUAR</span>
+          <span style={{ fontSize: "18px" }}>⚡</span>
+          <span style={{ fontSize: "6px" }}>USAR [E]</span>
         </button>
       </div>
 
@@ -118,7 +154,7 @@ export default function MobileControls() {
       <style>{`
         @media (max-width: 768px) {
           .dpad-container { display: block !important; }
-          .mobile-interact-btn { display: block !important; }
+          .mobile-interact-btn { display: flex !important; }
         }
       `}</style>
     </>

@@ -114,6 +114,20 @@ export const audioEngine = {
     playTone(440, 0.4, "sine", 0.08, 0.9);
   },
 
+  powerOnPhone() {
+    // Soft digital chime for phone power on
+    playTone(523, 0.08, "sine", 0.1, 0);
+    playTone(659, 0.08, "sine", 0.1, 0.08);
+    playTone(880, 0.15, "sine", 0.12, 0.16);
+  },
+
+  powerOff() {
+    // Descending power down sound
+    playTone(440, 0.06, "square", 0.08, 0);
+    playTone(330, 0.06, "square", 0.08, 0.06);
+    playTone(220, 0.12, "sawtooth", 0.1, 0.12);
+  },
+
   openFolder() {
     playTone(600, 0.04, "square", 0.08);
     playTone(800, 0.06, "square", 0.06, 0.04);

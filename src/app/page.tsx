@@ -86,7 +86,8 @@ function ControlsOverlay() {
       {[
         ["← → / A D", "Moverse (Izq/Der)"],
         ["↑ ↓ / W S", "Profundidad"],
-        ["E", "Interactuar"],
+        ["F", "Prender / Apagar"],
+        ["E", "Usar dispositivo"],
         ["ESC", "Cerrar"],
       ].map(([key, action]) => (
         <div key={key} style={{
@@ -150,8 +151,8 @@ function HowToPlay({ onDismiss }: { onDismiss: () => void }) {
       </div>
       {[
         "• Movéte de izquierda a derecha",
-        "• Acercate a los objetos en la habitación",
-        "• Presioná E para interactuar",
+        "• Presioná F o hacé clic para PRENDER tus dispositivos",
+        "• Presioná E para USARLOS cuando estén encendidos",
         "• ESC para cerrar ventanas",
       ].map((tip) => (
         <div key={tip} style={{
@@ -208,16 +209,22 @@ function HowToPlay({ onDismiss }: { onDismiss: () => void }) {
 
 // Hint bar at bottom
 function HintBar() {
-  const { nearObject } = useGameStore();
+  const { nearObject, isPcOn, isPhoneOn } = useGameStore();
 
   const hints: Record<string, string> = {
-    phone: "📱 Celular · Presioná E para ver mis apps",
-    computer: "💻 Computadora · Presioná E para encender",
+    phone: isPhoneOn
+      ? "📱 Celular [PRENDIDO] · Presioná E para usar o F para apagar"
+      : "📱 Celular [APAGADO] · Presioná F (o clic / E) para prenderlo primero",
+    computer: isPcOn
+      ? "💻 Computadora [PRENDIDA] · Presioná E para usar o F para apagar"
+      : "💻 Computadora [APAGADA] · Presioná F (o clic / E) para prenderla primero",
     door: "🚪 Puerta · Presioná E para contactarme",
     radio: "🎵 Radio · Presioná E para escuchar",
   };
 
-  const hint = nearObject ? hints[nearObject] : "💡 Consejo: acercate a los objetos y presioná E para interactuar";
+  const hint = nearObject
+    ? hints[nearObject]
+    : "💡 Consejo: acercate a la PC o celular y prendelos (F o clic) para interactuar";
 
   return (
     <div className="hint-bar">

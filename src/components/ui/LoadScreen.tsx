@@ -34,7 +34,10 @@ export default function LoadScreen() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const imagesToPreload = [
-      "/room_bg.jpg",
+      "/room_off_off.jpg",
+      "/room_off_phone.jpg",
+      "/room_pc_off.jpg",
+      "/room_pc_phone.jpg",
       "/side_clean.png?v=9",
       "/idle_front.png?v=9",
       "/antonella.png",
