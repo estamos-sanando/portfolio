@@ -402,9 +402,9 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
   return (
     <PixelWindow
       id="spot"
-      title="🎬 Spot Publicitario — Doná Sangre es Doná Vida"
+      title="🎬 Spot Publicitario — DonaxVida"
       onClose={onClose}
-      defaultX={50}
+      defaultX={40}
       defaultY={20}
       width={480}
       style="win95"
@@ -415,9 +415,8 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
         {/* Video Player */}
         <video
           controls
-          autoPlay
+          preload="metadata"
           playsInline
-          src="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4"
           style={{
             width: "100%",
             maxHeight: 260,
@@ -426,11 +425,14 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
             border: "2px inset #999",
             marginBottom: 12,
           }}
-        />
+        >
+          <source src="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4" type="video/mp4" />
+          Tu navegador no soporta el reproductor de video HTML5.
+        </video>
 
         <Section title="Descripción">
           <p style={{ lineHeight: 1.6, fontFamily: "VT323, monospace", fontSize: 16 }}>
-            Spot publicitario de concientización sobre la donación de sangre para la campaña "Doná Sangre es Doná Vida". Edición y postproducción audiovisual realizada con CapCut.
+            Spot publicitario de concientización para la campaña "DonaxVida". Edición y postproducción audiovisual realizada con CapCut.
           </p>
         </Section>
 
@@ -444,13 +446,11 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
         <br />
         <Section title="Herramientas">
           <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 4 }}>
-            {["CapCut", "Figma", "Canva", "Audition"].map(
-              (tool) => (
-                <span key={tool} className="skill-tag">
-                  {tool}
-                </span>
-              )
-            )}
+            {["CapCut"].map((tool) => (
+              <span key={tool} className="skill-tag">
+                {tool}
+              </span>
+            ))}
           </div>
         </Section>
       </div>
