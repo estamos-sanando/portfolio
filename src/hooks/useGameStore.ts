@@ -82,6 +82,7 @@ interface GameState {
   openQuestModal: () => void;
   closeQuestModal: () => void;
   toggleQuestModal: () => void;
+  resetQuests: () => void;
   dismissUnlockBanner: () => void;
   setActiveCharacter: (char: "antonella" | "dog") => void;
   openWindow: (id: WindowId) => void;
@@ -93,6 +94,27 @@ interface GameState {
   closeDesktopWindow: (id: string) => void;
   closeAllWindows: () => void;
 }
+
+const loadSavedQuests = () => {
+  if (typeof window === "undefined") {
+    return { visitedPhone: false, visitedPC: false, visitedDoor: false, dogUnlocked: false };
+  }
+  try {
+    const saved = localStorage.getItem("portfolio_quests");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return {
+        visitedPhone: !!parsed.visitedPhone,
+        visitedPC: !!parsed.visitedPC,
+        visitedDoor: !!parsed.visitedDoor,
+        dogUnlocked: !!parsed.dogUnlocked,
+      };
+    }
+  } catch (e) {}
+  return { visitedPhone: false, visitedPC: false, visitedDoor: false, dogUnlocked: false };
+};
+
+const initialQuests = loadSavedQuests();
 
 export const useGameStore = create<GameState>((set, get) => ({
   isLoading: true,
@@ -112,10 +134,10 @@ export const useGameStore = create<GameState>((set, get) => ({
   desktopOpenWindows: [],
 
   // Quests initial values
-  visitedPhone: false,
-  visitedPC: false,
-  visitedDoor: false,
-  dogUnlocked: false,
+  visitedPhone: initialQuests.visitedPhone,
+  visitedPC: initialQuests.visitedPC,
+  visitedDoor: initialQuests.visitedDoor,
+  dogUnlocked: initialQuests.dogUnlocked,
   activeCharacter: "antonella" as "antonella" | "dog",
   showQuestModal: false,
   showUnlockBanner: false,
@@ -229,6 +251,21 @@ export const useGameStore = create<GameState>((set, get) => ({
   toggleQuestModal: () => set((s) => ({ showQuestModal: !s.showQuestModal })),
   dismissUnlockBanner: () => set({ showUnlockBanner: false }),
 
+  resetQuests: () => {
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.removeItem("portfolio_quests");
+      } catch (e) {}
+    }
+    set({
+      visitedPhone: false,
+      visitedPC: false,
+      visitedDoor: false,
+      dogUnlocked: false,
+      showQuestModal: true,
+    });
+  },
+
   setActiveCharacter: (char) => set({ activeCharacter: char }),
 
   openWindow: (id) =>
@@ -247,7 +284,22 @@ export const useGameStore = create<GameState>((set, get) => ({
       if (id === "door" || id === "contacto") vDoor = true;
 
       const allCompleted = vPhone && vPC && vDoor;
+      const unlocked = state.dogUnlocked || allCompleted;
       const justUnlocked = allCompleted && !state.dogUnlocked;
+
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem(
+            "portfolio_quests",
+            JSON.stringify({
+              visitedPhone: vPhone,
+              visitedPC: vPC,
+              visitedDoor: vDoor,
+              dogUnlocked: unlocked,
+            })
+          );
+        } catch (e) {}
+      }
 
       return {
         openWindows: nextOpenWindows,
@@ -255,7 +307,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         visitedPhone: vPhone,
         visitedPC: vPC,
         visitedDoor: vDoor,
-        dogUnlocked: state.dogUnlocked || allCompleted,
+        dogUnlocked: unlocked,
         showUnlockBanner: state.showUnlockBanner || justUnlocked,
         showQuestModal: justUnlocked ? true : state.showQuestModal,
       };

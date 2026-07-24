@@ -14,7 +14,7 @@ export default function QuestModal() {
     showQuestModal,
     openQuestModal,
     closeQuestModal,
-    setActiveCharacter,
+    resetQuests,
   } = useGameStore();
 
   const completedCount =
@@ -28,11 +28,6 @@ export default function QuestModal() {
   const handleClose = () => {
     audioEngine.click();
     closeQuestModal();
-  };
-
-  const handleSwitchCharacter = (char: "antonella" | "dog") => {
-    audioEngine.click();
-    setActiveCharacter(char);
   };
 
   return (
@@ -263,6 +258,28 @@ export default function QuestModal() {
                       : "Completá las 3 misiones para desbloquear a la perrita de Antonella sentada al lado de la cama."}
                   </p>
                 </div>
+              </div>
+
+              {/* Reset Quests Button */}
+              <div style={{ marginTop: 16, display: "flex", justifyContent: "flex-end" }}>
+                <button
+                  onClick={() => {
+                    audioEngine.click();
+                    resetQuests();
+                  }}
+                  style={{
+                    padding: "6px 12px",
+                    background: "rgba(231, 76, 60, 0.15)",
+                    border: "1px solid rgba(231, 76, 60, 0.4)",
+                    borderRadius: 8,
+                    color: "#FF9A9A",
+                    fontFamily: "var(--font-pixel)",
+                    fontSize: "8px",
+                    cursor: "pointer",
+                  }}
+                >
+                  🔄 REINICIAR MISIONES
+                </button>
               </div>
             </motion.div>
           </motion.div>

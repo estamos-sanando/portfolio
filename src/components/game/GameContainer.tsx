@@ -248,6 +248,26 @@ export default function GameContainer() {
 
     // ---- Interaction Handler ----
     function handleInteraction() {
+      // Direct distance check to dog when unlocked
+      if (dogUnlockedRef.current) {
+        const distToDog = Math.hypot(player.x - dog.x, player.y - dog.y);
+        if (distToDog < 240) {
+          audioEngine.click();
+          petTimer = 180; // 3 seconds of happy smiling pose
+          for (let k = 0; k < 6; k++) {
+            petHearts.push({
+              x: dog.x + (Math.random() - 0.5) * 50,
+              y: dog.y - 140 + (Math.random() - 0.5) * 25,
+              vy: -1.2 - Math.random() * 1.2,
+              alpha: 1.0,
+              icon: ["💖", "✨", "🌸", "💕"][Math.floor(Math.random() * 4)],
+              size: 18 + Math.floor(Math.random() * 8),
+            });
+          }
+          return;
+        }
+      }
+
       for (let i = 0; i < interactables.length; i++) {
         const obj = interactables[i];
         const dist = Math.hypot(
@@ -260,7 +280,6 @@ export default function GameContainer() {
               audioEngine.interact();
               openWindow("phone");
             } else {
-              // Device is OFF: E key cannot turn on or open apps
               audioEngine.click();
             }
           } else if (obj.id === "computer") {
@@ -268,26 +287,11 @@ export default function GameContainer() {
               audioEngine.interact();
               openWindow("computer");
             } else {
-              // Device is OFF: E key cannot turn on or open apps
               audioEngine.click();
             }
           } else if (obj.id === "door") {
             audioEngine.interact();
             openWindow("door");
-          } else if (obj.id === "pet_dog") {
-            audioEngine.click();
-            petTimer = 180; // 3 seconds of happy smiling pose
-            // Spawn floating hearts
-            for (let k = 0; k < 6; k++) {
-              petHearts.push({
-                x: dog.x + (Math.random() - 0.5) * 50,
-                y: dog.y - 120 + (Math.random() - 0.5) * 25,
-                vy: -1.2 - Math.random() * 1.2,
-                alpha: 1.0,
-                icon: ["💖", "✨", "🌸", "💕"][Math.floor(Math.random() * 4)],
-                size: 16 + Math.floor(Math.random() * 8),
-              });
-            }
           }
           return;
         }
@@ -544,12 +548,48 @@ export default function GameContainer() {
 
     // ---- Draw Hint Labels ----
     function drawHints() {
-      const activePos = activeCharacterRef.current === "dog" ? dog : player;
+      // Direct proximity check to dog when unlocked
+      if (dogUnlockedRef.current) {
+        const distToDog = Math.hypot(player.x - dog.x, player.y - dog.y);
+        if (distToDog < 240) {
+          const hx = dog.x;
+          const hy = dog.y - 180;
+          const bubbleW = 120;
+          const bubbleH = 26;
+
+          ctx!.fillStyle = "rgba(25,25,35,0.92)";
+          ctx!.fillRect(hx - bubbleW / 2, hy - bubbleH / 2, bubbleW, bubbleH);
+          ctx!.strokeStyle = "#F2A7BB";
+          ctx!.lineWidth = 2;
+          ctx!.strokeRect(hx - bubbleW / 2, hy - bubbleH / 2, bubbleW, bubbleH);
+
+          ctx!.fillStyle = "#F2A7BB";
+          ctx!.fillRect(hx - bubbleW / 2 + 6, hy - 9, 18, 16);
+          ctx!.fillStyle = "#2D2D3A";
+          ctx!.font = `bold 9px 'Press Start 2P'`;
+          ctx!.textAlign = "center";
+          ctx!.fillText("E", hx - bubbleW / 2 + 15, hy + 3);
+
+          ctx!.fillStyle = "#FFF8EF";
+          ctx!.font = `7px 'Press Start 2P'`;
+          ctx!.textAlign = "left";
+          ctx!.fillText("ACARICIAR 🐾", hx - bubbleW / 2 + 28, hy + 3);
+
+          if (nearObjectRef.current !== "pet_dog") {
+            nearObjectRef.current = "pet_dog";
+            setNearObject("radio" as any);
+          }
+          return;
+        }
+      }
+
       for (let i = 0; i < interactables.length; i++) {
         const obj = interactables[i];
+        if (obj.id === "pet_dog") continue; // Handled directly above
+
         const dist = Math.hypot(
-          activePos.x + activePos.w / 2 - (obj.x + obj.w / 2),
-          activePos.y + activePos.h / 2 - (obj.y + obj.h / 2)
+          player.x + player.w / 2 - (obj.x + obj.w / 2),
+          player.y + player.h / 2 - (obj.y + obj.h / 2)
         );
         if (dist < 180) {
           const hx = obj.x + obj.w / 2;
@@ -594,18 +634,6 @@ export default function GameContainer() {
               ctx!.textAlign = "left";
               ctx!.fillText("USAR", hx + 32, hy + 3);
             }
-          } else if (obj.id === "pet_dog") {
-            ctx!.fillStyle = "#F2A7BB";
-            ctx!.fillRect(hx - bubbleW / 2 + 6, hy - 9, 18, 16);
-            ctx!.fillStyle = "#2D2D3A";
-            ctx!.font = `bold 9px 'Press Start 2P'`;
-            ctx!.textAlign = "center";
-            ctx!.fillText("E", hx - bubbleW / 2 + 15, hy + 3);
-
-            ctx!.fillStyle = "#FFF8EF";
-            ctx!.font = `7px 'Press Start 2P'`;
-            ctx!.textAlign = "left";
-            ctx!.fillText("ACARICIAR 🐾", hx - bubbleW / 2 + 28, hy + 3);
           } else {
             ctx!.fillStyle = "#B39DDB";
             ctx!.fillRect(hx - bubbleW / 2 + 6, hy - 9, 18, 16);
