@@ -71,10 +71,10 @@ export default function QuestModal() {
           </span>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
             <span style={{ color: "var(--px-rose)", fontWeight: 700 }}>
-              {dogUnlocked ? "🐾 COMPAÑERA DESBLOQUEADA" : `📜 MISIONES (${completedCount}/3)`}
+              {dogUnlocked ? "🐾 MASCOTA DESBLOQUEADA" : `📜 MISIONES (${completedCount}/3)`}
             </span>
             <span style={{ fontSize: "7px", color: "var(--px-beige)", opacity: 0.8 }}>
-              {dogUnlocked ? "Clic para cambiar personaje" : "Clic para ver misiones"}
+              {dogUnlocked ? "Acercate a la cama para acariciarla" : "Clic para ver misiones"}
             </span>
           </div>
         </button>
@@ -152,7 +152,7 @@ export default function QuestModal() {
                 📜 MISIONES Y RECOMPENSA
               </h2>
               <p style={{ fontSize: "13px", color: "#E2D9F3", marginBottom: 16, lineHeight: 1.4 }}>
-                Explorá ambos dispositivos y la puerta para desbloquear a la perrita de Antonella como personaje jugable:
+                Explorá ambos dispositivos y la puerta para desbloquear a la perrita de Antonella en la habitación:
               </p>
 
               {/* Progress List */}
@@ -255,58 +255,13 @@ export default function QuestModal() {
                       marginBottom: 4,
                     }}
                   >
-                    {dogUnlocked ? "🎉 ¡PERRITA DESBLOQUEADA!" : "🔒 PERSONAJE BLOQUEADO"}
+                    {dogUnlocked ? "🎉 ¡MASCOTA DESBLOQUEADA!" : "🔒 MASCOTA BLOQUEADA"}
                   </div>
                   <p style={{ fontSize: "11px", color: "#D2C5E8", lineHeight: 1.3 }}>
                     {dogUnlocked
-                      ? "¡Completaste las misiones! Tu perrita ha ingresado caminando a la habitación. Podés alternar entre ambos personajes:"
-                      : "Completá las 3 misiones para que la perrita de Antonella entre caminando y puedas usarla como personaje."}
+                      ? "¡Completaste las misiones! Tu perrita te aguarda sentada al lado de la cama. Acercate a ella y presioná E para acariciarla."
+                      : "Completá las 3 misiones para desbloquear a la perrita de Antonella sentada al lado de la cama."}
                   </p>
-
-                  {/* Character Selector Switcher */}
-                  {dogUnlocked && (
-                    <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-                      <button
-                        onClick={() => handleSwitchCharacter("antonella")}
-                        style={{
-                          padding: "6px 12px",
-                          background:
-                            activeCharacter === "antonella"
-                              ? "linear-gradient(135deg, var(--px-rose-dark), var(--px-violet-dark))"
-                              : "rgba(255,255,255,0.1)",
-                          border: `1px solid ${activeCharacter === "antonella" ? "var(--px-rose)" : "#666"}`,
-                          borderRadius: 8,
-                          color: "white",
-                          fontFamily: "var(--font-pixel)",
-                          fontSize: "8px",
-                          cursor: "pointer",
-                          fontWeight: 700,
-                        }}
-                      >
-                        👩 ANTONELLA
-                      </button>
-
-                      <button
-                        onClick={() => handleSwitchCharacter("dog")}
-                        style={{
-                          padding: "6px 12px",
-                          background:
-                            activeCharacter === "dog"
-                              ? "linear-gradient(135deg, var(--px-rose-dark), var(--px-violet-dark))"
-                              : "rgba(255,255,255,0.1)",
-                          border: `1px solid ${activeCharacter === "dog" ? "var(--px-rose)" : "#666"}`,
-                          borderRadius: 8,
-                          color: "white",
-                          fontFamily: "var(--font-pixel)",
-                          fontSize: "8px",
-                          cursor: "pointer",
-                          fontWeight: 700,
-                        }}
-                      >
-                        🐾 PERRITA
-                      </button>
-                    </div>
-                  )}
                 </div>
               </div>
             </motion.div>

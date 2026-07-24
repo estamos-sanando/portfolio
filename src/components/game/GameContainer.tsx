@@ -106,15 +106,11 @@ export default function GameContainer() {
     };
 
     const dog = {
-      x: canvas.width * 0.95,
-      targetX: canvas.width * 0.18, // Next to the bed
+      x: canvas.width * 0.22, // Static position right in front of the bed
       y: canvas.height * 0.85,
       w: 32,
       h: 32,
-      speed: 4.5,
       facing: "left" as "left" | "right",
-      isMoving: false,
-      hasEntered: false,
     };
 
     // ---- Room Objects & Interactables Cache ----
@@ -124,6 +120,9 @@ export default function GameContainer() {
     const updateObjects = () => {
       const w = canvas.width;
       const h = canvas.height;
+      dog.x = w * 0.22;
+      dog.y = h * 0.85;
+
       roomObjects = [
         { id: "wall_left", x: 0, y: 0, w: w * 0.04, h: h },
         { id: "wall_right", x: w * 0.96, y: 0, w: w * 0.04, h: h },
@@ -497,34 +496,8 @@ export default function GameContainer() {
           }
 
           ctx!.drawImage(dogHappyImg, -dw / 2, -dh + 32, dw, dh);
-        } else if (dog.isMoving && dogSideLoaded) {
-          // Multi-frame walk cycle from sprite sheet
-          const totalDogFrames = 2;
-          const frameW = dogSideImg.width / totalDogFrames;
-          const frameH = dogSideImg.height;
-          const frameIdx = Math.floor((now / 120) % totalDogFrames);
-          const frameX = frameIdx * frameW;
-
-          const targetH = 270;
-          const dh = targetH;
-          const dw = dh * (frameW / frameH);
-          const walkPhase = (now / 100) % (Math.PI * 2);
-          const stepBob = Math.abs(Math.sin(walkPhase)) * 6;
-          const tiltAngle = (dog.facing === "left" ? -1 : 1) * Math.sin(walkPhase) * 0.04;
-
-          ctx!.translate(dx, dy + 32 - stepBob);
-          if (dog.facing === "right") {
-            ctx!.scale(-1, 1);
-          }
-          ctx!.rotate(tiltAngle);
-
-          ctx!.drawImage(
-            dogSideImg,
-            frameX, 0, frameW, frameH,
-            -dw / 2, -dh, dw, dh
-          );
         } else {
-          // Idle pose with subtle breathing animation
+          // Attentive sitting pose with subtle breathing animation
           const targetH = 270;
           const dh = targetH;
           const dw = dh * (dogImg.width / dogImg.height);
@@ -671,21 +644,6 @@ export default function GameContainer() {
       // Clear
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // 1. Dog Entrance & Walk Animation (when unlocked)
-      if (dogUnlockedRef.current) {
-        if (!dog.hasEntered) {
-          if (dog.x > dog.targetX) {
-            dog.x -= 2.5;
-            dog.facing = "left";
-            dog.isMoving = true;
-          } else {
-            dog.x = dog.targetX;
-            dog.hasEntered = true;
-            dog.isMoving = false;
-          }
-        }
-      }
-
       // Update pet_dog interactable position dynamically
       const petObj = interactables.find((o) => o.id === "pet_dog");
       if (petObj) {
@@ -693,7 +651,7 @@ export default function GameContainer() {
         petObj.y = dog.y - 120;
       }
 
-      // 2. Player Input Movement (Active Character)
+      // 2. Player Input Movement (Antonella)
       let dx = 0,
         dy = 0;
 
@@ -734,51 +692,26 @@ export default function GameContainer() {
         dy *= 0.707;
       }
 
-      if (activeCharacterRef.current === "dog") {
-        // Control Dog
-        dog.isMoving = dx !== 0 || dy !== 0;
-        if (dx < 0) dog.facing = "left";
-        if (dx > 0) dog.facing = "right";
+      // Control Antonella
+      if (dx < 0) player.facing = "left";
+      if (dx > 0) player.facing = "right";
 
-        dog.x += dx * dog.speed;
-        dog.y += dy * dog.speed;
+      player.isMoving = dx !== 0 || dy !== 0;
 
-        // Clamp dog inside floor bounds
-        dog.x = Math.max(
-          dog.w / 2,
-          Math.min(canvas.width - dog.w * 1.5, dog.x)
-        );
-        dog.y = Math.max(
-          canvas.height * 0.72,
-          Math.min(canvas.height * 0.9, dog.y)
-        );
-        player.isMoving = false;
-      } else {
-        // Control Antonella
-        if (dx < 0) player.facing = "left";
-        if (dx > 0) player.facing = "right";
+      const nx = player.x + dx * player.speed;
+      const ny = player.y + dy * player.speed;
 
-        player.isMoving = dx !== 0 || dy !== 0;
+      if (!checkCollision(nx, player.y)) player.x = nx;
+      if (!checkCollision(player.x, ny)) player.y = ny;
 
-        const nx = player.x + dx * player.speed;
-        const ny = player.y + dy * player.speed;
-
-        if (!checkCollision(nx, player.y)) player.x = nx;
-        if (!checkCollision(player.x, ny)) player.y = ny;
-
-        player.x = Math.max(
-          player.w / 2,
-          Math.min(canvas.width - player.w * 1.5, player.x)
-        );
-        player.y = Math.max(
-          canvas.height * 0.72,
-          Math.min(canvas.height * 0.9, player.y)
-        );
-
-        if (dog.hasEntered && (activeCharacterRef.current as string) !== "dog") {
-          dog.isMoving = false;
-        }
-      }
+      player.x = Math.max(
+        player.w / 2,
+        Math.min(canvas.width - player.w * 1.5, player.x)
+      );
+      player.y = Math.max(
+        canvas.height * 0.72,
+        Math.min(canvas.height * 0.9, player.y)
+      );
 
       // Frame animation
       if (player.isMoving) {
