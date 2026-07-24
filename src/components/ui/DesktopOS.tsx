@@ -402,11 +402,6 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
   const [showVideoModal, setShowVideoModal] = useState(false);
   const { play } = useAudio();
 
-  const handleOpenNewTab = () => {
-    play("click");
-    window.open("/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4", "_blank");
-  };
-
   const handleOpenModal = () => {
     play("click");
     setShowVideoModal(true);
@@ -463,38 +458,19 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
                   display: "flex",
                   alignItems: "center",
                   gap: 6,
-                  padding: "8px 14px",
+                  padding: "10px 18px",
                   background: "linear-gradient(135deg, #B39DDB, #8E24AA)",
                   border: "2px outset #fff",
-                  borderRadius: 6,
+                  borderRadius: 8,
                   color: "white",
                   fontFamily: "VT323, monospace",
-                  fontSize: "16px",
+                  fontSize: "18px",
                   cursor: "pointer",
                   fontWeight: 700,
-                  boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+                  boxShadow: "0 4px 14px rgba(0,0,0,0.4)",
                 }}
               >
-                ▶ REPRODUCIR (VENTANA EMERGENTE)
-              </button>
-
-              <button
-                onClick={handleOpenNewTab}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "8px 12px",
-                  background: "#333",
-                  border: "2px outset #666",
-                  borderRadius: 6,
-                  color: "#FFF8EF",
-                  fontFamily: "VT323, monospace",
-                  fontSize: "15px",
-                  cursor: "pointer",
-                }}
-              >
-                🌐 ABRIR EN PESTAÑA
+                ▶ VER SPOT PUBLICITARIO
               </button>
             </div>
           </div>
@@ -552,7 +528,7 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
               style={{
                 position: "relative",
                 width: "90%",
-                maxWidth: 720,
+                maxWidth: 760,
                 background: "#1C1828",
                 border: "3px solid #F2A7BB",
                 borderRadius: 16,
@@ -602,50 +578,19 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
               {/* Video Element */}
               <video
                 controls
+                autoPlay
                 playsInline
                 preload="auto"
+                src="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4"
                 style={{
                   width: "100%",
-                  maxHeight: "65vh",
+                  maxHeight: "70vh",
                   borderRadius: 8,
                   background: "#000",
                 }}
               >
-                <source src="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4" type="video/mp4" />
                 Tu navegador no soporta el reproductor de video.
               </video>
-
-              {/* Direct Link Fallback Button */}
-              <div
-                style={{
-                  marginTop: 12,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <span style={{ fontSize: "11px", color: "#D2C5E8" }}>
-                  🎬 Campaña DonaxVida — Spot Publicitario CapCut
-                </span>
-                <a
-                  href="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    padding: "6px 14px",
-                    background: "rgba(242, 167, 187, 0.2)",
-                    border: "1px solid #F2A7BB",
-                    borderRadius: 8,
-                    color: "#FFF8EF",
-                    fontSize: "11px",
-                    textDecoration: "none",
-                    fontFamily: "var(--font-pixel)",
-                    fontWeight: 700,
-                  }}
-                >
-                  ↗ ABRIR EN PESTAÑA NUEVA
-                </a>
-              </div>
             </motion.div>
           </motion.div>
         )}
