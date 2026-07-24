@@ -34,11 +34,15 @@ Las 4 variaciones del fondo de la habitación están guardadas como archivos JPG
 
 Si querés reemplazar o editar a mano cualquiera de estas imágenes (en Photoshop, Canva o tu editor de preferencia), simplemente guardá tus nuevos archivos `.jpg` en la carpeta `public/` con esos mismos nombres exactos. El sistema los cargará y conmutará automáticamente sin necesidad de editar código. 🎨
 
-## 6. Carpeta "Mis Trabajos" (NUEVO) 💼
-* **Dónde guardarlos:** En la carpeta `public/mis_trabajos/` (`c:\Users\Anto\Desktop\APPCHEQUEATE\portfolio\public\mis_trabajos`).
-* **¿Qué podés poner ahí?:** Cualquier archivo PDF, imágenes de tus prototipos UX/UI, capturas de pantalla, archivos de diseño o videos de tus proyectos.
-* **¿Dónde aparecen?:** En el escritorio de la computadora (DesktopOS) dentro de la nueva carpeta **"Mis Trabajos"** (que se puede arrastrar y mover libremente como en un escritorio real).
+## 6. Carpetas para tus Trabajos y Proyectos 📁
+Para que puedas agregar el material de cada proyecto de forma organizada, tenés la carpeta `public/trabajos/` con subcarpetas para cada trabajo:
+
+* **App Después:** `public/trabajos/despues/` (Guardá capturas, prototipos o PDFs de Después)
+* **App Chequéate:** `public/trabajos/chequeate/` (Guardá capturas, flujos o PDFs de Chequéate)
+* **Estamos Sanando:** `public/trabajos/estamos_sanando/` (Guardá audios, capturas del sitio web o placas de Instagram)
+* **Spot Publicitario:** `public/trabajos/spot_publicitario/` (Guardá el video `.mp4` del spot o imágenes)
+* **Creación de Contenido:** `public/trabajos/creacion_contenido/` (Guardá tus videos `.mp4` para las miniaturas)
 
 ---
 
-¡Avisame si querés realizar alguna otra modificación! 🚀
+¡Avisame cuando agregues archivos para asignarlos directamente a cada ventana! 🚀
