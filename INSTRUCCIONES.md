@@ -25,6 +25,15 @@ Si el servidor se detiene, podés volver a iniciarlo abriendo la terminal en est
 ```bash
 npm run dev
 ```
-Luego abrí `http://localhost:3000` en tu navegador.
+## 5. Imágenes de Fondo (Habitación, PC y Celular)
+Las 4 variaciones del fondo de la habitación están guardadas como archivos JPG completos en la carpeta `public/`:
+* `public/room_off_off.jpg`: Todo apagado (fondo inicial).
+* `public/room_pc_off.jpg`: Solo la computadora prendida.
+* `public/room_off_phone.jpg`: Solo el celular prendido.
+* `public/room_pc_phone.jpg`: Ambos dispositivos prendidos.
 
-¡Avisame cuando tengas los archivos y los conectamos! 🚀
+Si querés reemplazar o editar a mano cualquiera de estas imágenes (en Photoshop, Canva o tu editor de preferencia), simplemente guardá tus nuevos archivos `.jpg` en la carpeta `public/` con esos mismos nombres exactos. El sistema los cargará y conmutará automáticamente sin necesidad de editar código. 🎨
+
+---
+
+¡Avisame si querés realizar alguna otra modificación! 🚀

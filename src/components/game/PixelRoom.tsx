@@ -3,8 +3,8 @@
 import { useGameStore } from "@/hooks/useGameStore";
 
 /**
- * PixelRoom — Renderiza la habitación con superposición absoluta directa de <img>.
- * Evita cualquier rescalado de envoltorios de Next.js para un cambio de capas 100% imperceptible.
+ * PixelRoom — Renderiza el fondo de la habitación según el estado de la PC y Celular.
+ * Conmutación directa y nítida de las imágenes originales enviadas por el usuario.
  */
 export default function PixelRoom() {
   const { isPcOn, isPhoneOn } = useGameStore();
@@ -31,11 +31,16 @@ export default function PixelRoom() {
         backgroundColor: "#1E1A29",
       }}
     >
-      {/* 1. BASE ESTÁTICA: Habitación Apagada (Siempre 100% opaca) */}
+      {/* 1. TODO APAGADO */}
       <img
         src="/room_off_off.jpg"
         alt="Habitación Apagada"
-        style={{ ...commonStyle, zIndex: 1 }}
+        style={{
+          ...commonStyle,
+          zIndex: 1,
+          opacity: !isPcOn && !isPhoneOn ? 1 : 0,
+          transition: "opacity 0.06s linear",
+        }}
       />
 
       {/* 2. SOLO PC PRENDIDA */}
@@ -46,8 +51,7 @@ export default function PixelRoom() {
           ...commonStyle,
           zIndex: 2,
           opacity: isPcOn && !isPhoneOn ? 1 : 0,
-          transition: "opacity 0.25s ease-in-out",
-          willChange: "opacity",
+          transition: "opacity 0.06s linear",
         }}
       />
 
@@ -59,8 +63,7 @@ export default function PixelRoom() {
           ...commonStyle,
           zIndex: 3,
           opacity: !isPcOn && isPhoneOn ? 1 : 0,
-          transition: "opacity 0.25s ease-in-out",
-          willChange: "opacity",
+          transition: "opacity 0.06s linear",
         }}
       />
 
@@ -72,8 +75,7 @@ export default function PixelRoom() {
           ...commonStyle,
           zIndex: 4,
           opacity: isPcOn && isPhoneOn ? 1 : 0,
-          transition: "opacity 0.25s ease-in-out",
-          willChange: "opacity",
+          transition: "opacity 0.06s linear",
         }}
       />
     </div>
