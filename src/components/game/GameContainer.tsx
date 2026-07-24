@@ -208,18 +208,16 @@ export default function GameContainer() {
               audioEngine.interact();
               openWindow("phone");
             } else {
-              // Turn phone on first if off
-              togglePhonePower();
-              audioEngine.powerOnPhone();
+              // Device is OFF: E key cannot turn on or open apps
+              audioEngine.click();
             }
           } else if (obj.id === "computer") {
             if (isPcOnRef.current) {
               audioEngine.interact();
               openWindow("computer");
             } else {
-              // Turn PC on first if off
-              togglePcPower();
-              audioEngine.bootPC();
+              // Device is OFF: E key cannot turn on or open apps
+              audioEngine.click();
             }
           } else if (obj.id === "door") {
             audioEngine.interact();
