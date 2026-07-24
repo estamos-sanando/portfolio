@@ -34,6 +34,11 @@ Las 4 variaciones del fondo de la habitación están guardadas como archivos JPG
 
 Si querés reemplazar o editar a mano cualquiera de estas imágenes (en Photoshop, Canva o tu editor de preferencia), simplemente guardá tus nuevos archivos `.jpg` en la carpeta `public/` con esos mismos nombres exactos. El sistema los cargará y conmutará automáticamente sin necesidad de editar código. 🎨
 
+## 6. Carpeta "Mis Trabajos" (NUEVO) 💼
+* **Dónde guardarlos:** En la carpeta `public/mis_trabajos/` (`c:\Users\Anto\Desktop\APPCHEQUEATE\portfolio\public\mis_trabajos`).
+* **¿Qué podés poner ahí?:** Cualquier archivo PDF, imágenes de tus prototipos UX/UI, capturas de pantalla, archivos de diseño o videos de tus proyectos.
+* **¿Dónde aparecen?:** En el escritorio de la computadora (DesktopOS) dentro de la nueva carpeta **"Mis Trabajos"** (que se puede arrastrar y mover libremente como en un escritorio real).
+
 ---
 
 ¡Avisame si querés realizar alguna otra modificación! 🚀

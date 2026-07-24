@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAudio } from "@/hooks/useAudio";
 import PixelWindow from "./PixelWindow";
@@ -590,11 +590,53 @@ function CreacionContenidoWindow({ onClose }: { onClose: () => void }) {
   );
 }
 
+// ---- Mis Trabajos Folder ----
+function MisTrabajosWindow({ onClose }: { onClose: () => void }) {
+  return (
+    <PixelWindow
+      id="mis_trabajos"
+      title="💼 Mis Trabajos — /public/mis_trabajos/"
+      onClose={onClose}
+      defaultX={160}
+      defaultY={80}
+      width={440}
+      style="win95"
+      icon="💼"
+    >
+      <div style={{ padding: 12, background: "#D4D0C8", display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ fontFamily: "VT323, monospace", fontSize: 16, color: "#2D2D3A", borderBottom: "1px solid #999", paddingBottom: 6 }}>
+          📁 Carpeta vinculada a <strong>public/mis_trabajos/</strong> en tu proyecto.
+        </div>
+        
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, padding: 10, background: "#FFFFFF", border: "2px inset #999", minHeight: 120 }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, padding: 8, fontFamily: "VT323, monospace", fontSize: 14 }}>
+            <div style={{ fontSize: 36 }}>📄</div>
+            <span>Documentos PDF</span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, padding: 8, fontFamily: "VT323, monospace", fontSize: 14 }}>
+            <div style={{ fontSize: 36 }}>🎨</div>
+            <span>Diseños & Figma</span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, padding: 8, fontFamily: "VT323, monospace", fontSize: 14 }}>
+            <div style={{ fontSize: 36 }}>🎬</div>
+            <span>Videos & Spots</span>
+          </div>
+        </div>
+
+        <div style={{ fontFamily: "VT323, monospace", fontSize: 13, color: "#555" }}>
+          💡 Guardá tus archivos en la carpeta <strong>public/mis_trabajos/</strong> para que se carguen automáticamente.
+        </div>
+      </div>
+    </PixelWindow>
+  );
+}
+
 // ---- Main Desktop OS ----
 export default function DesktopOS({ onClose }: { onClose: () => void }) {
   const { play } = useAudio();
   const [openFolder, setOpenFolder] = useState<string | null>(null);
   const [time, setTime] = useState("");
+  const desktopRef = useRef<HTMLDivElement>(null);
 
   // Clock & Keyboard ESC listener
   useEffect(() => {
@@ -622,11 +664,11 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
   }, []);
 
   const FOLDERS = [
-    { id: "cv", label: "Curriculum Vitae", icon: "📄", x: 20, y: 20 },
-    { id: "aplicaciones", label: "Aplicaciones", icon: "📁", x: 110, y: 20 },
-    { id: "estamos_sanando", label: "Estamos Sanando", icon: "📁", x: 200, y: 20 },
-    { id: "spot", label: "Spot Publicitario", icon: "📁", x: 20, y: 110 },
-    { id: "contenido", label: "Creación de Contenido", icon: "📁", x: 110, y: 110 },
+    { id: "aplicaciones", label: "Aplicaciones", icon: "📁", x: 20, y: 20 },
+    { id: "estamos_sanando", label: "Estamos Sanando", icon: "📁", x: 120, y: 20 },
+    { id: "spot", label: "Spot Publicitario", icon: "📁", x: 220, y: 20 },
+    { id: "contenido", label: "Creación de Contenido", icon: "📁", x: 20, y: 120 },
+    { id: "mis_trabajos", label: "Mis Trabajos", icon: "💼", x: 120, y: 120 },
   ];
 
   const openFolderHandler = (id: string) => {
@@ -699,6 +741,7 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
 
           {/* Desktop area */}
           <div
+            ref={desktopRef}
             className="win95-desktop"
             style={{
               flex: 1,
@@ -707,19 +750,22 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
               overflow: "hidden",
             }}
           >
-            {/* Folders */}
+            {/* Draggable Folders */}
             {FOLDERS.map((folder) => (
-              <button
+              <motion.div
                 key={folder.id}
+                drag
+                dragConstraints={desktopRef}
+                dragElastic={0}
+                dragMomentum={false}
+                initial={{ x: folder.x, y: folder.y }}
                 onDoubleClick={() => openFolderHandler(folder.id)}
                 onClick={() => play("click")}
                 style={{
                   position: "absolute",
-                  left: folder.x,
-                  top: folder.y,
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
+                  left: 0,
+                  top: 0,
+                  cursor: "grab",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
@@ -729,26 +775,31 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
                   fontFamily: "VT323, monospace",
                   fontSize: 14,
                   textShadow: "1px 1px 2px rgba(0,0,0,0.8)",
-                  width: 76,
+                  width: 86,
+                  userSelect: "none",
                 }}
-                title="Doble clic para abrir"
+                whileDrag={{ scale: 1.08, zIndex: 20, cursor: "grabbing" }}
+                title="Arrastrá para mover · Doble clic para abrir"
               >
-                <div style={{ fontSize: 36 }}>{folder.icon}</div>
-                <span style={{ textAlign: "center", lineHeight: 1.3 }}>
+                <div style={{ fontSize: 36, pointerEvents: "none" }}>{folder.icon}</div>
+                <span style={{ textAlign: "center", lineHeight: 1.3, pointerEvents: "none" }}>
                   {folder.label}
                 </span>
-              </button>
+              </motion.div>
             ))}
 
-            {/* Recycle bin */}
-            <button
+            {/* Draggable Recycle Bin */}
+            <motion.div
+              drag
+              dragConstraints={desktopRef}
+              dragElastic={0}
+              dragMomentum={false}
+              initial={{ x: 520, y: 350 }}
               style={{
                 position: "absolute",
-                right: 16,
-                bottom: 40,
-                background: "none",
-                border: "none",
-                cursor: "pointer",
+                left: 0,
+                top: 0,
+                cursor: "grab",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -757,11 +808,15 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
                 fontFamily: "VT323, monospace",
                 fontSize: 14,
                 textShadow: "1px 1px 2px rgba(0,0,0,0.8)",
+                width: 76,
+                userSelect: "none",
               }}
+              whileDrag={{ scale: 1.08, zIndex: 20, cursor: "grabbing" }}
+              title="Arrastrá para mover"
             >
-              <div style={{ fontSize: 36 }}>🗑️</div>
-              <span>Papelera</span>
-            </button>
+              <div style={{ fontSize: 36, pointerEvents: "none" }}>🗑️</div>
+              <span style={{ pointerEvents: "none" }}>Papelera</span>
+            </motion.div>
           </div>
 
           {/* Taskbar */}
@@ -796,9 +851,6 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
 
       {/* Sub-windows */}
       <AnimatePresence>
-        {openFolder === "cv" && (
-          <CVWindow onClose={() => setOpenFolder(null)} />
-        )}
         {openFolder === "aplicaciones" && (
           <AplicacionesWindow onClose={() => setOpenFolder(null)} />
         )}
@@ -810,6 +862,9 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
         )}
         {openFolder === "contenido" && (
           <CreacionContenidoWindow onClose={() => setOpenFolder(null)} />
+        )}
+        {openFolder === "mis_trabajos" && (
+          <MisTrabajosWindow onClose={() => setOpenFolder(null)} />
         )}
       </AnimatePresence>
     </>
