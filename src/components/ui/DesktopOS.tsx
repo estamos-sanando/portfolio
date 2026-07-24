@@ -399,62 +399,227 @@ function EstamosSanandoWindow({ onClose }: { onClose: () => void }) {
 
 // ---- Spot Publicitario ----
 function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const { play } = useAudio();
+
+  const handleOpenNewTab = () => {
+    play("click");
+    window.open("/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4", "_blank");
+  };
+
+  const handleOpenModal = () => {
+    play("click");
+    setShowVideoModal(true);
+  };
+
   return (
-    <PixelWindow
-      id="spot"
-      title="🎬 Spot Publicitario — DonaxVida"
-      onClose={onClose}
-      defaultX={40}
-      defaultY={20}
-      width={480}
-      style="win95"
-      icon="🎬"
-      contained={true}
-    >
-      <div style={{ padding: 8, background: "#D4D0C8" }}>
-        {/* Video Player */}
-        <video
-          controls
-          preload="auto"
-          playsInline
-          style={{
-            width: "100%",
-            maxHeight: 260,
-            background: "#000",
-            borderRadius: 4,
-            border: "2px inset #999",
-            marginBottom: 12,
-          }}
-        >
-          <source src="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4" type="video/mp4" />
-          Tu navegador no soporta la reproducción de video HTML5.
-        </video>
+    <>
+      <PixelWindow
+        id="spot"
+        title="🎬 Spot Publicitario — DonaxVida"
+        onClose={onClose}
+        defaultX={40}
+        defaultY={20}
+        width={480}
+        style="win95"
+        icon="🎬"
+        contained={true}
+      >
+        <div style={{ padding: 8, background: "#D4D0C8" }}>
+          {/* Video Thumbnail & Action Card */}
+          <div
+            style={{
+              width: "100%",
+              height: 160,
+              background: "linear-gradient(135deg, #1C1828, #2A2438)",
+              borderRadius: 6,
+              border: "2px inset #999",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 10,
+              padding: 16,
+              marginBottom: 12,
+              boxShadow: "inset 0 0 20px rgba(0,0,0,0.5)",
+            }}
+          >
+            <div
+              style={{
+                fontFamily: "VT323, monospace",
+                fontSize: "18px",
+                color: "#F2A7BB",
+                letterSpacing: "0.05em",
+                textShadow: "0 2px 4px rgba(0,0,0,0.6)",
+              }}
+            >
+              DONAXVIDA — SPOT PUBLICITARIO
+            </div>
 
-        <Section title="Descripción">
-          <p style={{ lineHeight: 1.6, fontFamily: "VT323, monospace", fontSize: 16 }}>
-            Spot publicitario de concientización para la campaña "DonaxVida". Edición y postproducción audiovisual realizada con CapCut.
-          </p>
-        </Section>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
+              <button
+                onClick={handleOpenModal}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "8px 14px",
+                  background: "linear-gradient(135deg, #B39DDB, #8E24AA)",
+                  border: "2px outset #fff",
+                  borderRadius: 6,
+                  color: "white",
+                  fontFamily: "VT323, monospace",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                  fontWeight: 700,
+                  boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+                }}
+              >
+                ▶ REPRODUCIR (VENTANA EMERGENTE)
+              </button>
 
-        <br />
-        <Section title="Mi Rol">
-          <p style={{ fontFamily: "VT323, monospace", fontSize: 16 }}>
-            Dirección creativa, guión, producción y edición audiovisual.
-          </p>
-        </Section>
-
-        <br />
-        <Section title="Herramientas">
-          <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 4 }}>
-            {["CapCut"].map((tool) => (
-              <span key={tool} className="skill-tag">
-                {tool}
-              </span>
-            ))}
+              <button
+                onClick={handleOpenNewTab}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "8px 12px",
+                  background: "#333",
+                  border: "2px outset #666",
+                  borderRadius: 6,
+                  color: "#FFF8EF",
+                  fontFamily: "VT323, monospace",
+                  fontSize: "15px",
+                  cursor: "pointer",
+                }}
+              >
+                🌐 ABRIR EN PESTAÑA
+              </button>
+            </div>
           </div>
-        </Section>
-      </div>
-    </PixelWindow>
+
+          <Section title="Descripción">
+            <p style={{ lineHeight: 1.6, fontFamily: "VT323, monospace", fontSize: 16 }}>
+              Spot publicitario de concientización para la campaña "DonaxVida". Edición y postproducción audiovisual realizada con CapCut.
+            </p>
+          </Section>
+
+          <br />
+          <Section title="Mi Rol">
+            <p style={{ fontFamily: "VT323, monospace", fontSize: 16 }}>
+              Dirección creativa, guión, producción y edición audiovisual.
+            </p>
+          </Section>
+
+          <br />
+          <Section title="Herramientas">
+            <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 4 }}>
+              {["CapCut"].map((tool) => (
+                <span key={tool} className="skill-tag">
+                  {tool}
+                </span>
+              ))}
+            </div>
+          </Section>
+        </div>
+      </PixelWindow>
+
+      {/* POPUP DEDICADO DE VIDEO (VENTANA EMERGENTE) */}
+      <AnimatePresence>
+        {showVideoModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 200,
+              background: "rgba(0,0,0,0.85)",
+              backdropFilter: "blur(6px)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 16,
+            }}
+            onClick={() => setShowVideoModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.8, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.8, y: 20 }}
+              style={{
+                position: "relative",
+                width: "90%",
+                maxWidth: 720,
+                background: "#1C1828",
+                border: "3px solid #F2A7BB",
+                borderRadius: 16,
+                padding: 16,
+                boxShadow: "0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(242,167,187,0.3)",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 12,
+                  borderBottom: "1px solid rgba(242,167,187,0.3)",
+                  paddingBottom: 8,
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "var(--font-pixel)",
+                    fontSize: "10px",
+                    color: "#F2A7BB",
+                  }}
+                >
+                  🎬 REPRODUCTOR — DONAXVIDA
+                </span>
+                <button
+                  onClick={() => setShowVideoModal(false)}
+                  style={{
+                    background: "rgba(242,167,187,0.2)",
+                    border: "1px solid #F2A7BB",
+                    color: "white",
+                    borderRadius: "50%",
+                    width: 28,
+                    height: 28,
+                    cursor: "pointer",
+                    fontFamily: "monospace",
+                    fontWeight: "bold",
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Video Element */}
+              <video
+                controls
+                autoPlay
+                playsInline
+                controlsList="nodownload"
+                style={{
+                  width: "100%",
+                  maxHeight: "65vh",
+                  borderRadius: 8,
+                  background: "#000",
+                }}
+              >
+                <source src="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4" type="video/mp4" />
+                Tu navegador no soporta el reproductor de video.
+              </video>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
