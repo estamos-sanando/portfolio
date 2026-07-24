@@ -116,34 +116,9 @@ function SobreMiScreen() {
           <p style={{ marginBottom: 12 }}>
             Creativa digital con experiencia en producción de contenidos, comunicación estratégica y diseño de experiencias digitales. Me especializo en transformar ideas en proyectos con impacto, combinando creatividad, pensamiento estratégico y dominio de herramientas digitales e Inteligencia Artificial.
           </p>
-          <p style={{ marginBottom: 16 }}>
+          <p style={{ marginBottom: 0 }}>
             Me destaco por entender a las personas, generar contenido auténtico, visual y funcional, y liderar proyectos desde la conceptualización hasta su ejecución.
           </p>
-
-          <a
-            href="/cv-antonella.pdf"
-            download
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 8,
-              width: "100%",
-              padding: "10px 14px",
-              background: "linear-gradient(135deg, var(--px-rose-dark), var(--px-violet-dark))",
-              border: "none",
-              borderRadius: "10px",
-              color: "white",
-              fontFamily: "var(--font-pixel)",
-              fontSize: "11px",
-              fontWeight: 700,
-              textDecoration: "none",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-              cursor: "pointer",
-            }}
-          >
-            📄 ↓ Descargar Curriculum Vitae Oficial (PDF)
-          </a>
         </div>
       </div>
 
