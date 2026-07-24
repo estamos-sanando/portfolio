@@ -81,9 +81,10 @@ function ProjectCard({
       id={`project-${project.id}`}
       title={`${project.icon} ${project.name}`}
       onClose={onClose}
-      defaultX={200}
-      defaultY={80}
-      width={520}
+      defaultX={60}
+      defaultY={20}
+      width={480}
+      contained={true}
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {/* Hero */}
@@ -198,11 +199,12 @@ function AplicacionesWindow({ onClose }: { onClose: () => void }) {
         id="aplicaciones"
         title="📁 Aplicaciones"
         onClose={onClose}
-        defaultX={100}
-        defaultY={70}
-        width={360}
+        defaultX={40}
+        defaultY={20}
+        width={380}
         style="win95"
         icon="📁"
+        contained={true}
       >
         <div
           style={{
@@ -280,11 +282,12 @@ function EstamosSanandoWindow({ onClose }: { onClose: () => void }) {
         id="estamos_sanando"
         title="📁 Estamos Sanando"
         onClose={onClose}
-        defaultX={160}
-        defaultY={100}
-        width={400}
+        defaultX={60}
+        defaultY={20}
+        width={420}
         style="win95"
         icon="🌿"
+        contained={true}
       >
         <div
           style={{
@@ -355,9 +358,10 @@ function EstamosSanandoWindow({ onClose }: { onClose: () => void }) {
             id={`sanando-${item.id}`}
             title={`${item.icon} ${item.label}`}
             onClose={() => setOpenItem(null)}
-            defaultX={300}
-            defaultY={120}
+            defaultX={100}
+            defaultY={40}
             width={320}
+            contained={true}
           >
             <div style={{ padding: 16 }}>
               <div style={{ fontSize: 48, textAlign: "center", marginBottom: 12 }}>
@@ -398,70 +402,49 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
   return (
     <PixelWindow
       id="spot"
-      title="🎬 Spot Publicitario"
+      title="🎬 Spot Publicitario — Doná Sangre es Doná Vida"
       onClose={onClose}
-      defaultX={180}
-      defaultY={90}
-      width={440}
+      defaultX={50}
+      defaultY={20}
+      width={480}
       style="win95"
       icon="🎬"
+      contained={true}
     >
       <div style={{ padding: 8, background: "#D4D0C8" }}>
-        {/* Video placeholder */}
-        <div
+        {/* Video Player */}
+        <video
+          controls
+          autoPlay
+          playsInline
+          src="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4"
           style={{
             width: "100%",
-            height: 140,
-            background: "#1a1a2e",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
+            maxHeight: 260,
+            background: "#000",
+            borderRadius: 4,
             border: "2px inset #999",
             marginBottom: 12,
-            cursor: "pointer",
-            gap: 8,
           }}
-        >
-          <div style={{ fontSize: 40, color: "white" }}>▶</div>
-          <div
-            style={{
-              fontFamily: "VT323, monospace",
-              fontSize: "16px",
-              color: "#F2A7BB",
-            }}
-          >
-            DONAR SANGRE ES DONAR VIDA
-          </div>
-          <div
-            style={{
-              fontFamily: "VT323, monospace",
-              fontSize: "13px",
-              color: "#ccc",
-            }}
-          >
-            0:00 / 0:30
-          </div>
-        </div>
+        />
 
         <Section title="Descripción">
           <p style={{ lineHeight: 1.6, fontFamily: "VT323, monospace", fontSize: 16 }}>
-            Spot de concientización sobre donación de sangre. Producción
-            audiovisual completa para campaña social.
+            Spot publicitario de concientización sobre la donación de sangre para la campaña "Doná Sangre es Doná Vida". Edición y postproducción audiovisual realizada con CapCut.
           </p>
         </Section>
 
         <br />
         <Section title="Mi Rol">
           <p style={{ fontFamily: "VT323, monospace", fontSize: 16 }}>
-            Dirección creativa, guión, producción y edición.
+            Dirección creativa, guión, producción y edición audiovisual.
           </p>
         </Section>
 
         <br />
         <Section title="Herramientas">
           <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 4 }}>
-            {["After Effects", "Premiere Pro", "Illustrator", "Audition"].map(
+            {["CapCut", "Figma", "Canva", "Audition"].map(
               (tool) => (
                 <span key={tool} className="skill-tag">
                   {tool}
@@ -486,11 +469,12 @@ function CreacionContenidoWindow({ onClose }: { onClose: () => void }) {
         id="contenido"
         title="📹 Creación de Contenido"
         onClose={onClose}
-        defaultX={200}
-        defaultY={80}
-        width={420}
+        defaultX={60}
+        defaultY={20}
+        width={440}
         style="win95"
         icon="📹"
+        contained={true}
       >
         <div style={{ padding: 8, background: "#D4D0C8" }}>
           <p
@@ -653,10 +637,12 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.92 }}
           style={{
-            width: 640,
+            width: "90vw",
+            maxWidth: 820,
+            height: "82vh",
+            maxHeight: 560,
             pointerEvents: "auto",
             position: "relative",
-            height: 480,
             zIndex: 40,
             display: "flex",
             flexDirection: "column",
@@ -753,7 +739,7 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
               dragConstraints={desktopRef}
               dragElastic={0}
               dragMomentum={false}
-              initial={{ x: 520, y: 350 }}
+              initial={{ x: 680, y: 380 }}
               style={{
                 position: "absolute",
                 left: 0,
@@ -776,6 +762,22 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
               <div style={{ fontSize: 36, pointerEvents: "none" }}>🗑️</div>
               <span style={{ pointerEvents: "none" }}>Papelera</span>
             </motion.div>
+
+            {/* Sub-windows contained inside Desktop OS Screen */}
+            <AnimatePresence>
+              {openFolder === "aplicaciones" && (
+                <AplicacionesWindow onClose={() => setOpenFolder(null)} />
+              )}
+              {openFolder === "estamos_sanando" && (
+                <EstamosSanandoWindow onClose={() => setOpenFolder(null)} />
+              )}
+              {openFolder === "spot" && (
+                <SpotPublicitarioWindow onClose={() => setOpenFolder(null)} />
+              )}
+              {openFolder === "contenido" && (
+                <CreacionContenidoWindow onClose={() => setOpenFolder(null)} />
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Taskbar */}
@@ -807,22 +809,6 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
           </div>
         </motion.div>
       </div>
-
-      {/* Sub-windows */}
-      <AnimatePresence>
-        {openFolder === "aplicaciones" && (
-          <AplicacionesWindow onClose={() => setOpenFolder(null)} />
-        )}
-        {openFolder === "estamos_sanando" && (
-          <EstamosSanandoWindow onClose={() => setOpenFolder(null)} />
-        )}
-        {openFolder === "spot" && (
-          <SpotPublicitarioWindow onClose={() => setOpenFolder(null)} />
-        )}
-        {openFolder === "contenido" && (
-          <CreacionContenidoWindow onClose={() => setOpenFolder(null)} />
-        )}
-      </AnimatePresence>
     </>
   );
 }
