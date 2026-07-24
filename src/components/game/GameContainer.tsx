@@ -433,7 +433,7 @@ export default function GameContainer() {
         ctx!.ellipse(dx, dy + 22, 34, 8, 0, 0, Math.PI * 2);
         ctx!.fill();
 
-        const targetH = 150;
+        const targetH = 270;
         const dh = targetH;
         const dw = dh * (dogImg.width / dogImg.height);
         const dogBob = dog.isMoving
@@ -445,7 +445,7 @@ export default function GameContainer() {
           ctx!.scale(-1, 1);
         }
 
-        ctx!.drawImage(dogImg, -dw / 2, -dh + 22, dw, dh);
+        ctx!.drawImage(dogImg, -dw / 2, -dh + 32, dw, dh);
         ctx!.restore();
       }
     }
