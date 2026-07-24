@@ -602,9 +602,8 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
               {/* Video Element */}
               <video
                 controls
-                autoPlay
                 playsInline
-                controlsList="nodownload"
+                preload="auto"
                 style={{
                   width: "100%",
                   maxHeight: "65vh",
@@ -615,6 +614,38 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
                 <source src="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4" type="video/mp4" />
                 Tu navegador no soporta el reproductor de video.
               </video>
+
+              {/* Direct Link Fallback Button */}
+              <div
+                style={{
+                  marginTop: 12,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span style={{ fontSize: "11px", color: "#D2C5E8" }}>
+                  🎬 Campaña DonaxVida — Spot Publicitario CapCut
+                </span>
+                <a
+                  href="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    padding: "6px 14px",
+                    background: "rgba(242, 167, 187, 0.2)",
+                    border: "1px solid #F2A7BB",
+                    borderRadius: 8,
+                    color: "#FFF8EF",
+                    fontSize: "11px",
+                    textDecoration: "none",
+                    fontFamily: "var(--font-pixel)",
+                    fontWeight: 700,
+                  }}
+                >
+                  ↗ ABRIR EN PESTAÑA NUEVA
+                </a>
+              </div>
             </motion.div>
           </motion.div>
         )}
