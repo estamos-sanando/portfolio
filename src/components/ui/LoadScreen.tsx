@@ -142,29 +142,29 @@ export default function LoadScreen() {
               />
             ))}
 
-            {/* ---- 2. PERFECTLY CENTERED TITLE & LOADING CARD ---- */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-20 pointer-events-auto px-4">
+            {/* ---- 2. RIGHT-ALIGNED TITLE & LOADING CARD ---- */}
+            <div className="absolute inset-y-0 right-12 md:right-20 lg:right-28 flex flex-col items-end justify-center text-right z-20 pointer-events-auto max-w-3xl">
               
-              {/* Emblem Badge */}
+              {/* Enlarged Name Badge */}
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="px-6 py-1.5 rounded-full flex items-center gap-2 shadow-lg mb-4"
+                className="px-8 py-3 rounded-2xl flex items-center gap-3 shadow-2xl mb-4"
                 style={{
                   background: "linear-gradient(135deg, #F2A7BB, #D4748A)",
-                  border: "2px solid #FFFFFF",
-                  boxShadow: "0 8px 20px rgba(242,167,187,0.5)",
+                  border: "3px solid #FFFFFF",
+                  boxShadow: "0 10px 30px rgba(242,167,187,0.6)",
                 }}
               >
-                <span className="text-sm">🌸</span>
+                <span className="text-xl">🌸</span>
                 <span
-                  className="font-extrabold text-sm tracking-[0.25em] text-[#2A1420] uppercase"
+                  className="font-black text-2xl md:text-3xl tracking-[0.3em] text-[#2A1420] uppercase"
                   style={{ fontFamily: "var(--font-body)" }}
                 >
                   ANTONELLA COSTA
                 </span>
-                <span className="text-sm">🌸</span>
+                <span className="text-xl">🌸</span>
               </motion.div>
 
               {/* Main Title */}
@@ -172,13 +172,13 @@ export default function LoadScreen() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.1, duration: 0.5 }}
-                className="text-7xl md:text-8xl font-black text-white"
+                className="text-7xl md:text-8xl font-black text-white text-right leading-none"
                 style={{
                   fontFamily: "'Pixelify Sans', var(--font-display), sans-serif",
                   letterSpacing: "0.06em",
                   color: "#FFF5FA",
                   textShadow:
-                    "0 0 30px rgba(242,167,187,0.8), 0 6px 15px rgba(0,0,0,0.8), 3px 3px 0px #8A3B58",
+                    "0 0 35px rgba(242,167,187,0.9), 0 8px 20px rgba(0,0,0,0.9), 4px 4px 0px #8A3B58",
                 }}
               >
                 CREATIVA DIGITAL
@@ -189,8 +189,8 @@ export default function LoadScreen() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="text-xl font-bold tracking-[0.4em] uppercase mt-2 text-[#E8D5B7]"
-                style={{ textShadow: "0 2px 10px rgba(0,0,0,0.9)" }}
+                className="text-2xl md:text-3xl font-bold tracking-[0.45em] uppercase mt-3 text-[#E8D5B7] text-right"
+                style={{ textShadow: "0 2px 12px rgba(0,0,0,0.9)" }}
               >
                 PORTFOLIO
               </motion.div>
@@ -200,17 +200,17 @@ export default function LoadScreen() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
-                className="flex items-center gap-3 mt-4 px-6 py-2 rounded-xl shadow-md"
+                className="flex items-center gap-3 mt-5 px-6 py-2.5 rounded-xl shadow-md"
                 style={{
-                  background: "rgba(30, 20, 40, 0.85)",
-                  border: "2px solid rgba(242,167,187,0.4)",
+                  background: "rgba(30, 20, 40, 0.88)",
+                  border: "2px solid rgba(242,167,187,0.45)",
                   backdropFilter: "blur(10px)",
                 }}
               >
                 {["COMUNICACIÓN", "CONTENIDOS", "DISEÑO", "IA"].map((item, idx) => (
                   <div key={item} className="flex items-center gap-3">
                     <span
-                      className="font-extrabold text-xs tracking-[0.2em]"
+                      className="font-extrabold text-xs md:text-sm tracking-[0.2em]"
                       style={{ color: "#FFF8EF", fontFamily: "var(--font-body)" }}
                     >
                       {item}
@@ -220,19 +220,18 @@ export default function LoadScreen() {
                 ))}
               </motion.div>
 
-              {/* Centered Loading Box Card */}
+              {/* Right-Aligned Loading Box Card */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35 }}
-                className="mt-8 px-10 py-6 rounded-3xl flex flex-col items-center gap-4 text-center shadow-2xl"
+                className="mt-8 px-10 py-6 rounded-3xl flex flex-col items-center gap-4 text-center shadow-2xl w-full max-w-lg"
                 style={{
                   background: "rgba(38, 26, 48, 0.92)",
                   border: "3px solid #F2A7BB",
                   boxShadow:
                     "0 20px 50px rgba(0,0,0,0.6), inset 0 0 20px rgba(242,167,187,0.15)",
                   backdropFilter: "blur(12px)",
-                  minWidth: "500px",
                 }}
               >
                 {/* Header text */}
@@ -298,7 +297,7 @@ export default function LoadScreen() {
                           ],
                         }}
                         transition={{ duration: 1.5, repeat: Infinity }}
-                        className="font-extrabold text-xs md:text-sm tracking-wider px-6 py-2 rounded-full inline-block text-[#1D1424] bg-gradient-to-r from-[#F2A7BB] to-[#B39DDB]"
+                        className="font-extrabold text-xs md:text-sm tracking-wider px-6 py-2.5 rounded-full inline-block text-[#1D1424] bg-gradient-to-r from-[#F2A7BB] to-[#B39DDB]"
                       >
                         ✨ Presioná cualquier tecla para comenzar ✨
                       </motion.span>
