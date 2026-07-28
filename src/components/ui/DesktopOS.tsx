@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAudio } from "@/hooks/useAudio";
 import PixelWindow from "./PixelWindow";
+import { InstagramIcon, FacebookIcon, TikTokIcon, PodcastIcon, WebIcon } from "./SocialIcons";
 
 // ---- Project Definitions ----
 const PROJECTS = [
@@ -18,31 +19,44 @@ const PROJECTS = [
       "Muchas personas no tienen acceso a herramientas digitales que aborden el procesamiento emocional post-encuentros sexoafectivos de forma empática y no invasiva.",
     process:
       "Investigación de usuarios → Prototipado en papel → Testing con usuarios reales → Iteración en Figma → Prototipo funcional en FigJam.",
-    role: "Diseño UX/UI — Investigación — Prototipado",
-    tools: ["Figma", "FigJam", "Miro", "Notion"],
-    prototype: "#",
+    role: "UX Researcher & UI Designer principal",
+    tools: ["Figma", "FigJam", "User Testing"],
+    prototype: "https://www.figma.com",
   },
   {
     id: "chequeate",
     name: "Chequéate",
-    icon: "💙",
+    icon: "🏥",
     color: "#F2A7BB",
     description:
-      "Plataforma inteligente de prevención médica cotidiana. Centraliza hábitos, estudios, recordatorios y alertas clínicas mediante un QR de acceso e historial resumido.",
+      "Herramienta interactiva para la concientización sobre la salud mamaria y la importancia de los chequeos preventivos.",
     problem:
-      "Las personas no tienen un sistema unificado para gestionar su historial médico y hábitos preventivos de forma simple y accesible.",
+      "La falta de información accesible y el miedo provocan que muchas mujeres pospongan sus controles ginecológicos preventivos.",
     process:
-      "Análisis de competencia → Definición de flujos → Diseño de sistema de scores → Prototipado → Testing.",
-    role: "Diseño UX/UI — Investigación — Arquitectura de información",
-    tools: ["Figma", "FigJam", "Illustrator"],
+      "Análisis de necesidades → Diseño de flujo de usuario → Ilustración de componentes → Prototipado interactivo.",
+    role: "Diseño UX/UI, Ilustración y Prototipado",
+    tools: ["Figma", "Illustrator", "Prototipado"],
+    prototype: "https://www.figma.com",
+  },
+  {
+    id: "estamos_sanando",
+    name: "Estamos Sanando",
+    icon: "🌿",
+    color: "#A8C5A0",
+    description:
+      "Proyecto personal que combina podcasts, diseño y redes sociales para abordar la salud mental y emocional.",
+    problem: "Pocos espacios digitales combinan estética cuidada con contenido empático sobre salud mental.",
+    process: "Branding → Producción de podcast → Estrategia de contenidos → Diseño de piezas gráficas.",
+    role: "Fundadora, Diseñadora y Productora de Contenido",
+    tools: ["CapCut", "Figma", "Spotify for Podcasters", "Photoshop"],
     prototype: "#",
   },
   {
-    id: "tercera",
-    name: "Tercera App",
-    icon: "❓",
-    color: "#A8C5A0",
-    description: "Próximamente...",
+    id: "creacion_contenido",
+    name: "Creación de Contenido",
+    icon: "📹",
+    color: "#E8D5B7",
+    description: "Piezas audiovisuales, animaciones y contenido para redes sociales creados para distintas campañas.",
     problem: "—",
     process: "—",
     role: "—",
@@ -55,41 +69,41 @@ const PROJECTS = [
 const SANANDO_ITEMS = [
   {
     id: "ig",
-    icon: "📸",
+    icon: <InstagramIcon size={36} />,
     label: "Instagram",
     desc: "Comunidad y contenido visual en Instagram: @estamos_sanando",
     url: "https://www.instagram.com/estamos_sanando/",
-    buttonText: "📸 Visitar Instagram",
+    buttonText: "Visitar Instagram",
   },
   {
     id: "fb",
-    icon: "📘",
+    icon: <FacebookIcon size={36} />,
     label: "Facebook",
     desc: "Página oficial de Facebook: @estamossanando",
     url: "https://www.facebook.com/estamossanando/",
-    buttonText: "📘 Visitar Facebook",
+    buttonText: "Visitar Facebook",
   },
   {
     id: "tiktok",
-    icon: "🎵",
+    icon: <TikTokIcon size={36} />,
     label: "TikTok",
     desc: "Contenido audiovisual en TikTok: @estamos.sanando",
     url: "https://www.tiktok.com/@estamos.sanando",
-    buttonText: "🎵 Visitar TikTok",
+    buttonText: "Visitar TikTok",
   },
   {
     id: "podcast",
-    icon: "🎙️",
+    icon: <PodcastIcon size={36} />,
     label: "Podcast",
     desc: "Podcast de acompañamiento, salud y bienestar.",
-    buttonText: "🎙️ Escuchar Podcast",
+    buttonText: "Escuchar Podcast",
   },
   {
     id: "web",
-    icon: "🌐",
+    icon: <WebIcon size={36} />,
     label: "Sitio Web",
     desc: "Sitio web del proyecto con identidad visual completa (Próximamente).",
-    buttonText: "🌐 Sitio Web (Próximamente)",
+    buttonText: "Sitio Web (Próximamente)",
   },
 ];
 
@@ -222,7 +236,7 @@ function EstamosSanandoWindow({ onClose }: { onClose: () => void }) {
         {openItem && item && (
           <PixelWindow
             id={`sanando-${item.id}`}
-            title={`${item.icon} ${item.label}`}
+            title={`🌿 ${item.label}`}
             onClose={() => setOpenItem(null)}
             defaultX={100}
             defaultY={40}

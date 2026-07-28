@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGameStore } from "@/hooks/useGameStore";
 import { useAudio } from "@/hooks/useAudio";
+import { InstagramIcon, FacebookIcon, TikTokIcon } from "./SocialIcons";
 
 // ---- App Screens ----
 
@@ -437,6 +438,7 @@ function HabilidadesScreen() {
     </div>
   );
 }
+
 function ContactoScreen() {
   const links = [
     {
@@ -463,21 +465,21 @@ function ContactoScreen() {
     {
       name: "Instagram",
       handle: "@estamos_sanando",
-      icon: "📸",
+      icon: <InstagramIcon size={28} />,
       url: "https://www.instagram.com/estamos_sanando/",
       color: "#E1306C",
     },
     {
       name: "Facebook",
       handle: "@estamossanando",
-      icon: "📘",
+      icon: <FacebookIcon size={28} />,
       url: "https://www.facebook.com/estamossanando/",
       color: "#1877F2",
     },
     {
       name: "TikTok",
       handle: "@estamos.sanando",
-      icon: "🎵",
+      icon: <TikTokIcon size={28} />,
       url: "https://www.tiktok.com/@estamos.sanando",
       color: "#000000",
     },
