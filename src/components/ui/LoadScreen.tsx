@@ -232,7 +232,7 @@ export default function LoadScreen() {
                     className="font-black text-base tracking-[0.2em] uppercase text-[#FFF8EF]"
                     style={{ fontFamily: "var(--font-body)" }}
                   >
-                    {!hintReady ? "Cargando experiencias..." : "¡Experiencia Lista!"}
+                    {!hintReady ? "Cargando contenido..." : "¡Conocé mi trabajo!"}
                   </span>
                   <span className="text-2xl">💖</span>
                 </div>
