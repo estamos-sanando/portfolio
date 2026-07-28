@@ -87,59 +87,23 @@ export default function LoadScreen() {
           exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
           onClick={handleStart}
         >
-          {/* Fullscreen Extended Background for Ultrawide Screens (Eliminates Side Seams) */}
+          {/* 1. SEAMLESS EDGE-TO-EDGE FULLSCREEN BACKGROUND */}
           <div
             className="absolute inset-0 bg-cover bg-center pointer-events-none"
             style={{
-              backgroundImage: `url('/cover_bg.png')`,
-              filter: "blur(32px) brightness(0.75)",
-              transform: "scale(1.15)",
+              backgroundImage: `url('/cover_bg.jpg')`,
+              filter: "brightness(0.98) contrast(1.02)",
             }}
           />
-          <div className="absolute inset-0 bg-[#160d1b]/40 backdrop-blur-sm pointer-events-none" />
 
-          {/* ---- PROPORTIONAL 1920x1080 STAGE ---- */}
+          {/* Subtle Ambient Vignette (No hard dark borders) */}
           <div
-            className="relative overflow-hidden flex-shrink-0"
+            className="absolute inset-0 pointer-events-none z-10"
             style={{
-              width: "1920px",
-              height: "1080px",
-              transform: `scale(${scale})`,
-              transformOrigin: "center center",
+              background:
+                "radial-gradient(circle at 50% 50%, transparent 40%, rgba(22, 13, 27, 0.3) 100%)",
             }}
-          >
-            {/* 1. BASE BACKGROUND IMAGE */}
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{
-                backgroundImage: `url('/cover_bg.png')`,
-                filter: "brightness(0.95) contrast(1.05)",
-              }}
-            />
-
-            {/* Edge Feathering & Smooth Vignette Overlays (Diffuses Edge Cut-offs) */}
-            <div
-              className="absolute inset-0 pointer-events-none z-10"
-              style={{
-                boxShadow: "inset 0 0 120px 40px #160d1b, inset 0 0 60px 15px rgba(22, 13, 27, 0.85)",
-              }}
-            />
-            <div
-              className="absolute inset-0 pointer-events-none z-10"
-              style={{
-                background:
-                  "linear-gradient(to right, #160d1b 0%, transparent 6%, transparent 94%, #160d1b 100%), linear-gradient(to bottom, #160d1b 0%, transparent 4%, transparent 96%, #160d1b 100%)",
-              }}
-            />
-
-            {/* Ambient Warm Night Overlay */}
-            <div
-              className="absolute inset-0 pointer-events-none z-10"
-              style={{
-                background:
-                  "radial-gradient(circle at 50% 50%, rgba(255, 220, 200, 0.05) 0%, rgba(22, 13, 27, 0.35) 80%, rgba(22, 13, 27, 0.65) 100%)",
-              }}
-            />
+          />
 
             {/* Floating Ambient Sparkles */}
             {sparkles.map((s) => (
@@ -333,9 +297,8 @@ export default function LoadScreen() {
                 </div>
               </motion.div>
             </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
   );
 }
