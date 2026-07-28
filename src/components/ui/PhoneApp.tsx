@@ -459,6 +459,30 @@ function ContactoScreen() {
     },
   ];
 
+  const socialLinks = [
+    {
+      name: "Instagram",
+      handle: "@estamos_sanando",
+      icon: "📸",
+      url: "https://www.instagram.com/estamos_sanando/",
+      color: "#E1306C",
+    },
+    {
+      name: "Facebook",
+      handle: "@estamossanando",
+      icon: "📘",
+      url: "https://www.facebook.com/estamossanando/",
+      color: "#1877F2",
+    },
+    {
+      name: "TikTok",
+      handle: "@estamos.sanando",
+      icon: "🎵",
+      url: "https://www.tiktok.com/@estamos.sanando",
+      color: "#000000",
+    },
+  ];
+
   return (
     <div style={{ padding: "24px 32px", background: "var(--px-cream)", minHeight: "100%" }}>
       <div
@@ -473,7 +497,7 @@ function ContactoScreen() {
         ¡Hablemos y conectemos! 🌟
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginBottom: 20 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginBottom: 24 }}>
         {links.map((link) => (
           <a
             key={link.label}
@@ -509,6 +533,52 @@ function ContactoScreen() {
                 {link.label}
               </div>
               <div style={{ fontFamily: "var(--font-body)", fontSize: "13px", fontWeight: 600 }}>{link.value}</div>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      {/* Estamos Sanando Social Media Section */}
+      <div
+        style={{
+          fontFamily: "var(--font-pixel)",
+          fontSize: "15px",
+          fontWeight: 800,
+          color: "var(--px-rose-dark)",
+          marginBottom: 12,
+        }}
+      >
+        🌿 Redes Oficiales — Estamos Sanando
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 24 }}>
+        {socialLinks.map((soc) => (
+          <a
+            key={soc.name}
+            href={soc.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "12px 14px",
+              background: "white",
+              borderRadius: "14px",
+              border: `1px solid rgba(0,0,0,0.06)`,
+              borderLeft: `4px solid ${soc.color}`,
+              boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+              textDecoration: "none",
+              color: "var(--px-dark)",
+              transition: "transform 0.15s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+          >
+            <span style={{ fontSize: "24px" }}>{soc.icon}</span>
+            <div>
+              <div style={{ fontFamily: "var(--font-pixel)", fontSize: "12px", fontWeight: 700 }}>{soc.name}</div>
+              <div style={{ fontFamily: "monospace", fontSize: "11px", color: "#666" }}>{soc.handle}</div>
             </div>
           </a>
         ))}

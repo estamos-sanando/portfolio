@@ -53,10 +53,234 @@ const PROJECTS = [
 
 // ---- Estamos Sanando ----
 const SANANDO_ITEMS = [
-  { id: "web", icon: "🌐", label: "Sitio web", desc: "Sitio web del proyecto con identidad visual completa." },
-  { id: "podcast", icon: "🎙️", label: "Podcast", desc: "Podcast de acompañamiento e información." },
-  { id: "ig", icon: "📸", label: "Instagram", desc: "Comunidad y contenido en redes sociales." },
+  {
+    id: "ig",
+    icon: "📸",
+    label: "Instagram",
+    desc: "Comunidad y contenido visual en Instagram: @estamos_sanando",
+    url: "https://www.instagram.com/estamos_sanando/",
+    buttonText: "📸 Visitar Instagram",
+  },
+  {
+    id: "fb",
+    icon: "📘",
+    label: "Facebook",
+    desc: "Página oficial de Facebook: @estamossanando",
+    url: "https://www.facebook.com/estamossanando/",
+    buttonText: "📘 Visitar Facebook",
+  },
+  {
+    id: "tiktok",
+    icon: "🎵",
+    label: "TikTok",
+    desc: "Contenido audiovisual en TikTok: @estamos.sanando",
+    url: "https://www.tiktok.com/@estamos.sanando",
+    buttonText: "🎵 Visitar TikTok",
+  },
+  {
+    id: "podcast",
+    icon: "🎙️",
+    label: "Podcast",
+    desc: "Podcast de acompañamiento, salud y bienestar.",
+    buttonText: "🎙️ Escuchar Podcast",
+  },
+  {
+    id: "web",
+    icon: "🌐",
+    label: "Sitio Web",
+    desc: "Sitio web del proyecto con identidad visual completa (Próximamente).",
+    buttonText: "🌐 Sitio Web (Próximamente)",
+  },
 ];
+
+// ---- Estamos Sanando Folder ----
+function EstamosSanandoWindow({ onClose }: { onClose: () => void }) {
+  const { play } = useAudio();
+  const [openItem, setOpenItem] = useState<string | null>(null);
+  const item = SANANDO_ITEMS.find((i) => i.id === openItem);
+
+  return (
+    <>
+      <PixelWindow
+        id="estamos_sanando"
+        title="📁 Estamos Sanando"
+        onClose={onClose}
+        defaultX={60}
+        defaultY={20}
+        width={460}
+        style="win95"
+        icon="🌿"
+        contained={true}
+      >
+        <div style={{ padding: 8, background: "#D4D0C8" }}>
+          {/* Logo Header Banner */}
+          <div
+            style={{
+              width: "100%",
+              background: "#FFFFFF",
+              borderRadius: 6,
+              border: "2px inset #999",
+              padding: "12px 16px",
+              marginBottom: 10,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+              boxShadow: "inset 0 0 10px rgba(0,0,0,0.05)",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/trabajos/estamos_sanando/logo.png"
+              alt="Logo Estamos Sanando"
+              style={{
+                maxHeight: 64,
+                maxWidth: "100%",
+                objectFit: "contain",
+              }}
+            />
+            <p
+              style={{
+                fontFamily: "VT323, monospace",
+                fontSize: "15px",
+                color: "#2D2D3A",
+                lineHeight: 1.4,
+                textAlign: "center",
+                margin: 0,
+              }}
+            >
+              Proyecto personal que acompaña, informa y crea comunidad a través de la
+              palabra, el arte y la escucha.
+            </p>
+          </div>
+
+          {/* Social Links & Grid */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: 8,
+              padding: "8px",
+              background: "#D4D0C8",
+            }}
+          >
+            {SANANDO_ITEMS.map((s) => (
+              <button
+                key={s.id}
+                onClick={() => {
+                  play("click");
+                  if (s.url) {
+                    window.open(s.url, "_blank", "noopener,noreferrer");
+                  } else {
+                    setOpenItem(s.id);
+                  }
+                }}
+                onDoubleClick={() => {
+                  play("openFolder");
+                  setOpenItem(s.id);
+                }}
+                style={{
+                  background: "#E4E0D8",
+                  border: "2px outset #fff",
+                  borderRadius: 4,
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 4,
+                  padding: "10px 4px",
+                  fontFamily: "VT323, monospace",
+                  fontSize: "14px",
+                  color: "#000",
+                }}
+              >
+                <div style={{ fontSize: "28px" }}>{s.icon}</div>
+                <span style={{ fontWeight: 600 }}>{s.label}</span>
+              </button>
+            ))}
+          </div>
+
+          <div
+            style={{
+              borderTop: "1px solid #999",
+              marginTop: 8,
+              padding: "4px 8px",
+              fontFamily: "VT323, monospace",
+              fontSize: "13px",
+              background: "#C0C0C0",
+              color: "#333",
+            }}
+          >
+            Hacé clic en una red social para abrir la página oficial
+          </div>
+        </div>
+      </PixelWindow>
+
+      <AnimatePresence>
+        {openItem && item && (
+          <PixelWindow
+            id={`sanando-${item.id}`}
+            title={`${item.icon} ${item.label}`}
+            onClose={() => setOpenItem(null)}
+            defaultX={100}
+            defaultY={40}
+            width={340}
+            contained={true}
+          >
+            <div style={{ padding: 16, textAlign: "center" }}>
+              <div style={{ fontSize: 48, marginBottom: 12 }}>{item.icon}</div>
+              <p
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: "16px",
+                  color: "var(--px-dark)",
+                  lineHeight: 1.6,
+                }}
+              >
+                {item.desc}
+              </p>
+
+              {item.url ? (
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-block",
+                    marginTop: 16,
+                    padding: "8px 16px",
+                    background: "linear-gradient(135deg, #B39DDB, #8E24AA)",
+                    color: "white",
+                    borderRadius: 8,
+                    textDecoration: "none",
+                    fontFamily: "VT323, monospace",
+                    fontSize: 16,
+                    fontWeight: "bold",
+                  }}
+                >
+                  {item.buttonText} →
+                </a>
+              ) : (
+                <p
+                  style={{
+                    marginTop: 16,
+                    fontFamily: "var(--font-pixel)",
+                    fontSize: "8px",
+                    color: "var(--px-rose-dark)",
+                  }}
+                >
+                  Contenido próximamente →
+                </p>
+              )}
+            </div>
+          </PixelWindow>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
 
 // ---- Content Creation Thumbnails ----
 const CONTENT_ITEMS = [
@@ -270,132 +494,7 @@ function AplicacionesWindow({ onClose }: { onClose: () => void }) {
   );
 }
 
-// ---- Estamos Sanando Folder ----
-function EstamosSanandoWindow({ onClose }: { onClose: () => void }) {
-  const { play } = useAudio();
-  const [openItem, setOpenItem] = useState<string | null>(null);
-  const item = SANANDO_ITEMS.find((i) => i.id === openItem);
 
-  return (
-    <>
-      <PixelWindow
-        id="estamos_sanando"
-        title="📁 Estamos Sanando"
-        onClose={onClose}
-        defaultX={60}
-        defaultY={20}
-        width={420}
-        style="win95"
-        icon="🌿"
-        contained={true}
-      >
-        <div
-          style={{
-            padding: 8,
-            background: "#D4D0C8",
-            fontFamily: "VT323, monospace",
-            fontSize: "15px",
-            color: "#2D2D3A",
-            lineHeight: 1.5,
-            marginBottom: 8,
-            borderBottom: "1px solid #999",
-          }}
-        >
-          Proyecto personal que acompaña, informa y crea comunidad a través de la
-          palabra, el arte y la escucha.
-        </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 12,
-            padding: "8px",
-            background: "#D4D0C8",
-          }}
-        >
-          {SANANDO_ITEMS.map((s) => (
-            <button
-              key={s.id}
-              onDoubleClick={() => {
-                play("openFolder");
-                setOpenItem(s.id);
-              }}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 4,
-                padding: 8,
-                fontFamily: "VT323, monospace",
-                fontSize: "14px",
-                color: "#000",
-              }}
-            >
-              <div style={{ fontSize: "32px" }}>{s.icon}</div>
-              <span>{s.label}</span>
-            </button>
-          ))}
-        </div>
-        <div
-          style={{
-            borderTop: "1px solid #999",
-            padding: "4px 8px",
-            fontFamily: "VT323, monospace",
-            fontSize: "14px",
-            background: "#C0C0C0",
-          }}
-        >
-          Doble clic para abrir
-        </div>
-      </PixelWindow>
-
-      <AnimatePresence>
-        {openItem && item && (
-          <PixelWindow
-            id={`sanando-${item.id}`}
-            title={`${item.icon} ${item.label}`}
-            onClose={() => setOpenItem(null)}
-            defaultX={100}
-            defaultY={40}
-            width={320}
-            contained={true}
-          >
-            <div style={{ padding: 16 }}>
-              <div style={{ fontSize: 48, textAlign: "center", marginBottom: 12 }}>
-                {item.icon}
-              </div>
-              <p
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: "18px",
-                  color: "var(--px-dark)",
-                  lineHeight: 1.6,
-                  textAlign: "center",
-                }}
-              >
-                {item.desc}
-              </p>
-              <p
-                style={{
-                  marginTop: 16,
-                  fontFamily: "var(--font-pixel)",
-                  fontSize: "7px",
-                  color: "var(--px-rose-dark)",
-                  textAlign: "center",
-                }}
-              >
-                Contenido próximamente →
-              </p>
-            </div>
-          </PixelWindow>
-        )}
-      </AnimatePresence>
-    </>
-  );
-}
 
 // ---- Spot Publicitario ----
 function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
