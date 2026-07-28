@@ -400,12 +400,23 @@ function EstamosSanandoWindow({ onClose }: { onClose: () => void }) {
 // ---- Spot Publicitario ----
 function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
   const [showVideoModal, setShowVideoModal] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const { play } = useAudio();
 
   const handleOpenModal = () => {
     play("click");
+    setVideoError(false);
     setShowVideoModal(true);
   };
+
+  useEffect(() => {
+    if (showVideoModal && videoRef.current) {
+      videoRef.current.play().catch((err) => {
+        console.log("Autoplay deferral:", err);
+      });
+    }
+  }, [showVideoModal]);
 
   return (
     <>
@@ -576,21 +587,76 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
               </div>
 
               {/* Video Element */}
-              <video
-                controls
-                autoPlay
-                playsInline
-                preload="auto"
-                src="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4"
+              {videoError ? (
+                <div
+                  style={{
+                    padding: 24,
+                    textAlign: "center",
+                    color: "#F2A7BB",
+                    fontFamily: "VT323, monospace",
+                    fontSize: 18,
+                  }}
+                >
+                  <p>Hubo un inconveniente al cargar el reproductor incorporado.</p>
+                  <a
+                    href="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "inline-block",
+                      marginTop: 12,
+                      padding: "8px 16px",
+                      background: "#F2A7BB",
+                      color: "#1C1828",
+                      borderRadius: 6,
+                      textDecoration: "none",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    ▶ Abrir video directamente
+                  </a>
+                </div>
+              ) : (
+                <video
+                  ref={videoRef}
+                  controls
+                  playsInline
+                  preload="auto"
+                  onError={() => setVideoError(true)}
+                  style={{
+                    width: "100%",
+                    maxHeight: "70vh",
+                    borderRadius: 8,
+                    background: "#000",
+                  }}
+                >
+                  <source src="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4" type="video/mp4" />
+                  Tu navegador no soporta el reproductor de video.
+                </video>
+              )}
+
+              <div
                 style={{
-                  width: "100%",
-                  maxHeight: "70vh",
-                  borderRadius: 8,
-                  background: "#000",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginTop: 10,
                 }}
               >
-                Tu navegador no soporta el reproductor de video.
-              </video>
+                <a
+                  href="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontFamily: "VT323, monospace",
+                    fontSize: "15px",
+                    color: "#F2A7BB",
+                    textDecoration: "none",
+                    opacity: 0.85,
+                  }}
+                >
+                  🔗 Abrir video en pestaña nueva
+                </a>
+              </div>
             </motion.div>
           </motion.div>
         )}
