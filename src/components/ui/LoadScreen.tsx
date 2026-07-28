@@ -87,9 +87,20 @@ export default function LoadScreen() {
           exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
           onClick={handleStart}
         >
+          {/* Fullscreen Extended Background for Ultrawide Screens (Eliminates Side Seams) */}
+          <div
+            className="absolute inset-0 bg-cover bg-center pointer-events-none"
+            style={{
+              backgroundImage: `url('/cover_bg.png')`,
+              filter: "blur(32px) brightness(0.75)",
+              transform: "scale(1.15)",
+            }}
+          />
+          <div className="absolute inset-0 bg-[#160d1b]/40 backdrop-blur-sm pointer-events-none" />
+
           {/* ---- PROPORTIONAL 1920x1080 STAGE ---- */}
           <div
-            className="relative overflow-hidden shadow-2xl flex-shrink-0"
+            className="relative overflow-hidden flex-shrink-0"
             style={{
               width: "1920px",
               height: "1080px",
@@ -106,12 +117,27 @@ export default function LoadScreen() {
               }}
             />
 
-            {/* Ambient Warm Night Overlay & Subtle Vignette */}
+            {/* Edge Feathering & Smooth Vignette Overlays (Diffuses Edge Cut-offs) */}
             <div
-              className="absolute inset-0 pointer-events-none"
+              className="absolute inset-0 pointer-events-none z-10"
+              style={{
+                boxShadow: "inset 0 0 120px 40px #160d1b, inset 0 0 60px 15px rgba(22, 13, 27, 0.85)",
+              }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none z-10"
               style={{
                 background:
-                  "radial-gradient(circle at 50% 50%, rgba(255, 220, 200, 0.05) 0%, rgba(22, 13, 27, 0.45) 80%, rgba(22, 13, 27, 0.75) 100%)",
+                  "linear-gradient(to right, #160d1b 0%, transparent 6%, transparent 94%, #160d1b 100%), linear-gradient(to bottom, #160d1b 0%, transparent 4%, transparent 96%, #160d1b 100%)",
+              }}
+            />
+
+            {/* Ambient Warm Night Overlay */}
+            <div
+              className="absolute inset-0 pointer-events-none z-10"
+              style={{
+                background:
+                  "radial-gradient(circle at 50% 50%, rgba(255, 220, 200, 0.05) 0%, rgba(22, 13, 27, 0.35) 80%, rgba(22, 13, 27, 0.65) 100%)",
               }}
             />
 
