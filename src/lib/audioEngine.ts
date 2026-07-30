@@ -77,9 +77,52 @@ function playNoise(duration: number, gainValue = 0.05, delay = 0): void {
   } catch (e) {}
 }
 
+let bgMusicInterval: any = null;
+let bgMusicStep = 0;
+
+// Gentle Cmaj7 -> Am7 -> Fmaj7 -> G6 chord arpeggios
+const bgNotes = [
+  // Cmaj7
+  261.63, 329.63, 392.00, 493.88,
+  // Am7
+  220.00, 261.63, 329.63, 392.00,
+  // Fmaj7
+  174.61, 220.00, 261.63, 329.63,
+  // G6
+  196.00, 246.94, 293.66, 349.23,
+];
+
 export const audioEngine = {
   setMuted(muted: boolean) {
     isMuted = muted;
+    if (muted) {
+      this.stopBackgroundMusic();
+    } else {
+      this.startBackgroundMusic();
+    }
+  },
+
+  startBackgroundMusic() {
+    if (bgMusicInterval || isMuted) return;
+    bgMusicStep = 0;
+    bgMusicInterval = setInterval(() => {
+      if (isMuted) return;
+      try {
+        const note = bgNotes[bgMusicStep % bgNotes.length];
+        playTone(note, 0.4, "sine", 0.022);
+        if (bgMusicStep % 4 === 0) {
+          playTone(note / 2, 0.7, "sine", 0.03);
+        }
+        bgMusicStep++;
+      } catch (e) {}
+    }, 480);
+  },
+
+  stopBackgroundMusic() {
+    if (bgMusicInterval) {
+      clearInterval(bgMusicInterval);
+      bgMusicInterval = null;
+    }
   },
 
   click() {
@@ -104,7 +147,6 @@ export const audioEngine = {
   },
 
   bootPC() {
-    // Classic PC boot sound: ascending arpeggio + noise burst
     playNoise(0.1, 0.08);
     playTone(130, 0.1, "sawtooth", 0.1, 0.1);
     playTone(195, 0.1, "sawtooth", 0.1, 0.2);
@@ -115,14 +157,12 @@ export const audioEngine = {
   },
 
   powerOnPhone() {
-    // Soft digital chime for phone power on
     playTone(523, 0.08, "sine", 0.1, 0);
     playTone(659, 0.08, "sine", 0.1, 0.08);
     playTone(880, 0.15, "sine", 0.12, 0.16);
   },
 
   powerOff() {
-    // Descending power down sound
     playTone(440, 0.06, "square", 0.08, 0);
     playTone(330, 0.06, "square", 0.08, 0.06);
     playTone(220, 0.12, "sawtooth", 0.1, 0.12);
@@ -141,7 +181,6 @@ export const audioEngine = {
 
   startAmbient() {
     if (isMuted) return;
-    // Very subtle ambient loop using noise
     const loop = () => {
       if (isMuted) return;
       playNoise(2, 0.005);

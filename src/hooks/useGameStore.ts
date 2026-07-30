@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { audioEngine } from "@/lib/audioEngine";
 
 export type WindowId =
   | "phone"
@@ -146,12 +147,17 @@ export const useGameStore = create<GameState>((set, get) => ({
   setLoadProgress: (progress) => set({ loadProgress: progress }),
 
   startGame: () =>
-    set((state) => ({
-      isLoading: false,
-      gameStarted: true,
-      showGuideModal: true,
-      showQuestModal: false,
-    })),
+    set((state) => {
+      if (!state.isMuted) {
+        audioEngine.startBackgroundMusic();
+      }
+      return {
+        isLoading: false,
+        gameStarted: true,
+        showGuideModal: true,
+        showQuestModal: false,
+      };
+    }),
 
   openGuideModal: () => set({ showGuideModal: true }),
 
@@ -170,7 +176,12 @@ export const useGameStore = create<GameState>((set, get) => ({
       hasSeenGuide: true,
     })),
 
-  toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
+  toggleMute: () =>
+    set((state) => {
+      const nextMuted = !state.isMuted;
+      audioEngine.setMuted(nextMuted);
+      return { isMuted: nextMuted };
+    }),
 
   togglePcPower: () =>
     set((state) => {
