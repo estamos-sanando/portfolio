@@ -1,6 +1,6 @@
 /**
  * Audio Engine — Web Audio API synthesizer
- * 2000s Flash Game Style Chiptune & Synthesized Sound Effects
+ * Cozy Tango & Jazz Lounge Style Synthesized Background Music
  */
 
 let audioCtx: AudioContext | null = null;
@@ -12,10 +12,10 @@ function getCtx(): { ctx: AudioContext; master: GainNode } {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
 
-    // Master filter to keep digital sounds smooth and warmth
+    // Warm Lowpass Filter for smooth Jazz/Tango tone
     masterFilter = audioCtx.createBiquadFilter();
     masterFilter.type = "lowpass";
-    masterFilter.frequency.value = 3600;
+    masterFilter.frequency.value = 3200;
 
     // Master gain node
     masterGain = audioCtx.createGain();
@@ -48,7 +48,7 @@ function playTone(
 
     // Smooth linear envelope with zero clicks
     const startTime = ctx.currentTime + delay;
-    const attackTime = Math.min(0.015, duration * 0.15);
+    const attackTime = Math.min(0.02, duration * 0.2);
     const stopTime = startTime + duration;
 
     gain.gain.setValueAtTime(0.0001, startTime);
@@ -66,21 +66,22 @@ function playTone(
 let bgMusicInterval: any = null;
 let bgMusicStep = 0;
 
-// Catchy, nostalgic 2000s Flash game melody sequence (C Major / F Major chiptune feel)
-const flashMelody = [
-  // Phrase 1 (Bouncy & Cheerful)
-  523.25, 659.25, 783.99, 659.25, 880.00, 783.99, 659.25, 523.25,
-  // Phrase 2
-  587.33, 698.46, 880.00, 698.46, 987.77, 880.00, 698.46, 587.33,
-  // Phrase 3 (High peak)
-  659.25, 783.99, 1046.50, 783.99, 1174.66, 1046.50, 783.99, 659.25,
-  // Phrase 4 (Resolution)
-  698.46, 880.00, 1046.50, 880.00, 987.77, 880.00, 698.46, 587.33,
+// Sophisticated Tango & Jazz Lounge Melody (A Minor / E7 / Dm6 Progression)
+const tangoMelody = [
+  // Measure 1: Am (Tango passion)
+  440.00, 523.25, 493.88, 440.00, 415.30, 440.00, 523.25, 659.25,
+  // Measure 2: Dm6 (Jazz lounge tension)
+  587.33, 523.25, 493.88, 440.00, 392.00, 440.00, 523.25, 587.33,
+  // Measure 3: E7 (Tango cadence)
+  659.25, 587.33, 523.25, 493.88, 415.30, 493.88, 523.25, 587.33,
+  // Measure 4: Am (Resolution)
+  440.00, 415.30, 440.00, 523.25, 659.25, 523.25, 440.00, 330.00,
 ];
 
-const flashBass = [
-  261.63, 261.63, 220.00, 220.00,
-  174.61, 174.61, 196.00, 196.00,
+const tangoBass = [
+  // A2, E2, D2, E2 (Walking Tango/Jazz Bassline)
+  110.00, 164.81, 146.83, 164.81,
+  110.00, 164.81, 146.83, 164.81,
 ];
 
 export const audioEngine = {
@@ -99,22 +100,22 @@ export const audioEngine = {
     bgMusicInterval = setInterval(() => {
       if (isMuted) return;
       try {
-        const idx = bgMusicStep % flashMelody.length;
-        const melodyNote = flashMelody[idx];
+        const idx = bgMusicStep % tangoMelody.length;
+        const melodyNote = tangoMelody[idx];
 
-        // 2000s Flash Game lead melody (soft triangle synth tone)
-        playTone(melodyNote, 0.16, "triangle", 0.022);
+        // Tango/Jazz Lead Melody (Soft Sine / Warm Tone)
+        playTone(melodyNote, 0.28, "sine", 0.022);
 
-        // Bouncy bassline every 2 steps
+        // Walking Tango/Jazz Bassline every 2 steps
         if (bgMusicStep % 2 === 0) {
-          const bassIdx = Math.floor((bgMusicStep / 2) % flashBass.length);
-          const bassNote = flashBass[bassIdx];
-          playTone(bassNote / 2, 0.28, "sine", 0.032);
+          const bassIdx = Math.floor((bgMusicStep / 2) % tangoBass.length);
+          const bassNote = tangoBass[bassIdx];
+          playTone(bassNote, 0.42, "sine", 0.035);
         }
 
         bgMusicStep++;
       } catch (e) {}
-    }, 220); // Upbeat 136 BPM Flash game tempo!
+    }, 310); // Relaxed Tango / Jazz 108 BPM Tempo!
   },
 
   stopBackgroundMusic() {
@@ -125,32 +126,32 @@ export const audioEngine = {
   },
 
   click() {
-    playTone(750, 0.04, "triangle", 0.04);
+    playTone(600, 0.04, "sine", 0.04);
   },
 
   footstep() {
-    playTone(130, 0.03, "sine", 0.02);
+    playTone(120, 0.03, "sine", 0.02);
   },
 
   openWindow() {
-    playTone(523.25, 0.05, "triangle", 0.05);
-    playTone(659.25, 0.08, "triangle", 0.05, 0.05);
+    playTone(440, 0.05, "sine", 0.05);
+    playTone(554.37, 0.08, "sine", 0.05, 0.05);
   },
 
   closeWindow() {
-    playTone(659.25, 0.05, "triangle", 0.05);
-    playTone(523.25, 0.08, "triangle", 0.05, 0.05);
+    playTone(554.37, 0.05, "sine", 0.05);
+    playTone(440, 0.08, "sine", 0.05, 0.05);
   },
 
   bootPC() {
-    playTone(260, 0.08, "triangle", 0.05, 0);
-    playTone(390, 0.12, "triangle", 0.05, 0.08);
-    playTone(520, 0.20, "triangle", 0.05, 0.20);
+    playTone(220, 0.1, "sine", 0.05, 0);
+    playTone(330, 0.15, "sine", 0.05, 0.08);
+    playTone(440, 0.25, "sine", 0.05, 0.20);
   },
 
   powerOnPhone() {
-    playTone(523, 0.06, "sine", 0.05, 0);
-    playTone(659, 0.10, "sine", 0.05, 0.06);
+    playTone(440, 0.08, "sine", 0.05, 0);
+    playTone(554.37, 0.12, "sine", 0.05, 0.06);
   },
 
   powerOff() {
@@ -159,13 +160,13 @@ export const audioEngine = {
   },
 
   openFolder() {
-    playTone(500, 0.04, "triangle", 0.04);
-    playTone(700, 0.06, "triangle", 0.04, 0.04);
+    playTone(440, 0.04, "sine", 0.04);
+    playTone(554.37, 0.06, "sine", 0.04, 0.04);
   },
 
   notification() {
-    playTone(523, 0.08, "sine", 0.06);
-    playTone(659, 0.12, "sine", 0.06, 0.08);
+    playTone(440, 0.08, "sine", 0.06);
+    playTone(554.37, 0.12, "sine", 0.06, 0.08);
   },
 
   startAmbient() {
@@ -173,7 +174,7 @@ export const audioEngine = {
   },
 
   interact() {
-    playTone(440, 0.04, "triangle", 0.04);
-    playTone(550, 0.06, "triangle", 0.04, 0.04);
+    playTone(440, 0.04, "sine", 0.04);
+    playTone(554.37, 0.06, "sine", 0.04, 0.04);
   },
 };
