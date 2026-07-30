@@ -590,8 +590,10 @@ export default function GameContainer() {
         const isPhone = activeObj.id === "phone";
         const isOn = isPc ? isPcOnRef.current : isPhone ? isPhoneOnRef.current : true;
 
-        const hx = isPhone ? canvas!.width * 0.24 : isPc ? canvas!.width * 0.49 : canvas!.width * 0.88;
-        const hy = isPhone ? canvas!.height * 0.54 : isPc ? canvas!.height * 0.20 : canvas!.height * 0.30;
+        // Position hint box right near Antonella's right hand
+        const handOffsetX = player.x > canvas!.width - 220 ? -90 : 90;
+        const hx = player.x + handOffsetX;
+        const hy = player.y - 140;
 
         const bubbleW = isPc || isPhone ? 150 : 110;
         const bubbleH = 26;
