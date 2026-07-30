@@ -803,7 +803,11 @@ export default function GameContainer() {
       window.removeEventListener("blur", handleBlur);
       window.removeEventListener("resize", resize);
     };
-  }, [gameStarted, isMuted]);
+  }, [gameStarted]);
+
+  useEffect(() => {
+    audioEngine.setMuted(isMuted);
+  }, [isMuted]);
 
   // Mobile D-pad input exposed via window events
   useEffect(() => {

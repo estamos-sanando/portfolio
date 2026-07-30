@@ -87,6 +87,9 @@ const happyJazzBass = [
 export const audioEngine = {
   setMuted(muted: boolean) {
     isMuted = muted;
+    if (masterGain && audioCtx) {
+      masterGain.gain.setValueAtTime(muted ? 0.0001 : 0.7, audioCtx.currentTime);
+    }
     if (muted) {
       this.stopBackgroundMusic();
     } else {
