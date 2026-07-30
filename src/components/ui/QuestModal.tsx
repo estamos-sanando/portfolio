@@ -66,10 +66,10 @@ export default function QuestModal() {
           </span>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
             <span style={{ color: "var(--px-rose)", fontWeight: 700 }}>
-              {dogUnlocked ? "MASCOTA DESBLOQUEADA" : `MISIONES (${completedCount}/3)`}
+              {dogUnlocked ? "SORPRESA DESBLOQUEADA" : `MISIONES (${completedCount}/3)`}
             </span>
             <span style={{ fontSize: "7px", color: "var(--px-beige)", opacity: 0.8 }}>
-              {dogUnlocked ? "Acercate a la cama para acariciarla" : "Clic para ver misiones"}
+              {dogUnlocked ? "¡Conocé la sorpresa en la habitación!" : "Clic para ver misiones"}
             </span>
           </div>
         </button>
@@ -151,7 +151,7 @@ export default function QuestModal() {
                 OBJETIVO Y MISIONES
               </h2>
               <p style={{ fontSize: "13px", color: "#E2D9F3", marginBottom: 16, lineHeight: 1.4 }}>
-                Explorá ambos dispositivos y la puerta para desbloquear a la perrita de Antonella en la habitación:
+                Explorá ambos dispositivos y la puerta para desbloquear una sorpresa en la habitación:
               </p>
 
               {/* Progress List */}
@@ -239,7 +239,7 @@ export default function QuestModal() {
                 >
                   <img
                     src="/dog_portrait.png"
-                    alt="Perrita de Antonella"
+                    alt="Sorpresa Desbloqueable"
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                 </div>
@@ -254,12 +254,12 @@ export default function QuestModal() {
                       marginBottom: 4,
                     }}
                   >
-                    {dogUnlocked ? "MASCOTA DESBLOQUEADA" : "MASCOTA BLOQUEADA"}
+                    {dogUnlocked ? "SORPRESA DESBLOQUEADA" : "SORPRESA BLOQUEADA"}
                   </div>
                   <p style={{ fontSize: "11px", color: "#D2C5E8", lineHeight: 1.3 }}>
                     {dogUnlocked
-                      ? "¡Completaste las misiones! Tu perrita te aguarda sentada al lado de la cama. Acercate a ella y presioná E para acariciarla."
-                      : "Completá las 3 misiones para desbloquear a la perrita de Antonella sentada al lado de la cama."}
+                      ? "¡Completaste las 3 misiones! Descubrí la sorpresa especial que te aguarda sentada al lado de la cama. Acercate y presioná E."
+                      : "Completá las 3 misiones para desbloquear una sorpresa especial en la habitación."}
                   </p>
                 </div>
               </div>

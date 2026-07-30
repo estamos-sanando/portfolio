@@ -554,10 +554,10 @@ export default function GameContainer() {
 
       ctx!.save();
 
-      // 1. CELULAR (directly above the red dot on the smartphone)
+      // 1. CELULAR (a bit higher and slightly right over smartphone)
       {
-        const px = w * 0.24;
-        const py = h * 0.52 + bounceY;
+        const px = w * 0.25;
+        const py = h * 0.48 + bounceY;
         const isDone = visitedPhoneRef.current;
 
         const label = isDone ? "CELULAR [OK]" : "MISION: CELULAR";
@@ -581,10 +581,10 @@ export default function GameContainer() {
         ctx!.fillText("▼", px, py - 4);
       }
 
-      // 2. COMPUTADORA (directly above the red dot on PC webcam/monitor top)
+      // 2. COMPUTADORA (slightly right and slightly lower over PC monitor top)
       {
-        const px = w * 0.49;
-        const py = h * 0.12 + bounceY;
+        const px = w * 0.51;
+        const py = h * 0.15 + bounceY;
         const isDone = visitedPCRef.current;
 
         const label = isDone ? "COMPUTADORA [OK]" : "MISION: PC";
@@ -608,10 +608,10 @@ export default function GameContainer() {
         ctx!.fillText("▼", px, py - 4);
       }
 
-      // 3. PUERTA (directly at the red dot to the right of the door frame)
+      // 3. PUERTA (a bit lower and slightly left towards door frame)
       {
-        const px = w * 0.94 + bounceX;
-        const py = h * 0.20;
+        const px = w * 0.90 + bounceX;
+        const py = h * 0.26;
         const isDone = visitedDoorRef.current;
 
         const label = isDone ? "CONTACTO [OK]" : "MISION: CONTACTO";
