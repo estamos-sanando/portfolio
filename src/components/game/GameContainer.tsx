@@ -554,10 +554,10 @@ export default function GameContainer() {
 
       ctx!.save();
 
-      // 1. CELULAR (directly above nightstand smartphone on the far left)
+      // 1. CELULAR (directly above the red dot on the smartphone)
       {
-        const px = w * 0.12;
-        const py = h * 0.38 + bounceY;
+        const px = w * 0.24;
+        const py = h * 0.52 + bounceY;
         const isDone = visitedPhoneRef.current;
 
         const label = isDone ? "CELULAR [OK]" : "MISION: CELULAR";
@@ -581,10 +581,10 @@ export default function GameContainer() {
         ctx!.fillText("▼", px, py - 4);
       }
 
-      // 2. COMPUTADORA (directly above PC monitor top bezel)
+      // 2. COMPUTADORA (directly above the red dot on PC webcam/monitor top)
       {
-        const px = w * 0.40;
-        const py = h * 0.10 + bounceY;
+        const px = w * 0.49;
+        const py = h * 0.12 + bounceY;
         const isDone = visitedPCRef.current;
 
         const label = isDone ? "COMPUTADORA [OK]" : "MISION: PC";
@@ -608,10 +608,10 @@ export default function GameContainer() {
         ctx!.fillText("▼", px, py - 4);
       }
 
-      // 3. PUERTA (on the right side of the door pointing left towards the door)
+      // 3. PUERTA (directly at the red dot to the right of the door frame)
       {
-        const px = w * 0.88 + bounceX;
-        const py = h * 0.32;
+        const px = w * 0.94 + bounceX;
+        const py = h * 0.20;
         const isDone = visitedDoorRef.current;
 
         const label = isDone ? "CONTACTO [OK]" : "MISION: CONTACTO";
@@ -681,8 +681,8 @@ export default function GameContainer() {
         const isPhone = activeObj.id === "phone";
         const isOn = isPc ? isPcOnRef.current : isPhone ? isPhoneOnRef.current : true;
 
-        const hx = isPhone ? canvas!.width * 0.12 : isPc ? canvas!.width * 0.40 : canvas!.width * 0.80;
-        const hy = isPhone ? canvas!.height * 0.54 : isPc ? canvas!.height * 0.32 : canvas!.height * 0.50;
+        const hx = isPhone ? canvas!.width * 0.24 : isPc ? canvas!.width * 0.49 : canvas!.width * 0.88;
+        const hy = isPhone ? canvas!.height * 0.54 : isPc ? canvas!.height * 0.20 : canvas!.height * 0.30;
 
         const bubbleW = isPc || isPhone ? 150 : 110;
         const bubbleH = 26;
