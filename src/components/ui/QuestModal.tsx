@@ -228,6 +228,7 @@ export default function QuestModal() {
               >
                 <div
                   style={{
+                    position: "relative",
                     width: 64,
                     height: 64,
                     borderRadius: "50%",
@@ -240,8 +241,34 @@ export default function QuestModal() {
                   <img
                     src="/dog_portrait.png"
                     alt="Sorpresa Desbloqueable"
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      filter: dogUnlocked ? "none" : "blur(10px) brightness(0.55)",
+                      transform: dogUnlocked ? "none" : "scale(1.2)",
+                      transition: "all 0.4s ease",
+                    }}
                   />
+                  {!dogUnlocked && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontFamily: "var(--font-pixel)",
+                        fontSize: "24px",
+                        fontWeight: 900,
+                        color: "#F2A7BB",
+                        textShadow: "0 0 10px rgba(242,167,187,0.9), 0 2px 4px rgba(0,0,0,0.9)",
+                        pointerEvents: "none",
+                      }}
+                    >
+                      ?
+                    </div>
+                  )}
                 </div>
 
                 <div style={{ flex: 1 }}>
