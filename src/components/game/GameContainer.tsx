@@ -290,8 +290,13 @@ export default function GameContainer() {
 
     // ---- Interaction Handler ----
     function handleInteraction() {
-      // 1. FIRST: Check proximity to dog if unlocked
-      if (dogUnlockedRef.current) {
+      const isTouchDevice =
+        window.innerWidth <= 768 ||
+        "ontouchstart" in window ||
+        (typeof navigator !== "undefined" && navigator.maxTouchPoints > 0);
+
+      // 1. FIRST: Check proximity to dog if unlocked (ONLY ON DESKTOP / NON-TOUCH DEVICES)
+      if (dogUnlockedRef.current && !isTouchDevice) {
         const distToDog = Math.hypot(player.x - dog.x, player.y - dog.y);
         if (distToDog < 260) {
           triggerPetDog();
