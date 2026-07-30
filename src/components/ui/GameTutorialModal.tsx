@@ -91,7 +91,7 @@ export default function GameTutorialModal() {
                   </span>
                 </div>
                 <span style={{ fontSize: "7px", color: "var(--px-beige)", opacity: 0.8 }}>
-                  Clic para ver instrucciones ✨
+                  Clic para ver instrucciones
                 </span>
               </div>
             </button>
@@ -243,7 +243,7 @@ export default function GameTutorialModal() {
                       fontWeight: 700,
                     }}
                   >
-                    🌸 ANTONELLA COSTA
+                    ANTONELLA COSTA
                   </span>
                 </div>
 
@@ -269,7 +269,7 @@ export default function GameTutorialModal() {
                         letterSpacing: "0.04em",
                       }}
                     >
-                      ✨ ¡TE DOY LA BIENVENIDA A MI ESPACIO!
+                      ¡TE DOY LA BIENVENIDA A MI ESPACIO!
                     </h2>
                     <p
                       style={{
@@ -352,7 +352,7 @@ export default function GameTutorialModal() {
                     }}
                     className="hover:brightness-110 active:scale-95"
                   >
-                    ✨ INGRESAR Y EXPLORAR ✨
+                    INGRESAR Y EXPLORAR
                   </button>
                 </div>
               </div>

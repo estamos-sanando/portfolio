@@ -28,6 +28,9 @@ export default function GameContainer() {
     isMuted,
     isPcOn,
     isPhoneOn,
+    visitedPhone,
+    visitedPC,
+    visitedDoor,
     togglePcPower,
     togglePhonePower,
     dogUnlocked,
@@ -39,13 +42,19 @@ export default function GameContainer() {
   const isPhoneOnRef = useRef(isPhoneOn);
   const dogUnlockedRef = useRef<boolean>(dogUnlocked);
   const activeCharacterRef = useRef<"antonella" | "dog">(activeCharacter);
+  const visitedPhoneRef = useRef(visitedPhone);
+  const visitedPCRef = useRef(visitedPC);
+  const visitedDoorRef = useRef(visitedDoor);
 
   useEffect(() => {
     isPcOnRef.current = isPcOn;
     isPhoneOnRef.current = isPhoneOn;
     dogUnlockedRef.current = dogUnlocked;
     activeCharacterRef.current = activeCharacter;
-  }, [isPcOn, isPhoneOn, dogUnlocked, activeCharacter]);
+    visitedPhoneRef.current = visitedPhone;
+    visitedPCRef.current = visitedPC;
+    visitedDoorRef.current = visitedDoor;
+  }, [isPcOn, isPhoneOn, dogUnlocked, activeCharacter, visitedPhone, visitedPC, visitedDoor]);
 
   useEffect(() => {
     if (!gameStarted) return;
@@ -545,6 +554,99 @@ export default function GameContainer() {
       }
     }
 
+    // ---- Draw Mission Indicators & Subtle Arrows ----
+    function drawMissionArrows(ts: number) {
+      const w = canvas!.width;
+      const h = canvas!.height;
+      const bounceY = Math.sin(ts / 220) * 4;
+      const bounceX = Math.sin(ts / 220) * 4;
+
+      ctx!.save();
+
+      // 1. CELULAR (above phone)
+      {
+        const px = w * 0.34;
+        const py = h * 0.60 + bounceY;
+        const isDone = visitedPhoneRef.current;
+
+        const label = isDone ? "CELULAR [OK]" : "MISION: CELULAR";
+        ctx!.font = "bold 8px 'Press Start 2P', monospace";
+        ctx!.textAlign = "center";
+        const textW = ctx!.measureText(label).width;
+        const bw = textW + 16;
+        const bh = 18;
+
+        ctx!.fillStyle = isDone ? "rgba(20, 38, 25, 0.9)" : "rgba(32, 24, 48, 0.9)";
+        ctx!.fillRect(px - bw / 2, py - bh - 14, bw, bh);
+        ctx!.strokeStyle = isDone ? "#2ECC71" : "#F2A7BB";
+        ctx!.lineWidth = 1.5;
+        ctx!.strokeRect(px - bw / 2, py - bh - 14, bw, bh);
+
+        ctx!.fillStyle = isDone ? "#2ECC71" : "#F2A7BB";
+        ctx!.fillText(label, px, py - 20);
+
+        // Subtle arrow pointing down
+        ctx!.font = "bold 11px 'Press Start 2P', monospace";
+        ctx!.fillText("▼", px, py - 4);
+      }
+
+      // 2. COMPUTADORA (above PC)
+      {
+        const px = w * 0.60;
+        const py = h * 0.58 + bounceY;
+        const isDone = visitedPCRef.current;
+
+        const label = isDone ? "COMPUTADORA [OK]" : "MISION: PC";
+        ctx!.font = "bold 8px 'Press Start 2P', monospace";
+        ctx!.textAlign = "center";
+        const textW = ctx!.measureText(label).width;
+        const bw = textW + 16;
+        const bh = 18;
+
+        ctx!.fillStyle = isDone ? "rgba(20, 38, 25, 0.9)" : "rgba(32, 24, 48, 0.9)";
+        ctx!.fillRect(px - bw / 2, py - bh - 14, bw, bh);
+        ctx!.strokeStyle = isDone ? "#2ECC71" : "#F2A7BB";
+        ctx!.lineWidth = 1.5;
+        ctx!.strokeRect(px - bw / 2, py - bh - 14, bw, bh);
+
+        ctx!.fillStyle = isDone ? "#2ECC71" : "#F2A7BB";
+        ctx!.fillText(label, px, py - 20);
+
+        // Subtle arrow pointing down
+        ctx!.font = "bold 11px 'Press Start 2P', monospace";
+        ctx!.fillText("▼", px, py - 4);
+      }
+
+      // 3. PUERTA (right side of door pointing left towards door)
+      {
+        const px = w * 0.93 + bounceX;
+        const py = h * 0.77;
+        const isDone = visitedDoorRef.current;
+
+        const label = isDone ? "CONTACTO [OK]" : "MISION: CONTACTO";
+        ctx!.font = "bold 8px 'Press Start 2P', monospace";
+        ctx!.textAlign = "center";
+        const textW = ctx!.measureText(label).width;
+        const bw = textW + 16;
+        const bh = 18;
+
+        ctx!.fillStyle = isDone ? "rgba(20, 38, 25, 0.9)" : "rgba(32, 24, 48, 0.9)";
+        ctx!.fillRect(px - bw / 2, py - bh - 14, bw, bh);
+        ctx!.strokeStyle = isDone ? "#2ECC71" : "#F2A7BB";
+        ctx!.lineWidth = 1.5;
+        ctx!.strokeRect(px - bw / 2, py - bh - 14, bw, bh);
+
+        ctx!.fillStyle = isDone ? "#2ECC71" : "#F2A7BB";
+        ctx!.fillText(label, px, py - 20);
+
+        // Subtle arrow pointing left towards door
+        ctx!.font = "bold 11px 'Press Start 2P', monospace";
+        ctx!.fillText("◀", px - bw / 2 - 8, py - 20);
+      }
+
+      ctx!.restore();
+    }
+
     // ---- Draw Hint Labels ----
     function drawHints() {
       // Direct proximity check to dog when unlocked
@@ -553,7 +655,7 @@ export default function GameContainer() {
         if (distToDog < 240) {
           const hx = dog.x;
           const hy = dog.y - 275; // Positioned cleanly above ears & face
-          const bubbleW = 120;
+          const bubbleW = 110;
           const bubbleH = 26;
 
           ctx!.fillStyle = "rgba(25,25,35,0.92)";
@@ -572,7 +674,7 @@ export default function GameContainer() {
           ctx!.fillStyle = "#FFF8EF";
           ctx!.font = `7px 'Press Start 2P'`;
           ctx!.textAlign = "left";
-          ctx!.fillText("ACARICIAR 🐾", hx - bubbleW / 2 + 28, hy + 3);
+          ctx!.fillText("ACARICIAR", hx - bubbleW / 2 + 28, hy + 3);
 
           if (nearObjectRef.current !== "pet_dog") {
             nearObjectRef.current = "pet_dog";
@@ -767,6 +869,7 @@ export default function GameContainer() {
 
       // ---- Draw ----
       drawParticles();
+      drawMissionArrows(ts);
       drawCharacter();
       drawHints();
 

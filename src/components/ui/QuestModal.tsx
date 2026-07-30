@@ -61,12 +61,12 @@ export default function QuestModal() {
           }}
           className="hover:scale-105"
         >
-          <span style={{ fontSize: "14px" }}>
-            {dogUnlocked ? "🐾" : "📜"}
+          <span style={{ fontSize: "10px", fontWeight: "bold", color: "var(--px-rose)" }}>
+            {dogUnlocked ? "[OK]" : "[!]"}
           </span>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
             <span style={{ color: "var(--px-rose)", fontWeight: 700 }}>
-              {dogUnlocked ? "🐾 MASCOTA DESBLOQUEADA" : `📜 MISIONES (${completedCount}/3)`}
+              {dogUnlocked ? "MASCOTA DESBLOQUEADA" : `MISIONES (${completedCount}/3)`}
             </span>
             <span style={{ fontSize: "7px", color: "var(--px-beige)", opacity: 0.8 }}>
               {dogUnlocked ? "Acercate a la cama para acariciarla" : "Clic para ver misiones"}
@@ -144,7 +144,7 @@ export default function QuestModal() {
                   letterSpacing: "0.04em",
                 }}
               >
-                📜 MISIONES Y RECOMPENSA
+                MISIONES Y RECOMPENSA
               </h2>
               <p style={{ fontSize: "13px", color: "#E2D9F3", marginBottom: 16, lineHeight: 1.4 }}>
                 Explorá ambos dispositivos y la puerta para desbloquear a la perrita de Antonella en la habitación:
@@ -162,17 +162,17 @@ export default function QuestModal() {
                 {[
                   {
                     id: "phone",
-                    label: "📱 Prender y explorar el Celular",
+                    label: "Prender y explorar el Celular",
                     done: visitedPhone,
                   },
                   {
                     id: "pc",
-                    label: "💻 Prender y explorar la Computadora",
+                    label: "Prender y explorar la Computadora",
                     done: visitedPC,
                   },
                   {
                     id: "door",
-                    label: "🚪 Visitar la Puerta (Contacto)",
+                    label: "Visitar la Puerta (Contacto)",
                     done: visitedDoor,
                   },
                 ].map((m) => (
@@ -204,7 +204,7 @@ export default function QuestModal() {
                         borderRadius: 6,
                       }}
                     >
-                      {m.done ? "✓ COMPLETADO" : "PENDIENTE"}
+                      {m.done ? "COMPLETADO" : "PENDIENTE"}
                     </span>
                   </div>
                 ))}
@@ -250,7 +250,7 @@ export default function QuestModal() {
                       marginBottom: 4,
                     }}
                   >
-                    {dogUnlocked ? "🎉 ¡MASCOTA DESBLOQUEADA!" : "🔒 MASCOTA BLOQUEADA"}
+                    {dogUnlocked ? "MASCOTA DESBLOQUEADA" : "MASCOTA BLOQUEADA"}
                   </div>
                   <p style={{ fontSize: "11px", color: "#D2C5E8", lineHeight: 1.3 }}>
                     {dogUnlocked
@@ -278,7 +278,7 @@ export default function QuestModal() {
                     cursor: "pointer",
                   }}
                 >
-                  🔄 REINICIAR MISIONES
+                  REINICIAR MISIONES
                 </button>
               </div>
             </motion.div>

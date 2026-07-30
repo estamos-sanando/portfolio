@@ -552,7 +552,7 @@ function ProduccionesWindow({ onClose }: { onClose: () => void }) {
     <>
       <PixelWindow
         id="producciones"
-        title="🎬 PRODUCCIONES"
+        title="PRODUCCIONES"
         onClose={onClose}
         defaultX={20}
         defaultY={10}
@@ -577,7 +577,6 @@ function ProduccionesWindow({ onClose }: { onClose: () => void }) {
           >
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ fontSize: 22 }}>🎬</span>
                 <div style={{ fontFamily: "VT323, monospace", fontSize: 17, fontWeight: "bold", color: "#000" }}>
                   DonaxVida — Spot Publicitario
                 </div>
@@ -598,8 +597,7 @@ function ProduccionesWindow({ onClose }: { onClose: () => void }) {
                   gap: 6,
                 }}
               >
-                <span style={{ fontSize: 28, color: "#F2A7BB" }}>🎬</span>
-                <span style={{ fontFamily: "VT323, monospace", fontSize: 14, color: "#F2A7BB" }}>
+                <span style={{ fontFamily: "VT323, monospace", fontSize: 15, color: "#F2A7BB", fontWeight: "bold" }}>
                   SPOT AUDIOVISUAL
                 </span>
               </div>
@@ -631,7 +629,7 @@ function ProduccionesWindow({ onClose }: { onClose: () => void }) {
                 fontWeight: "bold",
               }}
             >
-              ▶ VER SPOT PUBLICITARIO
+              VER SPOT PUBLICITARIO →
             </button>
           </div>
 
@@ -650,7 +648,6 @@ function ProduccionesWindow({ onClose }: { onClose: () => void }) {
           >
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ fontSize: 22 }}>🎮</span>
                 <div style={{ fontFamily: "VT323, monospace", fontSize: 17, fontWeight: "bold", color: "#000" }}>
                   Videojuego — Women Game Jam
                 </div>
@@ -708,7 +705,7 @@ function ProduccionesWindow({ onClose }: { onClose: () => void }) {
                 fontWeight: "bold",
               }}
             >
-              🎮 Ver en itch.io →
+              VER EN ITCH.IO →
             </a>
           </div>
         </div>
