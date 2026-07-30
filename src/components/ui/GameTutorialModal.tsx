@@ -1,11 +1,20 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGameStore } from "@/hooks/useGameStore";
 import { audioEngine } from "@/lib/audioEngine";
 
 export default function GameTutorialModal() {
   const { showGuideModal, isGuideDocked, closeGuideModal, openGuideModal } = useGameStore();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handleClose = () => {
     audioEngine.click();
@@ -32,8 +41,8 @@ export default function GameTutorialModal() {
             className="docked-guide-bar"
             style={{
               position: "fixed",
-              top: 72,
-              right: 20,
+              top: isMobile ? 10 : 72,
+              right: isMobile ? 48 : 20,
               zIndex: 40,
             }}
           >
@@ -42,14 +51,14 @@ export default function GameTutorialModal() {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 10,
-                padding: "8px 14px 8px 8px",
+                gap: isMobile ? 5 : 10,
+                padding: isMobile ? "5px 10px 5px 6px" : "8px 14px 8px 8px",
                 background: "rgba(28, 24, 40, 0.92)",
                 border: "2px solid var(--px-rose)",
                 borderRadius: 24,
                 color: "#FFF8EF",
                 fontFamily: "var(--font-pixel)",
-                fontSize: "10px",
+                fontSize: isMobile ? "8px" : "10px",
                 cursor: "pointer",
                 boxShadow: "0 8px 24px rgba(0,0,0,0.4), 0 0 12px rgba(242,167,187,0.3)",
                 backdropFilter: "blur(10px)",
@@ -62,8 +71,8 @@ export default function GameTutorialModal() {
               <div
                 style={{
                   position: "relative",
-                  width: 34,
-                  height: 34,
+                  width: isMobile ? 24 : 34,
+                  height: isMobile ? 24 : 34,
                   borderRadius: "50%",
                   overflow: "hidden",
                   border: "2px solid var(--px-violet-light)",
@@ -79,23 +88,25 @@ export default function GameTutorialModal() {
 
               {/* Status pulse & Text */}
               <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 2 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                   <span
                     style={{
-                      width: 6,
-                      height: 6,
+                      width: 5,
+                      height: 5,
                       borderRadius: "50%",
                       backgroundColor: "#2ECC71",
                       boxShadow: "0 0 6px #2ECC71",
                     }}
                   />
-                  <span style={{ color: "var(--px-rose)", fontWeight: 700, fontSize: "9px" }}>
+                  <span style={{ color: "var(--px-rose)", fontWeight: 700, fontSize: isMobile ? "8px" : "9px" }}>
                     GUÍA DEL ESPACIO
                   </span>
                 </div>
-                <span style={{ fontSize: "7px", color: "var(--px-beige)", opacity: 0.8 }}>
-                  Clic para ver instrucciones
-                </span>
+                {!isMobile && (
+                  <span style={{ fontSize: "7px", color: "var(--px-beige)", opacity: 0.8 }}>
+                    Clic para ver instrucciones
+                  </span>
+                )}
               </div>
             </button>
           </motion.div>

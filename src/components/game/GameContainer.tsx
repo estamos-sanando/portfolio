@@ -272,24 +272,29 @@ export default function GameContainer() {
       }
     }
 
+    // ---- Pet Dog Action Helper ----
+    function triggerPetDog() {
+      audioEngine.click();
+      petTimer = 180;
+      for (let k = 0; k < 6; k++) {
+        petHearts.push({
+          x: dog.x + (Math.random() - 0.5) * 50,
+          y: dog.y - 120 + (Math.random() - 0.5) * 25,
+          vy: -1.2 - Math.random() * 1.2,
+          alpha: 1.0,
+          icon: ["💖", "✨", "🌸", "💕"][Math.floor(Math.random() * 4)],
+          size: 18 + Math.floor(Math.random() * 8),
+        });
+      }
+    }
+
     // ---- Interaction Handler ----
     function handleInteraction() {
       // Direct distance check to dog when unlocked
       if (dogUnlockedRef.current) {
         const distToDog = Math.hypot(player.x - dog.x, player.y - dog.y);
-        if (distToDog < 240) {
-          audioEngine.click();
-          petTimer = 180;
-          for (let k = 0; k < 6; k++) {
-            petHearts.push({
-              x: dog.x + (Math.random() - 0.5) * 50,
-              y: dog.y - 140 + (Math.random() - 0.5) * 25,
-              vy: -1.2 - Math.random() * 1.2,
-              alpha: 1.0,
-              icon: ["💖", "✨", "🌸", "💕"][Math.floor(Math.random() * 4)],
-              size: 18 + Math.floor(Math.random() * 8),
-            });
-          }
+        if (distToDog < 260) {
+          triggerPetDog();
           return;
         }
       }
@@ -317,14 +322,25 @@ export default function GameContainer() {
       }
     }
 
-    // ---- Canvas Direct Click Handler ----
+    // ---- Canvas Direct Click & Touch Handler ----
     const handleCanvasClick = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const clickY = e.clientY - rect.top;
       const worldClickX = clickX + currentCamX;
-      const relX = worldClickX / roomWidth;
 
+      // 1. FIRST: Check direct tap/click on dog if unlocked
+      if (dogUnlockedRef.current) {
+        const distToDog = Math.hypot(worldClickX - dog.x, clickY - dog.y);
+        const isNearDog = Math.abs(worldClickX - dog.x) < 100 && Math.abs(clickY - dog.y) < 150;
+        if (distToDog < 160 || isNearDog) {
+          triggerPetDog();
+          return;
+        }
+      }
+
+      // 2. Objects interaction zones
+      const relX = worldClickX / roomWidth;
       if (relX < 0.22) {
         if (isPhoneOnRef.current) {
           audioEngine.interact();
@@ -342,25 +358,29 @@ export default function GameContainer() {
       } else if (relX >= 0.70 && clickY < canvas.height * 0.80) {
         audioEngine.interact();
         openWindow("door");
-      } else if (dogUnlockedRef.current) {
+      }
+    };
+
+    const handleCanvasTouch = (e: TouchEvent) => {
+      if (!e.touches || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      const clickX = touch.clientX - rect.left;
+      const clickY = touch.clientY - rect.top;
+      const worldClickX = clickX + currentCamX;
+
+      if (dogUnlockedRef.current) {
         const distToDog = Math.hypot(worldClickX - dog.x, clickY - dog.y);
-        if (distToDog < 120) {
-          audioEngine.click();
-          petTimer = 180;
-          for (let k = 0; k < 6; k++) {
-            petHearts.push({
-              x: dog.x + (Math.random() - 0.5) * 50,
-              y: dog.y - 120 + (Math.random() - 0.5) * 25,
-              vy: -1.2 - Math.random() * 1.2,
-              alpha: 1.0,
-              icon: ["💖", "✨", "🌸", "💕"][Math.floor(Math.random() * 4)],
-              size: 16 + Math.floor(Math.random() * 8),
-            });
-          }
+        const isNearDog = Math.abs(worldClickX - dog.x) < 100 && Math.abs(clickY - dog.y) < 150;
+        if (distToDog < 160 || isNearDog) {
+          if (e.cancelable) e.preventDefault();
+          triggerPetDog();
         }
       }
     };
+
     canvas.addEventListener("click", handleCanvasClick);
+    canvas.addEventListener("touchstart", handleCanvasTouch, { passive: false });
 
     // ---- Collision Detection ----
     function checkCollision(nx: number, ny: number): boolean {
@@ -563,10 +583,11 @@ export default function GameContainer() {
       // Direct proximity check to dog when unlocked
       if (dogUnlockedRef.current) {
         const distToDog = Math.hypot(player.x - dog.x, player.y - dog.y);
-        if (distToDog < 240) {
+        const isTouchDevice = window.innerWidth <= 768 || 'ontouchstart' in window;
+        if (distToDog < 260) {
           const hx = dog.x - currentCamX;
           const hy = dog.y - 250;
-          const bubbleW = 110;
+          const bubbleW = isTouchDevice ? 150 : 110;
           const bubbleH = 26;
 
           ctx!.fillStyle = "rgba(25,25,35,0.92)";
@@ -575,17 +596,24 @@ export default function GameContainer() {
           ctx!.lineWidth = 2;
           ctx!.strokeRect(hx - bubbleW / 2, hy - bubbleH / 2, bubbleW, bubbleH);
 
-          ctx!.fillStyle = "#F2A7BB";
-          ctx!.fillRect(hx - bubbleW / 2 + 6, hy - 9, 18, 16);
-          ctx!.fillStyle = "#2D2D3A";
-          ctx!.font = `bold 9px 'Press Start 2P'`;
-          ctx!.textAlign = "center";
-          ctx!.fillText("E", hx - bubbleW / 2 + 15, hy + 3);
+          if (isTouchDevice) {
+            ctx!.fillStyle = "#FFF8EF";
+            ctx!.font = `7px 'Press Start 2P'`;
+            ctx!.textAlign = "center";
+            ctx!.fillText("TOCÁ PARA ACARICIAR 🐶", hx, hy + 3);
+          } else {
+            ctx!.fillStyle = "#F2A7BB";
+            ctx!.fillRect(hx - bubbleW / 2 + 6, hy - 9, 18, 16);
+            ctx!.fillStyle = "#2D2D3A";
+            ctx!.font = `bold 9px 'Press Start 2P'`;
+            ctx!.textAlign = "center";
+            ctx!.fillText("E", hx - bubbleW / 2 + 15, hy + 3);
 
-          ctx!.fillStyle = "#FFF8EF";
-          ctx!.font = `7px 'Press Start 2P'`;
-          ctx!.textAlign = "left";
-          ctx!.fillText("ACARICIAR", hx - bubbleW / 2 + 28, hy + 3);
+            ctx!.fillStyle = "#FFF8EF";
+            ctx!.font = `7px 'Press Start 2P'`;
+            ctx!.textAlign = "left";
+            ctx!.fillText("ACARICIAR", hx - bubbleW / 2 + 28, hy + 3);
+          }
 
           if (nearObjectRef.current !== "pet_dog") {
             nearObjectRef.current = "pet_dog";

@@ -9,13 +9,21 @@ import { InstagramIcon, FacebookIcon, TikTokIcon } from "./SocialIcons";
 // ---- App Screens ----
 
 function SobreMiScreen() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   return (
-    <div style={{ padding: "20px 24px", background: "var(--px-cream)", minHeight: "100%" }}>
-      <div style={{ display: "flex", gap: "24px", alignItems: "flex-start", marginBottom: 20 }}>
+    <div style={{ padding: isMobile ? "12px 14px" : "20px 24px", background: "var(--px-cream)", minHeight: "100%" }}>
+      <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", gap: isMobile ? "12px" : "24px", alignItems: isMobile ? "center" : "flex-start", marginBottom: 20 }}>
         {/* Left Column: Avatar & Quick Info */}
         <div
           style={{
-            width: "180px",
+            width: isMobile ? "100%" : "180px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -629,6 +637,14 @@ const APPS = [
 export default function PhoneApp({ onClose }: { onClose: () => void }) {
   const { play } = useAudio();
   const [activeApp, setActiveApp] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -687,8 +703,10 @@ export default function PhoneApp({ onClose }: { onClose: () => void }) {
       <div
         className="phone-frame"
         style={{
-          width: 680,
-          height: 450,
+          width: isMobile ? "92vw" : 680,
+          maxWidth: isMobile ? 380 : 680,
+          height: isMobile ? "calc(100dvh - 110px)" : 450,
+          maxHeight: isMobile ? 560 : 450,
           display: "flex",
           flexDirection: "column",
         }}
@@ -724,9 +742,9 @@ export default function PhoneApp({ onClose }: { onClose: () => void }) {
               background: "#1F1F2E",
               color: "white",
               fontFamily: "var(--font-pixel)",
-              fontSize: "12px",
+              fontSize: isMobile ? "10px" : "12px",
               fontWeight: 600,
-              padding: "6px 16px",
+              padding: isMobile ? "4px 10px" : "6px 16px",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
@@ -736,7 +754,7 @@ export default function PhoneApp({ onClose }: { onClose: () => void }) {
               {new Date().getHours()}:
               {String(new Date().getMinutes()).padStart(2, "0")}
             </span>
-            <span>📱 Dispositivo Inteligente Horizontal ● WiFi 🔋</span>
+            <span>📱 Dispositivo Inteligente {isMobile ? "Mobile" : "Horizontal"} ● WiFi 🔋</span>
           </div>
 
           {/* App content / Home screen */}
@@ -748,13 +766,13 @@ export default function PhoneApp({ onClose }: { onClose: () => void }) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.96 }}
                 transition={{ type: "tween", duration: 0.2 }}
-                style={{ position: "absolute", inset: 0, background: "var(--px-cream)", overflowY: "auto", top: 30, display: "flex", flexDirection: "column" }}
+                style={{ position: "absolute", inset: 0, background: "var(--px-cream)", overflowY: "auto", top: isMobile ? 24 : 30, display: "flex", flexDirection: "column" }}
               >
                 {/* App header */}
                 <div
                   style={{
                     background: activeScreen.color,
-                    padding: "10px 20px",
+                    padding: isMobile ? "8px 12px" : "10px 20px",
                     display: "flex",
                     alignItems: "center",
                     gap: 12,
@@ -771,18 +789,18 @@ export default function PhoneApp({ onClose }: { onClose: () => void }) {
                       padding: "4px 14px",
                       cursor: "pointer",
                       fontFamily: "var(--font-pixel)",
-                      fontSize: "13px",
+                      fontSize: isMobile ? "11px" : "13px",
                       fontWeight: 700,
                       color: "var(--px-dark)",
                       boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                     }}
                   >
-                    ← Volver al inicio
+                    ← Volver
                   </button>
                   <span
                     style={{
                       fontFamily: "var(--font-pixel)",
-                      fontSize: "15px",
+                      fontSize: isMobile ? "13px" : "15px",
                       fontWeight: 800,
                       color: "var(--px-dark)",
                     }}
@@ -801,30 +819,31 @@ export default function PhoneApp({ onClose }: { onClose: () => void }) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 style={{
-                  padding: "24px 32px",
+                  padding: isMobile ? "14px 16px" : "24px 32px",
                   height: "100%",
                   background: "linear-gradient(135deg, #FFF8EF, #F5EDD5)",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
                   alignItems: "center",
+                  overflowY: "auto",
                 }}
               >
-                <div style={{ textAlign: "center", marginBottom: 20 }}>
-                  <h2 style={{ fontFamily: "var(--font-pixel)", fontSize: "18px", fontWeight: 800, color: "var(--px-dark)" }}>
+                <div style={{ textAlign: "center", marginBottom: isMobile ? 12 : 20 }}>
+                  <h2 style={{ fontFamily: "var(--font-pixel)", fontSize: isMobile ? "15px" : "18px", fontWeight: 800, color: "var(--px-dark)", margin: 0 }}>
                     ANTONELLA COSTA
                   </h2>
-                  <p style={{ fontFamily: "var(--font-body)", fontSize: "14px", color: "var(--px-rose-dark)", fontWeight: 600 }}>
-                    Creativa Digital · Seleccioná una aplicación para ver la información
+                  <p style={{ fontFamily: "var(--font-body)", fontSize: isMobile ? "12px" : "14px", color: "var(--px-rose-dark)", fontWeight: 600, margin: "4px 0 0 0" }}>
+                    Creativa Digital · Seleccioná una app
                   </p>
                 </div>
 
-                {/* App grid (5 columns) */}
+                {/* App grid */}
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(5, 1fr)",
-                    gap: 16,
+                    gridTemplateColumns: isMobile ? "repeat(3, 1fr)" : "repeat(5, 1fr)",
+                    gap: isMobile ? 10 : 16,
                     width: "100%",
                     maxWidth: 580,
                   }}
@@ -837,14 +856,14 @@ export default function PhoneApp({ onClose }: { onClose: () => void }) {
                       style={{
                         background: app.color,
                         width: "100%",
-                        height: 90,
+                        height: isMobile ? 70 : 90,
                         borderRadius: 16,
                         boxShadow: "0 6px 16px rgba(0,0,0,0.1)",
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
                         justifyContent: "center",
-                        gap: 6,
+                        gap: 4,
                       }}
                       aria-label={app.label}
                     >

@@ -94,12 +94,12 @@ export default function PixelWindow({
         ref={windowRef}
         className="win95-window window-animate-in"
         style={{
-          left: isMobile ? "3vw" : pos.x,
-          top: isMobile ? "64px" : pos.y,
-          width: isMobile ? "94vw" : width,
-          maxWidth: "94vw",
-          height: isMobile ? "calc(100vh - 84px)" : undefined,
-          maxHeight: isMobile ? "calc(100vh - 84px)" : "85vh",
+          left: isMobile ? "4vw" : pos.x,
+          top: isMobile ? "48px" : pos.y,
+          width: isMobile ? "92vw" : width,
+          maxWidth: "92vw",
+          height: isMobile ? "calc(100dvh - 110px)" : undefined,
+          maxHeight: isMobile ? "calc(100dvh - 110px)" : "85vh",
           zIndex: isActive ? 210 : 200,
           position: isMobile ? "fixed" : contained ? "absolute" : "fixed",
           cursor: isDragging ? "grabbing" : "default",
@@ -119,7 +119,7 @@ export default function PixelWindow({
             <button className="win95-btn" onClick={onClose} aria-label="Cerrar" style={{ background: "#C0392B", color: "#FFF", fontWeight: "bold", padding: "2px 8px" }}>✕</button>
           </div>
         </div>
-        <div style={{ padding: "8px", overflowY: "auto", height: isMobile ? "calc(100% - 36px)" : undefined, maxHeight: contained ? 490 : "75vh" }}>
+        <div style={{ padding: "8px", overflowY: "auto", height: isMobile ? "calc(100% - 36px)" : undefined, maxHeight: contained ? (isMobile ? 420 : 490) : "75vh" }}>
           {children}
         </div>
       </motion.div>
@@ -132,12 +132,12 @@ export default function PixelWindow({
       ref={windowRef}
       className="pixel-window window-animate-in"
       style={{
-        left: isMobile ? "3vw" : pos.x,
-        top: isMobile ? "64px" : pos.y,
-        width: isMobile ? "94vw" : width,
-        maxWidth: "94vw",
-        height: isMobile ? "calc(100vh - 84px)" : undefined,
-        maxHeight: isMobile ? "calc(100vh - 84px)" : "85vh",
+        left: isMobile ? "4vw" : pos.x,
+        top: isMobile ? "48px" : pos.y,
+        width: isMobile ? "92vw" : width,
+        maxWidth: "92vw",
+        height: isMobile ? "calc(100dvh - 110px)" : undefined,
+        maxHeight: isMobile ? "calc(100dvh - 110px)" : "85vh",
         zIndex: isActive ? 210 : 200,
         position: isMobile ? "fixed" : contained ? "absolute" : "fixed",
         cursor: isDragging ? "grabbing" : "default",

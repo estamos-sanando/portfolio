@@ -1,10 +1,20 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGameStore } from "@/hooks/useGameStore";
 import { audioEngine } from "@/lib/audioEngine";
 
 export default function QuestModal() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const {
     visitedPhone,
     visitedPC,
@@ -39,8 +49,8 @@ export default function QuestModal() {
         className="docked-quest-bar"
         style={{
           position: "fixed",
-          top: 16,
-          left: 16,
+          top: isMobile ? 10 : 16,
+          left: isMobile ? 10 : 16,
           zIndex: 45,
         }}
       >
@@ -49,14 +59,14 @@ export default function QuestModal() {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: 8,
-            padding: "8px 14px",
+            gap: isMobile ? 5 : 8,
+            padding: isMobile ? "5px 10px" : "8px 14px",
             background: "rgba(28, 24, 40, 0.92)",
             border: "2px solid var(--px-rose)",
             borderRadius: 20,
             color: "#FFF8EF",
             fontFamily: "var(--font-pixel)",
-            fontSize: "10px",
+            fontSize: isMobile ? "8px" : "10px",
             cursor: "pointer",
             boxShadow: "0 8px 24px rgba(0,0,0,0.4), 0 0 12px rgba(242,167,187,0.25)",
             backdropFilter: "blur(8px)",
@@ -64,16 +74,18 @@ export default function QuestModal() {
           }}
           className="hover:scale-105"
         >
-          <span style={{ fontSize: "10px", fontWeight: "bold", color: "var(--px-rose)" }}>
+          <span style={{ fontSize: isMobile ? "9px" : "10px", fontWeight: "bold", color: "var(--px-rose)" }}>
             {dogUnlocked ? "[OK]" : "[!]"}
           </span>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
             <span style={{ color: "var(--px-rose)", fontWeight: 700 }}>
               {dogUnlocked ? "SORPRESA DESBLOQUEADA" : `MISIONES (${completedCount}/3)`}
             </span>
-            <span style={{ fontSize: "7px", color: "var(--px-beige)", opacity: 0.8 }}>
-              {dogUnlocked ? "¡Conocé la sorpresa en la habitación!" : "Clic para ver misiones"}
-            </span>
+            {!isMobile && (
+              <span style={{ fontSize: "7px", color: "var(--px-beige)", opacity: 0.8 }}>
+                {dogUnlocked ? "¡Conocé la sorpresa en la habitación!" : "Clic para ver misiones"}
+              </span>
+            )}
           </div>
         </button>
       </div>
