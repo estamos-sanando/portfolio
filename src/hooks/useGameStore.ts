@@ -70,7 +70,9 @@ interface GameState {
 
   // Camera tracking
   cameraX: number;
+  maxCameraX: number;
   setCameraX: (x: number) => void;
+  setMaxCameraX: (max: number) => void;
 
   // Actions
   setLoading: (loading: boolean) => void;
@@ -147,7 +149,9 @@ export const useGameStore = create<GameState>((set, get) => ({
   showQuestModal: false,
   showUnlockBanner: false,
   cameraX: 0,
+  maxCameraX: 1,
   setCameraX: (x) => set({ cameraX: x }),
+  setMaxCameraX: (max) => set({ maxCameraX: max }),
 
   setLoading: (loading) => set({ isLoading: loading }),
   setLoadProgress: (progress) => set({ loadProgress: progress }),

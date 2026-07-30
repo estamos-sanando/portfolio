@@ -36,6 +36,7 @@ export default function GameContainer() {
     dogUnlocked,
     activeCharacter,
     setCameraX,
+    setMaxCameraX,
   } = useGameStore();
 
   const nearObjectRef = useRef<string | null>(null);
@@ -749,10 +750,11 @@ export default function GameContainer() {
       );
 
       // Camera tracking update
-      const maxCamX = Math.max(0, roomWidth - canvas.width);
+      const maxCamX = Math.max(1, roomWidth - canvas.width);
       const targetCamX = Math.max(0, Math.min(maxCamX, player.x - canvas.width * 0.5));
       currentCamX += (targetCamX - currentCamX) * 0.14;
       setCameraX(Math.round(currentCamX));
+      setMaxCameraX(Math.max(1, Math.round(maxCamX)));
 
       // Frame animation
       if (player.isMoving) {
