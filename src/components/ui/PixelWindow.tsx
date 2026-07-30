@@ -110,7 +110,7 @@ export default function PixelWindow({
             <button className="win95-btn" onClick={onClose} aria-label="Cerrar">✕</button>
           </div>
         </div>
-        <div style={{ padding: "8px", overflowY: "auto", maxHeight: contained ? 380 : "70vh" }}>
+        <div style={{ padding: "8px", overflowY: "auto", maxHeight: contained ? 490 : "75vh" }}>
           {children}
         </div>
       </motion.div>
@@ -170,7 +170,7 @@ export default function PixelWindow({
         style={{
           padding: "12px",
           overflowY: "auto",
-          maxHeight: contained ? 380 : "72vh",
+          maxHeight: contained ? 490 : "78vh",
           background: "var(--px-window-bg)",
           fontFamily: "var(--font-body)",
           fontSize: "18px",

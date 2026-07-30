@@ -311,108 +311,118 @@ function ProjectCard({
       id={`project-${project.id}`}
       title={`${project.icon} ${project.name}`}
       onClose={onClose}
-      defaultX={60}
-      defaultY={20}
-      width={480}
+      defaultX={20}
+      defaultY={10}
+      width={640}
       contained={true}
     >
-      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        {/* Hero / GIF Preview */}
-        {"gif" in project && project.gif ? (
-          <div
-            style={{
-              position: "relative",
-              width: "100%",
-              borderRadius: 6,
-              overflow: "hidden",
-              border: "2px inset #999",
-              background: "#000",
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={project.gif as string}
-              alt={`Vista previa ${project.name}`}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "240px 1fr",
+          gap: 14,
+          alignItems: "start",
+        }}
+      >
+        {/* Left Column: GIF/Media & Link */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {"gif" in project && project.gif ? (
+            <div
               style={{
                 width: "100%",
-                maxHeight: 220,
-                objectFit: "contain",
-                display: "block",
+                borderRadius: 6,
+                overflow: "hidden",
+                border: "2px inset #999",
+                background: "#000",
               }}
-            />
-          </div>
-        ) : (
-          <div
-            style={{
-              height: 120,
-              background: `linear-gradient(135deg, ${project.color}40, ${project.color}80)`,
-              border: `2px solid ${project.color}`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "48px",
-            }}
-          >
-            {project.icon}
-          </div>
-        )}
-
-        {/* Description */}
-        <Section title="Descripción">
-          <p style={{ lineHeight: 1.6 }}>{project.description}</p>
-        </Section>
-
-        <Section title="Problema">
-          <p style={{ lineHeight: 1.6 }}>{project.problem}</p>
-        </Section>
-
-        <Section title="Proceso">
-          <p style={{ lineHeight: 1.6 }}>{project.process}</p>
-        </Section>
-
-        <Section title="Mi Rol">
-          <p style={{ lineHeight: 1.6 }}>{project.role}</p>
-        </Section>
-
-        {project.tools.length > 0 && (
-          <Section title="Herramientas">
-            <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 4 }}>
-              {project.tools.map((tool) => (
-                <span key={tool} className="skill-tag" style={{ background: project.color }}>
-                  {tool}
-                </span>
-              ))}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={project.gif as string}
+                alt={`Vista previa ${project.name}`}
+                style={{
+                  width: "100%",
+                  maxHeight: 180,
+                  objectFit: "contain",
+                  display: "block",
+                }}
+              />
             </div>
-          </Section>
-        )}
+          ) : (
+            <div
+              style={{
+                height: 120,
+                background: `linear-gradient(135deg, ${project.color}40, ${project.color}80)`,
+                border: `2px solid ${project.color}`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "48px",
+              }}
+            >
+              {project.icon}
+            </div>
+          )}
 
-        {project.prototype !== "#" && (
-          <a
-            href={project.prototype}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 6,
-              padding: "10px 16px",
-              background: "linear-gradient(135deg, #B39DDB, #8E24AA)",
-              border: `2px outset #fff`,
-              borderRadius: 6,
-              textAlign: "center",
-              fontFamily: "VT323, monospace",
-              fontSize: "18px",
-              color: "#fff",
-              textDecoration: "none",
-              fontWeight: "bold",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-              cursor: "pointer",
-            }}
-          >
-            🌐 Abrir Aplicación Web ({project.prototype.replace("https://", "")}) →
-          </a>
-        )}
+          {project.prototype !== "#" && (
+            <a
+              href={project.prototype}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
+                padding: "8px 12px",
+                background: "linear-gradient(135deg, #B39DDB, #8E24AA)",
+                border: `2px outset #fff`,
+                borderRadius: 6,
+                textAlign: "center",
+                fontFamily: "VT323, monospace",
+                fontSize: "17px",
+                color: "#fff",
+                textDecoration: "none",
+                fontWeight: "bold",
+                boxShadow: "0 3px 8px rgba(0,0,0,0.3)",
+                cursor: "pointer",
+              }}
+            >
+              🌐 Abrir App Web →
+            </a>
+          )}
+        </div>
+
+        {/* Right Column: Info & Details */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <Section title="Descripción">
+            <p style={{ lineHeight: 1.4, margin: 0 }}>{project.description}</p>
+          </Section>
+
+          <Section title="Problema">
+            <p style={{ lineHeight: 1.4, margin: 0 }}>{project.problem}</p>
+          </Section>
+
+          <Section title="Proceso">
+            <p style={{ lineHeight: 1.4, margin: 0 }}>{project.process}</p>
+          </Section>
+
+          <Section title="Mi Rol">
+            <p style={{ lineHeight: 1.4, margin: 0 }}>{project.role}</p>
+          </Section>
+
+          {project.tools.length > 0 && (
+            <Section title="Herramientas">
+              <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 4 }}>
+                {project.tools.map((tool) => (
+                  <span key={tool} className="skill-tag" style={{ background: project.color }}>
+                    {tool}
+                  </span>
+                ))}
+              </div>
+            </Section>
+          )}
+        </div>
       </div>
     </PixelWindow>
   );
@@ -557,53 +567,79 @@ function ProduccionesWindow({ onClose }: { onClose: () => void }) {
         id="producciones"
         title="🎬 PRODUCCIONES"
         onClose={onClose}
-        defaultX={40}
-        defaultY={20}
-        width={490}
+        defaultX={20}
+        defaultY={10}
+        width={660}
         style="win95"
         icon="🎬"
         contained={true}
       >
-        <div style={{ padding: 12, background: "#D4D0C8", display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ padding: 10, background: "#D4D0C8", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
           {/* PRODUCCIÓN 1: Spot Publicitario */}
           <div
             style={{
               background: "#E4E0D8",
               border: "2px outset #fff",
               borderRadius: 6,
-              padding: 12,
+              padding: 10,
               display: "flex",
               flexDirection: "column",
-              gap: 8,
+              justifyContent: "space-between",
+              gap: 6,
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ fontSize: 24 }}>🎬</span>
-              <div style={{ fontFamily: "VT323, monospace", fontSize: 18, fontWeight: "bold", color: "#000" }}>
-                DonaxVida — Spot Publicitario
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ fontSize: 22 }}>🎬</span>
+                <div style={{ fontFamily: "VT323, monospace", fontSize: 17, fontWeight: "bold", color: "#000" }}>
+                  DonaxVida — Spot Publicitario
+                </div>
+              </div>
+
+              {/* Video Thumbnail Placeholder */}
+              <div
+                style={{
+                  width: "100%",
+                  height: 125,
+                  background: "linear-gradient(135deg, #1C1828, #2A2438)",
+                  borderRadius: 6,
+                  border: "2px inset #999",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6,
+                }}
+              >
+                <span style={{ fontSize: 28, color: "#F2A7BB" }}>🎬</span>
+                <span style={{ fontFamily: "VT323, monospace", fontSize: 14, color: "#F2A7BB" }}>
+                  SPOT AUDIOVISUAL
+                </span>
+              </div>
+
+              <p style={{ fontFamily: "VT323, monospace", fontSize: 14, color: "#2D2D3A", margin: 0, lineHeight: 1.3 }}>
+                Spot publicitario de concientización para la campaña &quot;DonaxVida&quot;. Edición y postproducción con CapCut.
+              </p>
+              <div style={{ fontSize: 13, fontFamily: "VT323, monospace", color: "#444" }}>
+                <strong>Rol:</strong> Dirección creativa, guión y edición.
               </div>
             </div>
-            <p style={{ fontFamily: "VT323, monospace", fontSize: 15, color: "#2D2D3A", margin: 0, lineHeight: 1.4 }}>
-              Spot publicitario de concientización para la campaña &quot;DonaxVida&quot;. Edición y postproducción audiovisual realizada con CapCut.
-            </p>
-            <div style={{ fontSize: 14, fontFamily: "VT323, monospace", color: "#444" }}>
-              <strong>Rol:</strong> Dirección creativa, guión, producción y edición audiovisual.
-            </div>
+
             <button
               onClick={handleOpenVideo}
               style={{
-                marginTop: 4,
+                marginTop: 6,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 gap: 6,
-                padding: "8px 14px",
+                padding: "7px 12px",
                 background: "linear-gradient(135deg, #B39DDB, #8E24AA)",
                 border: "2px outset #fff",
                 borderRadius: 6,
                 color: "white",
                 fontFamily: "VT323, monospace",
-                fontSize: "16px",
+                fontSize: "15px",
                 cursor: "pointer",
                 fontWeight: "bold",
               }}
@@ -618,70 +654,74 @@ function ProduccionesWindow({ onClose }: { onClose: () => void }) {
               background: "#E4E0D8",
               border: "2px outset #fff",
               borderRadius: 6,
-              padding: 12,
+              padding: 10,
               display: "flex",
               flexDirection: "column",
-              gap: 8,
+              justifyContent: "space-between",
+              gap: 6,
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ fontSize: 24 }}>🎮</span>
-              <div style={{ fontFamily: "VT323, monospace", fontSize: 18, fontWeight: "bold", color: "#000" }}>
-                Videojuego — Women Game Jam 2025
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ fontSize: 22 }}>🎮</span>
+                <div style={{ fontFamily: "VT323, monospace", fontSize: 17, fontWeight: "bold", color: "#000" }}>
+                  Videojuego — Women Game Jam
+                </div>
+              </div>
+
+              {/* Cover Image */}
+              <div
+                style={{
+                  width: "100%",
+                  height: 125,
+                  borderRadius: 6,
+                  overflow: "hidden",
+                  border: "2px inset #999",
+                  background: "#000",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/trabajos/PRODUCCIONES/theafter.jpeg"
+                  alt="Portada del Videojuego - Women Game Jam 2025"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </div>
+
+              <p style={{ fontFamily: "VT323, monospace", fontSize: 14, color: "#2D2D3A", margin: 0, lineHeight: 1.3 }}>
+                Videojuego desarrollado en la Women Game Jam 2025. Diseño de juego y narrativa interactiva.
+              </p>
+              <div style={{ fontSize: 13, fontFamily: "VT323, monospace", color: "#444" }}>
+                <strong>Rol:</strong> Game design / Narrativa
               </div>
             </div>
 
-            {/* Cover Image */}
-            <div
-              style={{
-                width: "100%",
-                borderRadius: 6,
-                overflow: "hidden",
-                border: "2px inset #999",
-                background: "#000",
-                maxHeight: 180,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/trabajos/PRODUCCIONES/theafter.jpeg"
-                alt="Portada del Videojuego - Women Game Jam 2025"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-            </div>
-
-            <p style={{ fontFamily: "VT323, monospace", fontSize: 15, color: "#2D2D3A", margin: 0, lineHeight: 1.4 }}>
-              Videojuego desarrollado en la Women Game Jam 2025. Participación en el diseño del juego y en la creación de la narrativa interactiva.
-            </p>
-            <div style={{ fontSize: 14, fontFamily: "VT323, monospace", color: "#444" }}>
-              <strong>Mi Rol:</strong> Game design / Narrativa
-            </div>
             <a
               href="https://itch.io/jam/women-game-jam-2025/rate/3802081#google_vignette"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => play("click")}
               style={{
-                marginTop: 4,
+                marginTop: 6,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 gap: 6,
-                padding: "8px 14px",
+                padding: "7px 12px",
                 background: "linear-gradient(135deg, #FF7043, #D84315)",
                 border: "2px outset #fff",
                 borderRadius: 6,
                 color: "white",
                 fontFamily: "VT323, monospace",
-                fontSize: "16px",
+                fontSize: "15px",
                 textDecoration: "none",
                 fontWeight: "bold",
               }}
             >
-              🎮 Ver / Calificar Videojuego en itch.io →
+              🎮 Ver en itch.io →
             </a>
           </div>
         </div>
@@ -914,10 +954,10 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.92 }}
           style={{
-            width: "90vw",
-            maxWidth: 820,
-            height: "82vh",
-            maxHeight: 560,
+            width: "94vw",
+            maxWidth: 900,
+            height: "86vh",
+            maxHeight: 600,
             pointerEvents: "auto",
             position: "relative",
             zIndex: 40,
