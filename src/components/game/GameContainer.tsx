@@ -545,52 +545,7 @@ export default function GameContainer() {
       }
     }
 
-    // ---- Draw Mission Arrows (Only clean bouncing arrows, vanish when completed) ----
-    function drawMissionArrows(ts: number) {
-      const w = canvas!.width;
-      const h = canvas!.height;
-      const bounceY = Math.sin(ts / 200) * 5;
-      const bounceX = Math.sin(ts / 200) * 5;
 
-      ctx!.save();
-      ctx!.font = "bold 18px 'Press Start 2P', sans-serif";
-      ctx!.textAlign = "center";
-
-      // 1. CELULAR (only if not visited yet)
-      if (!visitedPhoneRef.current) {
-        const px = w * 0.25;
-        const py = h * 0.49 + bounceY;
-
-        ctx!.shadowColor = "#F2A7BB";
-        ctx!.shadowBlur = 12;
-        ctx!.fillStyle = "#F2A7BB";
-        ctx!.fillText("▼", px, py);
-      }
-
-      // 2. COMPUTADORA (only if not visited yet)
-      if (!visitedPCRef.current) {
-        const px = w * 0.49;
-        const py = h * 0.14 + bounceY;
-
-        ctx!.shadowColor = "#F2A7BB";
-        ctx!.shadowBlur = 12;
-        ctx!.fillStyle = "#F2A7BB";
-        ctx!.fillText("▼", px, py);
-      }
-
-      // 3. PUERTA (only if not visited yet)
-      if (!visitedDoorRef.current) {
-        const px = w * 0.90 + bounceX;
-        const py = h * 0.26;
-
-        ctx!.shadowColor = "#F2A7BB";
-        ctx!.shadowBlur = 12;
-        ctx!.fillStyle = "#F2A7BB";
-        ctx!.fillText("◀", px, py);
-      }
-
-      ctx!.restore();
-    }
 
     // ---- Draw Hint Labels ----
     function drawHints() {
@@ -807,7 +762,6 @@ export default function GameContainer() {
 
       // ---- Draw ----
       drawParticles();
-      drawMissionArrows(ts);
       drawCharacter();
       drawHints();
 
