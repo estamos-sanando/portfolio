@@ -235,15 +235,15 @@ export default function GameContainer() {
     function getActiveObjectAtPlayerPos(): RoomObject | null {
       const relX = player.x / roomWidth;
       // 1. Phone / Nightstand spot
-      if (relX >= 0.16 && relX <= 0.30) {
+      if (relX >= 0.10 && relX <= 0.34) {
         return interactables.find((o) => o.id === "phone") || null;
       }
       // 2. PC / Desk Chair spot
-      if (relX >= 0.42 && relX <= 0.58) {
+      if (relX >= 0.38 && relX <= 0.64) {
         return interactables.find((o) => o.id === "computer") || null;
       }
       // 3. Door / Rug spot
-      if (relX >= 0.76 && relX <= 0.90) {
+      if (relX >= 0.72 && relX <= 0.94) {
         return interactables.find((o) => o.id === "door") || null;
       }
       return null;
@@ -290,15 +290,6 @@ export default function GameContainer() {
 
     // ---- Interaction Handler ----
     function handleInteraction() {
-      // Direct distance check to dog when unlocked
-      if (dogUnlockedRef.current) {
-        const distToDog = Math.hypot(player.x - dog.x, player.y - dog.y);
-        if (distToDog < 260) {
-          triggerPetDog();
-          return;
-        }
-      }
-
       const obj = getActiveObjectAtPlayerPos();
       if (!obj) return;
 
@@ -614,12 +605,6 @@ export default function GameContainer() {
             ctx!.textAlign = "left";
             ctx!.fillText("ACARICIAR", hx - bubbleW / 2 + 28, hy + 3);
           }
-
-          if (nearObjectRef.current !== "pet_dog") {
-            nearObjectRef.current = "pet_dog";
-            setNearObject("radio" as any);
-          }
-          return;
         }
       }
 
