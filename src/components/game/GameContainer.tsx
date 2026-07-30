@@ -121,11 +121,11 @@ export default function GameContainer() {
     };
 
     const dog = {
-      x: roomWidth * 0.22, // Static position right in front of the bed
+      x: roomWidth * 0.13, // Position directly in front of the bed
       y: canvas.height * 0.85,
       w: 32,
       h: 32,
-      facing: "left" as "left" | "right",
+      facing: "right" as "left" | "right",
     };
 
     // ---- Room Objects & Interactables Cache ----
@@ -136,7 +136,7 @@ export default function GameContainer() {
       roomWidth = Math.max(canvas.width, canvas.height * 1.7778);
       const w = roomWidth;
       const h = canvas.height;
-      dog.x = w * 0.22;
+      dog.x = w * 0.13;
       dog.y = h * 0.85;
 
       roomObjects = [
