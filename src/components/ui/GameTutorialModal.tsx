@@ -99,7 +99,7 @@ export default function GameTutorialModal() {
         )}
       </AnimatePresence>
 
-      {/* 2. TUTORIAL MODAL POPUP */}
+      {/* 2. SPEECH BUBBLE TUTORIAL POPUP (Floating above character) */}
       <AnimatePresence>
         {showGuideModal && (
           <motion.div
@@ -109,34 +109,63 @@ export default function GameTutorialModal() {
             style={{
               position: "fixed",
               inset: 0,
-              zIndex: 100,
+              zIndex: 120,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               padding: 16,
-              background: "rgba(10, 8, 16, 0.75)",
-              backdropFilter: "blur(8px)",
+              background: "rgba(10, 8, 16, 0.55)",
+              backdropFilter: "blur(4px)",
             }}
+            onClick={handleClose}
           >
             <motion.div
-              initial={{ scale: 0.85, y: 20, opacity: 0 }}
+              initial={{ scale: 0.8, y: -30, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
-              exit={{ scale: 0.85, y: 20, opacity: 0 }}
+              exit={{ scale: 0.8, y: -30, opacity: 0 }}
               transition={{ type: "spring", stiffness: 350, damping: 28 }}
               style={{
                 position: "relative",
                 width: "100%",
-                maxWidth: 620,
+                maxWidth: 580,
+                marginBottom: "8vh",
                 background: "linear-gradient(145deg, rgba(32, 28, 48, 0.98), rgba(20, 16, 32, 0.98))",
                 border: "3px solid var(--px-rose)",
-                borderRadius: 20,
-                padding: "24px 28px",
-                boxShadow: "0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(242,167,187,0.25)",
+                borderRadius: 22,
+                padding: "24px 26px",
+                boxShadow: "0 20px 60px rgba(0,0,0,0.65), 0 0 35px rgba(242,167,187,0.35)",
                 color: "#FFF8EF",
                 fontFamily: "var(--font-body)",
-                overflow: "hidden",
               }}
+              onClick={(e) => e.stopPropagation()}
             >
+              {/* Speech Bubble Pointer Tail pointing down at Antonella */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: -16,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: 0,
+                  height: 0,
+                  borderLeft: "16px solid transparent",
+                  borderRight: "16px solid transparent",
+                  borderTop: "16px solid var(--px-rose)",
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: -12,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: 0,
+                  height: 0,
+                  borderLeft: "13px solid transparent",
+                  borderRight: "13px solid transparent",
+                  borderTop: "13px solid #201C30",
+                }}
+              />
               {/* Pixel Art Corner Accents */}
               <div
                 style={{
