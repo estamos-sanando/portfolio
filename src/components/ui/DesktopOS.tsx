@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAudio } from "@/hooks/useAudio";
 import PixelWindow from "./PixelWindow";
@@ -295,8 +296,10 @@ function ProjectCard({
 }) {
   const [isZoomed, setIsZoomed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const checkMobile = () => setIsMobile(window.innerWidth <= 640);
     checkMobile();
     window.addEventListener("resize", checkMobile);
@@ -447,97 +450,101 @@ function ProjectCard({
       </PixelWindow>
 
       {/* Lightbox / Zoom Modal for GIF */}
-      <AnimatePresence>
-        {isZoomed && "gif" in project && project.gif && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            style={{
-              position: "fixed",
-              inset: 0,
-              zIndex: 9999,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "rgba(10, 8, 16, 0.88)",
-              backdropFilter: "blur(10px)",
-              padding: 24,
-            }}
-            onClick={() => setIsZoomed(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.85, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.85, opacity: 0 }}
-              style={{
-                position: "relative",
-                width: "95vw",
-                maxWidth: "1350px",
-                maxHeight: "94vh",
-                background: "#161022",
-                border: "3px solid var(--px-rose)",
-                borderRadius: 20,
-                padding: "16px 20px",
-                boxShadow: "0 25px 80px rgba(0,0,0,0.9), 0 0 45px rgba(242,167,187,0.45)",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {isZoomed && "gif" in project && project.gif && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                style={{
+                  position: "fixed",
+                  inset: 0,
+                  zIndex: 99999,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: "rgba(10, 8, 16, 0.88)",
+                  backdropFilter: "blur(10px)",
+                  padding: 24,
+                }}
                 onClick={() => setIsZoomed(false)}
-                style={{
-                  position: "absolute",
-                  top: -14,
-                  right: -14,
-                  width: 34,
-                  height: 34,
-                  borderRadius: "50%",
-                  background: "var(--px-rose)",
-                  border: "2px solid #FFF",
-                  color: "#120C1A",
-                  fontWeight: "bold",
-                  fontSize: "14px",
-                  cursor: "pointer",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
-                }}
               >
-                ✕
-              </button>
+                <motion.div
+                  initial={{ scale: 0.85, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.85, opacity: 0 }}
+                  style={{
+                    position: "relative",
+                    width: "95vw",
+                    maxWidth: "1350px",
+                    maxHeight: "94vh",
+                    background: "#161022",
+                    border: "3px solid var(--px-rose)",
+                    borderRadius: 20,
+                    padding: "16px 20px",
+                    boxShadow: "0 25px 80px rgba(0,0,0,0.9), 0 0 45px rgba(242,167,187,0.45)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    onClick={() => setIsZoomed(false)}
+                    style={{
+                      position: "absolute",
+                      top: -14,
+                      right: -14,
+                      width: 34,
+                      height: 34,
+                      borderRadius: "50%",
+                      background: "var(--px-rose)",
+                      border: "2px solid #FFF",
+                      color: "#120C1A",
+                      fontWeight: "bold",
+                      fontSize: "14px",
+                      cursor: "pointer",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+                    }}
+                  >
+                    ✕
+                  </button>
 
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={project.gif as string}
-                alt={`GIF Ampliado ${project.name}`}
-                style={{
-                  width: "100%",
-                  maxWidth: "100%",
-                  maxHeight: "83vh",
-                  borderRadius: 10,
-                  display: "block",
-                  objectFit: "contain",
-                }}
-              />
-              <div
-                style={{
-                  marginTop: 12,
-                  textAlign: "center",
-                  fontFamily: "var(--font-pixel)",
-                  fontSize: "10px",
-                  color: "var(--px-rose)",
-                  letterSpacing: "0.04em",
-                }}
-              >
-                {project.name} — VISTA PREVIA AMPLIADA
-              </div>
-            </motion.div>
-          </motion.div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={project.gif as string}
+                    alt={`GIF Ampliado ${project.name}`}
+                    style={{
+                      width: "100%",
+                      maxWidth: "100%",
+                      maxHeight: "83vh",
+                      borderRadius: 10,
+                      display: "block",
+                      objectFit: "contain",
+                    }}
+                  />
+                  <div
+                    style={{
+                      marginTop: 12,
+                      textAlign: "center",
+                      fontFamily: "var(--font-pixel)",
+                      fontSize: "10px",
+                      color: "var(--px-rose)",
+                      letterSpacing: "0.04em",
+                    }}
+                  >
+                    {project.name} — VISTA PREVIA AMPLIADA
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </>
   );
 }
@@ -658,8 +665,13 @@ function AplicacionesWindow({ onClose }: { onClose: () => void }) {
 function ProduccionesWindow({ onClose }: { onClose: () => void }) {
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const { play } = useAudio();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleOpenVideo = () => {
     play("click");
@@ -852,154 +864,158 @@ function ProduccionesWindow({ onClose }: { onClose: () => void }) {
       </PixelWindow>
 
       {/* POPUP DEDICADO DE VIDEO (VENTANA EMERGENTE) */}
-      <AnimatePresence>
-        {showVideoModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            style={{
-              position: "fixed",
-              inset: 0,
-              zIndex: 200,
-              background: "rgba(0,0,0,0.85)",
-              backdropFilter: "blur(6px)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 16,
-            }}
-            onClick={() => setShowVideoModal(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.8, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.8, y: 20 }}
-              style={{
-                position: "relative",
-                width: "90%",
-                maxWidth: 760,
-                background: "#1C1828",
-                border: "3px solid #F2A7BB",
-                borderRadius: 16,
-                padding: 16,
-                boxShadow: "0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(242,167,187,0.3)",
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Header */}
-              <div
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {showVideoModal && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 style={{
+                  position: "fixed",
+                  inset: 0,
+                  zIndex: 99999,
+                  background: "rgba(0,0,0,0.85)",
+                  backdropFilter: "blur(6px)",
                   display: "flex",
-                  justifyContent: "space-between",
                   alignItems: "center",
-                  marginBottom: 12,
-                  borderBottom: "1px solid rgba(242,167,187,0.3)",
-                  paddingBottom: 8,
+                  justifyContent: "center",
+                  padding: 16,
                 }}
+                onClick={() => setShowVideoModal(false)}
               >
-                <span
+                <motion.div
+                  initial={{ scale: 0.8, y: 20 }}
+                  animate={{ scale: 1, y: 0 }}
+                  exit={{ scale: 0.8, y: 20 }}
                   style={{
-                    fontFamily: "var(--font-pixel)",
-                    fontSize: "10px",
-                    color: "#F2A7BB",
+                    position: "relative",
+                    width: "90%",
+                    maxWidth: 760,
+                    background: "#1C1828",
+                    border: "3px solid #F2A7BB",
+                    borderRadius: 16,
+                    padding: 16,
+                    boxShadow: "0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(242,167,187,0.3)",
                   }}
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  🎬 REPRODUCTOR — DONAXVIDA
-                </span>
-                <button
-                  onClick={() => setShowVideoModal(false)}
-                  style={{
-                    background: "rgba(242,167,187,0.2)",
-                    border: "1px solid #F2A7BB",
-                    color: "white",
-                    borderRadius: "50%",
-                    width: 28,
-                    height: 28,
-                    cursor: "pointer",
-                    fontFamily: "monospace",
-                    fontWeight: "bold",
-                  }}
-                >
-                  ✕
-                </button>
-              </div>
-
-              {/* Video Element */}
-              {videoError ? (
-                <div
-                  style={{
-                    padding: 24,
-                    textAlign: "center",
-                    color: "#F2A7BB",
-                    fontFamily: "VT323, monospace",
-                    fontSize: 18,
-                  }}
-                >
-                  <p>Hubo un inconveniente al cargar el reproductor incorporado.</p>
-                  <a
-                    href="/trabajos/PRODUCCIONES/SPOTDONAXVIDA.mp4"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  {/* Header */}
+                  <div
                     style={{
-                      display: "inline-block",
-                      marginTop: 12,
-                      padding: "8px 16px",
-                      background: "#F2A7BB",
-                      color: "#1C1828",
-                      borderRadius: 6,
-                      textDecoration: "none",
-                      fontWeight: "bold",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: 12,
+                      borderBottom: "1px solid rgba(242,167,187,0.3)",
+                      paddingBottom: 8,
                     }}
                   >
-                    ▶ Abrir video directamente
-                  </a>
-                </div>
-              ) : (
-                <video
-                  ref={videoRef}
-                  controls
-                  playsInline
-                  preload="auto"
-                  onError={() => setVideoError(true)}
-                  style={{
-                    width: "100%",
-                    maxHeight: "70vh",
-                    borderRadius: 8,
-                    background: "#000",
-                  }}
-                >
-                  <source src="/trabajos/PRODUCCIONES/SPOTDONAXVIDA.mp4" type="video/mp4" />
-                  Tu navegador no soporta el reproductor de video.
-                </video>
-              )}
+                    <span
+                      style={{
+                        fontFamily: "var(--font-pixel)",
+                        fontSize: "10px",
+                        color: "#F2A7BB",
+                      }}
+                    >
+                      🎬 REPRODUCTOR — DONAXVIDA
+                    </span>
+                    <button
+                      onClick={() => setShowVideoModal(false)}
+                      style={{
+                        background: "rgba(242,167,187,0.2)",
+                        border: "1px solid #F2A7BB",
+                        color: "white",
+                        borderRadius: "50%",
+                        width: 28,
+                        height: 28,
+                        cursor: "pointer",
+                        fontFamily: "monospace",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  marginTop: 10,
-                }}
-              >
-                <a
-                  href="/trabajos/PRODUCCIONES/SPOTDONAXVIDA.mp4"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    fontFamily: "VT323, monospace",
-                    fontSize: "15px",
-                    color: "#F2A7BB",
-                    textDecoration: "none",
-                    opacity: 0.85,
-                  }}
-                >
-                  🔗 Abrir video en pestaña nueva
-                </a>
-              </div>
-            </motion.div>
-          </motion.div>
+                  {/* Video Element */}
+                  {videoError ? (
+                    <div
+                      style={{
+                        padding: 24,
+                        textAlign: "center",
+                        color: "#F2A7BB",
+                        fontFamily: "VT323, monospace",
+                        fontSize: 18,
+                      }}
+                    >
+                      <p>Hubo un inconveniente al cargar el reproductor incorporado.</p>
+                      <a
+                        href="/trabajos/PRODUCCIONES/SPOTDONAXVIDA.mp4"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: "inline-block",
+                          marginTop: 12,
+                          padding: "8px 16px",
+                          background: "#F2A7BB",
+                          color: "#1C1828",
+                          borderRadius: 6,
+                          textDecoration: "none",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        ▶ Abrir video directamente
+                      </a>
+                    </div>
+                  ) : (
+                    <video
+                      ref={videoRef}
+                      controls
+                      playsInline
+                      preload="auto"
+                      onError={() => setVideoError(true)}
+                      style={{
+                        width: "100%",
+                        maxHeight: "70vh",
+                        borderRadius: 8,
+                        background: "#000",
+                      }}
+                    >
+                      <source src="/trabajos/PRODUCCIONES/SPOTDONAXVIDA.mp4" type="video/mp4" />
+                      Tu navegador no soporta el reproductor de video.
+                    </video>
+                  )}
+
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: 10,
+                    }}
+                  >
+                    <a
+                      href="/trabajos/PRODUCCIONES/SPOTDONAXVIDA.mp4"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        fontFamily: "VT323, monospace",
+                        fontSize: "15px",
+                        color: "#F2A7BB",
+                        textDecoration: "none",
+                        opacity: 0.85,
+                      }}
+                    >
+                      🔗 Abrir video en pestaña nueva
+                    </a>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </>
   );
 }
