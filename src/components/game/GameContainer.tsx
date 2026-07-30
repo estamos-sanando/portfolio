@@ -224,14 +224,19 @@ export default function GameContainer() {
     window.addEventListener("keyup", handleKeyUp);
     window.addEventListener("blur", handleBlur);
 
-    // ---- Active Object Resolver based on Player X Position ----
+    // ---- Active Object Resolver based on Specific Interaction Spots ----
     function getActiveObjectAtPlayerPos(): RoomObject | null {
       const relX = player.x / canvas!.width;
-      if (relX < 0.28) {
+      // 1. Phone / Nightstand spot (Image 1)
+      if (relX >= 0.16 && relX <= 0.30) {
         return interactables.find((o) => o.id === "phone") || null;
-      } else if (relX >= 0.28 && relX <= 0.68) {
+      }
+      // 2. PC / Desk Chair spot (Image 2)
+      if (relX >= 0.42 && relX <= 0.58) {
         return interactables.find((o) => o.id === "computer") || null;
-      } else if (relX > 0.68) {
+      }
+      // 3. Door / Rug spot (Image 3)
+      if (relX >= 0.76 && relX <= 0.90) {
         return interactables.find((o) => o.id === "door") || null;
       }
       return null;
