@@ -460,18 +460,23 @@ function ProjectCard({
             onClick={() => setIsZoomed(false)}
           >
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
+              exit={{ scale: 0.85, opacity: 0 }}
               style={{
                 position: "relative",
-                maxWidth: "92vw",
-                maxHeight: "88vh",
+                width: "95vw",
+                maxWidth: "1350px",
+                maxHeight: "94vh",
                 background: "#161022",
                 border: "3px solid var(--px-rose)",
-                borderRadius: 18,
-                padding: 16,
-                boxShadow: "0 25px 70px rgba(0,0,0,0.85), 0 0 35px rgba(242,167,187,0.4)",
+                borderRadius: 20,
+                padding: "16px 20px",
+                boxShadow: "0 25px 80px rgba(0,0,0,0.9), 0 0 45px rgba(242,167,187,0.45)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
               }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -501,8 +506,9 @@ function ProjectCard({
                 src={project.gif as string}
                 alt={`GIF Ampliado ${project.name}`}
                 style={{
+                  width: "100%",
                   maxWidth: "100%",
-                  maxHeight: "75vh",
+                  maxHeight: "83vh",
                   borderRadius: 10,
                   display: "block",
                   objectFit: "contain",
