@@ -545,94 +545,48 @@ export default function GameContainer() {
       }
     }
 
-    // ---- Draw Mission Indicators & Subtle Arrows ----
+    // ---- Draw Mission Arrows (Only clean bouncing arrows, vanish when completed) ----
     function drawMissionArrows(ts: number) {
       const w = canvas!.width;
       const h = canvas!.height;
-      const bounceY = Math.sin(ts / 220) * 4;
-      const bounceX = Math.sin(ts / 220) * 4;
+      const bounceY = Math.sin(ts / 200) * 5;
+      const bounceX = Math.sin(ts / 200) * 5;
 
       ctx!.save();
+      ctx!.font = "bold 18px 'Press Start 2P', sans-serif";
+      ctx!.textAlign = "center";
 
-      // 1. CELULAR (a bit higher and slightly right over smartphone)
-      {
+      // 1. CELULAR (only if not visited yet)
+      if (!visitedPhoneRef.current) {
         const px = w * 0.25;
-        const py = h * 0.48 + bounceY;
-        const isDone = visitedPhoneRef.current;
+        const py = h * 0.49 + bounceY;
 
-        const label = isDone ? "CELULAR [OK]" : "MISION: CELULAR";
-        ctx!.font = "bold 8px 'Press Start 2P', monospace";
-        ctx!.textAlign = "center";
-        const textW = ctx!.measureText(label).width;
-        const bw = textW + 16;
-        const bh = 18;
-
-        ctx!.fillStyle = isDone ? "rgba(20, 38, 25, 0.9)" : "rgba(32, 24, 48, 0.9)";
-        ctx!.fillRect(px - bw / 2, py - bh - 14, bw, bh);
-        ctx!.strokeStyle = isDone ? "#2ECC71" : "#F2A7BB";
-        ctx!.lineWidth = 1.5;
-        ctx!.strokeRect(px - bw / 2, py - bh - 14, bw, bh);
-
-        ctx!.fillStyle = isDone ? "#2ECC71" : "#F2A7BB";
-        ctx!.fillText(label, px, py - 20);
-
-        // Subtle arrow pointing down onto smartphone
-        ctx!.font = "bold 11px 'Press Start 2P', monospace";
-        ctx!.fillText("▼", px, py - 4);
+        ctx!.shadowColor = "#F2A7BB";
+        ctx!.shadowBlur = 12;
+        ctx!.fillStyle = "#F2A7BB";
+        ctx!.fillText("▼", px, py);
       }
 
-      // 2. COMPUTADORA (slightly right and slightly lower over PC monitor top)
-      {
+      // 2. COMPUTADORA (only if not visited yet)
+      if (!visitedPCRef.current) {
         const px = w * 0.51;
-        const py = h * 0.15 + bounceY;
-        const isDone = visitedPCRef.current;
+        const py = h * 0.16 + bounceY;
 
-        const label = isDone ? "COMPUTADORA [OK]" : "MISION: PC";
-        ctx!.font = "bold 8px 'Press Start 2P', monospace";
-        ctx!.textAlign = "center";
-        const textW = ctx!.measureText(label).width;
-        const bw = textW + 16;
-        const bh = 18;
-
-        ctx!.fillStyle = isDone ? "rgba(20, 38, 25, 0.9)" : "rgba(32, 24, 48, 0.9)";
-        ctx!.fillRect(px - bw / 2, py - bh - 14, bw, bh);
-        ctx!.strokeStyle = isDone ? "#2ECC71" : "#F2A7BB";
-        ctx!.lineWidth = 1.5;
-        ctx!.strokeRect(px - bw / 2, py - bh - 14, bw, bh);
-
-        ctx!.fillStyle = isDone ? "#2ECC71" : "#F2A7BB";
-        ctx!.fillText(label, px, py - 20);
-
-        // Subtle arrow pointing down onto PC monitor
-        ctx!.font = "bold 11px 'Press Start 2P', monospace";
-        ctx!.fillText("▼", px, py - 4);
+        ctx!.shadowColor = "#F2A7BB";
+        ctx!.shadowBlur = 12;
+        ctx!.fillStyle = "#F2A7BB";
+        ctx!.fillText("▼", px, py);
       }
 
-      // 3. PUERTA (a bit lower and slightly left towards door frame)
-      {
+      // 3. PUERTA (only if not visited yet)
+      if (!visitedDoorRef.current) {
         const px = w * 0.90 + bounceX;
         const py = h * 0.26;
-        const isDone = visitedDoorRef.current;
 
-        const label = isDone ? "CONTACTO [OK]" : "MISION: CONTACTO";
-        ctx!.font = "bold 8px 'Press Start 2P', monospace";
-        ctx!.textAlign = "center";
-        const textW = ctx!.measureText(label).width;
-        const bw = textW + 16;
-        const bh = 18;
-
-        ctx!.fillStyle = isDone ? "rgba(20, 38, 25, 0.9)" : "rgba(32, 24, 48, 0.9)";
-        ctx!.fillRect(px - bw / 2, py - bh - 14, bw, bh);
-        ctx!.strokeStyle = isDone ? "#2ECC71" : "#F2A7BB";
-        ctx!.lineWidth = 1.5;
-        ctx!.strokeRect(px - bw / 2, py - bh - 14, bw, bh);
-
-        ctx!.fillStyle = isDone ? "#2ECC71" : "#F2A7BB";
-        ctx!.fillText(label, px, py - 20);
-
-        // Subtle arrow pointing left towards door
-        ctx!.font = "bold 11px 'Press Start 2P', monospace";
-        ctx!.fillText("◀", px - bw / 2 - 8, py - 20);
+        ctx!.shadowColor = "#F2A7BB";
+        ctx!.shadowBlur = 12;
+        ctx!.fillStyle = "#F2A7BB";
+        ctx!.fillText("◀", px, py);
       }
 
       ctx!.restore();
