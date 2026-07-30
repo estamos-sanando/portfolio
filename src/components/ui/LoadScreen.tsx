@@ -140,21 +140,19 @@ export default function LoadScreen() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="px-10 py-3.5 rounded-full flex items-center gap-4 shadow-2xl mb-4"
+                className="px-10 py-3 rounded-full flex items-center gap-4 shadow-2xl mb-4"
                 style={{
                   background: "linear-gradient(135deg, #FFF0F5, #F2A7BB, #D4748A)",
                   border: "3px solid #FFFFFF",
                   boxShadow: "0 12px 35px rgba(242,167,187,0.7), 0 0 20px rgba(255,255,255,0.8)",
                 }}
               >
-                <span className="text-2xl">🌸</span>
                 <span
                   className="font-black text-3xl md:text-4xl tracking-[0.32em] text-[#1D1424] uppercase"
                   style={{ fontFamily: "var(--font-body)", textShadow: "0 1px 2px rgba(255,255,255,0.8)" }}
                 >
                   ANTONELLA COSTA
                 </span>
-                <span className="text-2xl">🌸</span>
               </motion.div>
 
               {/* Main Title */}
@@ -227,14 +225,12 @@ export default function LoadScreen() {
               >
                 {/* Header text */}
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl">💖</span>
                   <span
                     className="font-black text-base tracking-[0.2em] uppercase text-[#FFF8EF]"
                     style={{ fontFamily: "var(--font-body)" }}
                   >
-                    {!hintReady ? "Cargando contenido..." : "¡Conocé mi trabajo!"}
+                    {!hintReady ? "Cargando contenido..." : "¡CONOCÉ MI TRABAJO!"}
                   </span>
-                  <span className="text-2xl">💖</span>
                 </div>
 
                 {/* Animated Progress Bar */}
@@ -290,7 +286,7 @@ export default function LoadScreen() {
                         transition={{ duration: 1.5, repeat: Infinity }}
                         className="font-black text-sm md:text-base tracking-wider px-8 py-3 rounded-full inline-block text-[#1D1424] bg-gradient-to-r from-[#F2A7BB] to-[#B39DDB]"
                       >
-                        ✨ Presioná cualquier tecla para comenzar ✨
+                        Presioná cualquier tecla para comenzar
                       </motion.span>
                     </motion.div>
                   )}

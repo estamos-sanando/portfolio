@@ -75,7 +75,7 @@ export default function QuestModal() {
         </button>
       </div>
 
-      {/* 2. QUESTS POPUP MODAL */}
+      {/* 2. QUESTS POPUP MODAL (Positioned on the left, converts to top-left menu on close) */}
       <AnimatePresence>
         {showQuestModal && (
           <motion.div
@@ -88,21 +88,25 @@ export default function QuestModal() {
               zIndex: 150,
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              padding: 16,
-              background: "rgba(10, 8, 16, 0.8)",
-              backdropFilter: "blur(8px)",
+              justifyContent: "flex-start",
+              paddingLeft: "4vw",
+              paddingRight: "16px",
+              paddingTop: "16px",
+              paddingBottom: "16px",
+              background: "rgba(10, 8, 16, 0.75)",
+              backdropFilter: "blur(6px)",
             }}
             onClick={handleClose}
           >
             <motion.div
-              initial={{ scale: 0.85, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.85, y: 20 }}
+              initial={{ opacity: 0, x: -120, scale: 0.85 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -280, y: -260, scale: 0.15 }}
+              transition={{ duration: 0.35, ease: "easeInOut" }}
               style={{
                 position: "relative",
                 width: "100%",
-                maxWidth: 480,
+                maxWidth: 460,
                 background: "linear-gradient(145deg, rgba(32, 28, 48, 0.98), rgba(20, 16, 32, 0.98))",
                 border: "3px solid var(--px-rose)",
                 borderRadius: 20,
@@ -144,7 +148,7 @@ export default function QuestModal() {
                   letterSpacing: "0.04em",
                 }}
               >
-                MISIONES Y RECOMPENSA
+                OBJETIVO Y MISIONES
               </h2>
               <p style={{ fontSize: "13px", color: "#E2D9F3", marginBottom: 16, lineHeight: 1.4 }}>
                 Explorá ambos dispositivos y la puerta para desbloquear a la perrita de Antonella en la habitación:
@@ -260,15 +264,15 @@ export default function QuestModal() {
                 </div>
               </div>
 
-              {/* Reset Quests Button */}
-              <div style={{ marginTop: 16, display: "flex", justifyContent: "flex-end" }}>
+              {/* Action & Reset Buttons */}
+              <div style={{ marginTop: 16, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
                 <button
                   onClick={() => {
                     audioEngine.click();
                     resetQuests();
                   }}
                   style={{
-                    padding: "6px 12px",
+                    padding: "8px 12px",
                     background: "rgba(231, 76, 60, 0.15)",
                     border: "1px solid rgba(231, 76, 60, 0.4)",
                     borderRadius: 8,
@@ -278,7 +282,26 @@ export default function QuestModal() {
                     cursor: "pointer",
                   }}
                 >
-                  REINICIAR MISIONES
+                  REINICIAR
+                </button>
+
+                <button
+                  onClick={handleClose}
+                  style={{
+                    flex: 1,
+                    padding: "10px 16px",
+                    background: "linear-gradient(135deg, var(--px-rose-dark), var(--px-violet-dark))",
+                    border: "1px solid var(--px-rose)",
+                    borderRadius: 8,
+                    color: "#FFF",
+                    fontFamily: "var(--font-pixel)",
+                    fontSize: "10px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    textAlign: "center",
+                  }}
+                >
+                  EXPLORAR HABITACIÓN →
                 </button>
               </div>
             </motion.div>
