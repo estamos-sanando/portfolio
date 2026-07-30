@@ -16,9 +16,9 @@ const PROJECTS = [
     gif: "/trabajos/despues/despues.gif",
     video: "/trabajos/despues/despues.mp4",
     description:
-      "Después es una aplicación de acompañamiento y prevención frente a situaciones de violencia sexoafectiva. Está pensada para ayudar a reconocer señales de alerta, comprender los propios límites y acceder a información clara sobre consentimiento, vínculos saludables y educación sexual. La aplicación reúne recursos de orientación, herramientas para registrar situaciones y un botón de salida rápida que permite abandonar la pantalla de manera discreta. Su objetivo es ofrecer un espacio seguro y accesible para informarse, identificar conductas que muchas veces se naturalizan y tomar decisiones con mayor autonomía.",
+      "Aplicación de acompañamiento y prevención frente a situaciones de violencia sexoafectiva. Ayuda a reconocer señales de alerta, comprender límites y acceder a recursos de orientación con registro de situaciones y botón de salida discreta.",
     problem:
-      "Muchas personas no tienen acceso a herramientas digitales que aborden el procesamiento emocional post-encuentros sexoafectivos de forma empática y no invasiva.",
+      "La naturalización de conductas dañinas y la falta de herramientas de orientación discretas dificultan identificar límites y buscar ayuda de forma segura.",
     process:
       "Desarrollo impulsado por Inteligencia Artificial (ChatGPT, Gemini, Antigravity) → Despliegue en Vercel.",
     role: "Diseño y Desarrollo con IA",
@@ -33,9 +33,9 @@ const PROJECTS = [
     gif: "/trabajos/chequeate/chequeate.gif",
     video: "/trabajos/chequeate/chequeate.mp4",
     description:
-      "Chequéate es una aplicación de salud pensada para que cada persona pueda llevar un control más consciente y organizado de su propio cuerpo. Permite centralizar el historial médico, registrar controles y estudios, gestionar turnos y recibir recordatorios para no postergar chequeos importantes. Además de facilitar el seguimiento de la salud, brinda información preventiva y ayuda a detectar hábitos, antecedentes o controles pendientes. Su objetivo es que cada usuario pueda conocer mejor su cuerpo, tomar decisiones informadas y adoptar una actitud más activa frente al cuidado de su salud.",
+      "Aplicación de salud pensada para llevar un control consciente y organizado del cuerpo. Centraliza el historial médico, registra controles y estudios, gestiona turnos y envía recordatorios para no postergar chequeos importantes.",
     problem:
-      "La falta de información accesible y el miedo provocan que muchas mujeres pospongan sus controles ginecológicos preventivos.",
+      "La dispersión del historial médico y la falta de seguimiento organizado hacen que muchas personas pospongan sus controles preventivos clave.",
     process:
       "Desarrollo impulsado por Inteligencia Artificial (ChatGPT, Gemini, Antigravity) → Despliegue en Vercel.",
     role: "Diseño y Desarrollo con IA",
