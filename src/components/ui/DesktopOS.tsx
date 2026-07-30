@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAudio } from "@/hooks/useAudio";
+import { audioEngine } from "@/lib/audioEngine";
 import PixelWindow from "./PixelWindow";
 import { InstagramIcon, FacebookIcon, TikTokIcon, PodcastIcon, WebIcon } from "./SocialIcons";
 
@@ -680,11 +681,23 @@ function ProduccionesWindow({ onClose }: { onClose: () => void }) {
   };
 
   useEffect(() => {
-    if (showVideoModal && videoRef.current) {
-      videoRef.current.play().catch((err) => {
-        console.log("Autoplay deferral:", err);
-      });
+    if (showVideoModal) {
+      audioEngine.stopBackgroundMusic();
+      if (videoRef.current) {
+        videoRef.current.play().catch((err) => {
+          console.log("Autoplay deferral:", err);
+        });
+      }
+    } else {
+      if (videoRef.current) {
+        videoRef.current.pause();
+      }
+      audioEngine.startBackgroundMusic();
     }
+
+    return () => {
+      audioEngine.startBackgroundMusic();
+    };
   }, [showVideoModal]);
 
   return (
