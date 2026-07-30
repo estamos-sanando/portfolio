@@ -569,8 +569,8 @@ export default function GameContainer() {
 
       // 2. COMPUTADORA (only if not visited yet)
       if (!visitedPCRef.current) {
-        const px = w * 0.51;
-        const py = h * 0.16 + bounceY;
+        const px = w * 0.49;
+        const py = h * 0.14 + bounceY;
 
         ctx!.shadowColor = "#F2A7BB";
         ctx!.shadowBlur = 12;
