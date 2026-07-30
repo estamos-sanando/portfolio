@@ -146,11 +146,11 @@ export const useGameStore = create<GameState>((set, get) => ({
   setLoadProgress: (progress) => set({ loadProgress: progress }),
 
   startGame: () =>
-    set(() => ({
+    set((state) => ({
       isLoading: false,
       gameStarted: true,
-      showQuestModal: true,
-      showGuideModal: false,
+      showGuideModal: true,
+      showQuestModal: false,
     })),
 
   openGuideModal: () => set({ showGuideModal: true }),
@@ -158,6 +158,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   closeGuideModal: () =>
     set({
       showGuideModal: false,
+      showQuestModal: true,
       isGuideDocked: true,
       hasSeenGuide: true,
     }),

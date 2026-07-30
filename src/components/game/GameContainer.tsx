@@ -224,30 +224,38 @@ export default function GameContainer() {
     window.addEventListener("keyup", handleKeyUp);
     window.addEventListener("blur", handleBlur);
 
+    // ---- Active Object Resolver based on Player X Position ----
+    function getActiveObjectAtPlayerPos(): RoomObject | null {
+      const relX = player.x / canvas!.width;
+      if (relX < 0.28) {
+        return interactables.find((o) => o.id === "phone") || null;
+      } else if (relX >= 0.28 && relX <= 0.68) {
+        return interactables.find((o) => o.id === "computer") || null;
+      } else if (relX > 0.68) {
+        return interactables.find((o) => o.id === "door") || null;
+      }
+      return null;
+    }
+
     // ---- Power Toggle Handler ----
     function handlePowerToggle() {
-      for (let i = 0; i < interactables.length; i++) {
-        const obj = interactables[i];
-        const distX = Math.abs(player.x + player.w / 2 - (obj.x + obj.w / 2));
-        if (distX < 140) {
-          if (obj.id === "computer") {
-            const turningOn = !isPcOnRef.current;
-            togglePcPower();
-            if (turningOn) {
-              audioEngine.bootPC();
-            } else {
-              audioEngine.powerOff();
-            }
-          } else if (obj.id === "phone") {
-            const turningOn = !isPhoneOnRef.current;
-            togglePhonePower();
-            if (turningOn) {
-              audioEngine.powerOnPhone();
-            } else {
-              audioEngine.powerOff();
-            }
-          }
-          return;
+      const obj = getActiveObjectAtPlayerPos();
+      if (!obj) return;
+      if (obj.id === "computer") {
+        const turningOn = !isPcOnRef.current;
+        togglePcPower();
+        if (turningOn) {
+          audioEngine.bootPC();
+        } else {
+          audioEngine.powerOff();
+        }
+      } else if (obj.id === "phone") {
+        const turningOn = !isPhoneOnRef.current;
+        togglePhonePower();
+        if (turningOn) {
+          audioEngine.powerOnPhone();
+        } else {
+          audioEngine.powerOff();
         }
       }
     }
@@ -259,7 +267,7 @@ export default function GameContainer() {
         const distToDog = Math.hypot(player.x - dog.x, player.y - dog.y);
         if (distToDog < 240) {
           audioEngine.click();
-          petTimer = 180; // 3 seconds of happy smiling pose
+          petTimer = 180;
           for (let k = 0; k < 6; k++) {
             petHearts.push({
               x: dog.x + (Math.random() - 0.5) * 50,
@@ -274,30 +282,26 @@ export default function GameContainer() {
         }
       }
 
-      for (let i = 0; i < interactables.length; i++) {
-        const obj = interactables[i];
-        const distX = Math.abs(player.x + player.w / 2 - (obj.x + obj.w / 2));
-        if (distX < 140) {
-          if (obj.id === "phone") {
-            if (isPhoneOnRef.current) {
-              audioEngine.interact();
-              openWindow("phone");
-            } else {
-              audioEngine.click();
-            }
-          } else if (obj.id === "computer") {
-            if (isPcOnRef.current) {
-              audioEngine.interact();
-              openWindow("computer");
-            } else {
-              audioEngine.click();
-            }
-          } else if (obj.id === "door") {
-            audioEngine.interact();
-            openWindow("door");
-          }
-          return;
+      const obj = getActiveObjectAtPlayerPos();
+      if (!obj) return;
+
+      if (obj.id === "phone") {
+        if (isPhoneOnRef.current) {
+          audioEngine.interact();
+          openWindow("phone");
+        } else {
+          audioEngine.click();
         }
+      } else if (obj.id === "computer") {
+        if (isPcOnRef.current) {
+          audioEngine.interact();
+          openWindow("computer");
+        } else {
+          audioEngine.click();
+        }
+      } else if (obj.id === "door") {
+        audioEngine.interact();
+        openWindow("door");
       }
     }
 
@@ -306,47 +310,40 @@ export default function GameContainer() {
       const rect = canvas.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const clickY = e.clientY - rect.top;
+      const relX = clickX / canvas.width;
 
-      for (let i = 0; i < interactables.length; i++) {
-        const obj = interactables[i];
-        if (
-          clickX >= obj.x &&
-          clickX <= obj.x + obj.w &&
-          clickY >= obj.y &&
-          clickY <= obj.y + obj.h
-        ) {
-          if (obj.id === "computer") {
-            if (isPcOnRef.current) {
-              audioEngine.interact();
-              openWindow("computer");
-            } else {
-              audioEngine.click();
-            }
-          } else if (obj.id === "phone") {
-            if (isPhoneOnRef.current) {
-              audioEngine.interact();
-              openWindow("phone");
-            } else {
-              audioEngine.click();
-            }
-          } else if (obj.id === "door") {
-            audioEngine.interact();
-            openWindow("door");
-          } else if (obj.id === "pet_dog") {
-            audioEngine.click();
-            petTimer = 180;
-            for (let k = 0; k < 6; k++) {
-              petHearts.push({
-                x: dog.x + (Math.random() - 0.5) * 50,
-                y: dog.y - 120 + (Math.random() - 0.5) * 25,
-                vy: -1.2 - Math.random() * 1.2,
-                alpha: 1.0,
-                icon: ["💖", "✨", "🌸", "💕"][Math.floor(Math.random() * 4)],
-                size: 16 + Math.floor(Math.random() * 8),
-              });
-            }
+      if (relX < 0.22) {
+        if (isPhoneOnRef.current) {
+          audioEngine.interact();
+          openWindow("phone");
+        } else {
+          audioEngine.click();
+        }
+      } else if (relX >= 0.22 && relX < 0.70 && clickY < canvas.height * 0.80) {
+        if (isPcOnRef.current) {
+          audioEngine.interact();
+          openWindow("computer");
+        } else {
+          audioEngine.click();
+        }
+      } else if (relX >= 0.70 && clickY < canvas.height * 0.80) {
+        audioEngine.interact();
+        openWindow("door");
+      } else if (dogUnlockedRef.current) {
+        const distToDog = Math.hypot(clickX - dog.x, clickY - dog.y);
+        if (distToDog < 120) {
+          audioEngine.click();
+          petTimer = 180;
+          for (let k = 0; k < 6; k++) {
+            petHearts.push({
+              x: dog.x + (Math.random() - 0.5) * 50,
+              y: dog.y - 120 + (Math.random() - 0.5) * 25,
+              vy: -1.2 - Math.random() * 1.2,
+              alpha: 1.0,
+              icon: ["💖", "✨", "🌸", "💕"][Math.floor(Math.random() * 4)],
+              size: 16 + Math.floor(Math.random() * 8),
+            });
           }
-          break;
         }
       }
     };
@@ -559,8 +556,8 @@ export default function GameContainer() {
 
       // 1. CELULAR (directly above nightstand smartphone on the far left)
       {
-        const px = w * 0.08;
-        const py = h * 0.36 + bounceY;
+        const px = w * 0.12;
+        const py = h * 0.38 + bounceY;
         const isDone = visitedPhoneRef.current;
 
         const label = isDone ? "CELULAR [OK]" : "MISION: CELULAR";
@@ -586,8 +583,8 @@ export default function GameContainer() {
 
       // 2. COMPUTADORA (directly above PC monitor top bezel)
       {
-        const px = w * 0.38;
-        const py = h * 0.08 + bounceY;
+        const px = w * 0.40;
+        const py = h * 0.10 + bounceY;
         const isDone = visitedPCRef.current;
 
         const label = isDone ? "COMPUTADORA [OK]" : "MISION: PC";
@@ -678,75 +675,71 @@ export default function GameContainer() {
         }
       }
 
-      for (let i = 0; i < interactables.length; i++) {
-        const obj = interactables[i];
-        if (obj.id === "pet_dog") continue; // Handled directly above
+      const activeObj = getActiveObjectAtPlayerPos();
+      if (activeObj) {
+        const isPc = activeObj.id === "computer";
+        const isPhone = activeObj.id === "phone";
+        const isOn = isPc ? isPcOnRef.current : isPhone ? isPhoneOnRef.current : true;
 
-        const distX = Math.abs(player.x + player.w / 2 - (obj.x + obj.w / 2));
-        if (distX < 140) {
-          const hx = obj.x + obj.w / 2;
-          const hy = obj.y - 25;
+        const hx = isPhone ? canvas!.width * 0.12 : isPc ? canvas!.width * 0.40 : canvas!.width * 0.80;
+        const hy = isPhone ? canvas!.height * 0.54 : isPc ? canvas!.height * 0.32 : canvas!.height * 0.50;
 
-          const isPc = obj.id === "computer";
-          const isPhone = obj.id === "phone";
-          const isOn = isPc ? isPcOnRef.current : isPhone ? isPhoneOnRef.current : true;
+        const bubbleW = isPc || isPhone ? 150 : 110;
+        const bubbleH = 26;
 
-          const bubbleW = isPc || isPhone ? 150 : 110;
-          const bubbleH = 26;
+        ctx!.fillStyle = "rgba(25,25,35,0.92)";
+        ctx!.fillRect(hx - bubbleW / 2, hy - bubbleH / 2, bubbleW, bubbleH);
+        ctx!.strokeStyle = isOn ? "#F2A7BB" : "#B39DDB";
+        ctx!.lineWidth = 2;
+        ctx!.strokeRect(hx - bubbleW / 2, hy - bubbleH / 2, bubbleW, bubbleH);
 
-          ctx!.fillStyle = "rgba(25,25,35,0.92)";
-          ctx!.fillRect(hx - bubbleW / 2, hy - bubbleH / 2, bubbleW, bubbleH);
-          ctx!.strokeStyle = isOn ? "#F2A7BB" : "#B39DDB";
-          ctx!.lineWidth = 2;
-          ctx!.strokeRect(hx - bubbleW / 2, hy - bubbleH / 2, bubbleW, bubbleH);
+        if (isPc || isPhone) {
+          ctx!.fillStyle = isOn ? "#E74C3C" : "#2ECC71";
+          ctx!.fillRect(hx - bubbleW / 2 + 6, hy - 9, 18, 16);
+          ctx!.fillStyle = "#FFFFFF";
+          ctx!.font = `bold 9px 'Press Start 2P'`;
+          ctx!.textAlign = "center";
+          ctx!.fillText("F", hx - bubbleW / 2 + 15, hy + 3);
 
-          if (isPc || isPhone) {
-            ctx!.fillStyle = isOn ? "#E74C3C" : "#2ECC71";
-            ctx!.fillRect(hx - bubbleW / 2 + 6, hy - 9, 18, 16);
-            ctx!.fillStyle = "#FFFFFF";
-            ctx!.font = `bold 9px 'Press Start 2P'`;
-            ctx!.textAlign = "center";
-            ctx!.fillText("F", hx - bubbleW / 2 + 15, hy + 3);
+          ctx!.fillStyle = isOn ? "#FFD1D1" : "#D4EFDF";
+          ctx!.font = `7px 'Press Start 2P'`;
+          ctx!.textAlign = "left";
+          ctx!.fillText(isOn ? "APAGAR" : "PRENDER", hx - bubbleW / 2 + 28, hy + 3);
 
-            ctx!.fillStyle = isOn ? "#FFD1D1" : "#D4EFDF";
-            ctx!.font = `7px 'Press Start 2P'`;
-            ctx!.textAlign = "left";
-            ctx!.fillText(isOn ? "APAGAR" : "PRENDER", hx - bubbleW / 2 + 28, hy + 3);
-
-            if (isOn) {
-              ctx!.fillStyle = "#F2A7BB";
-              ctx!.fillRect(hx + 10, hy - 9, 18, 16);
-              ctx!.fillStyle = "#2D2D3A";
-              ctx!.font = `bold 9px 'Press Start 2P'`;
-              ctx!.textAlign = "center";
-              ctx!.fillText("E", hx + 19, hy + 3);
-
-              ctx!.fillStyle = "#F0E8FF";
-              ctx!.font = `7px 'Press Start 2P'`;
-              ctx!.textAlign = "left";
-              ctx!.fillText("USAR", hx + 32, hy + 3);
-            }
-          } else {
-            ctx!.fillStyle = "#B39DDB";
-            ctx!.fillRect(hx - bubbleW / 2 + 6, hy - 9, 18, 16);
+          if (isOn) {
+            ctx!.fillStyle = "#F2A7BB";
+            ctx!.fillRect(hx + 10, hy - 9, 18, 16);
             ctx!.fillStyle = "#2D2D3A";
             ctx!.font = `bold 9px 'Press Start 2P'`;
             ctx!.textAlign = "center";
-            ctx!.fillText("E", hx - bubbleW / 2 + 15, hy + 3);
+            ctx!.fillText("E", hx + 19, hy + 3);
 
             ctx!.fillStyle = "#F0E8FF";
             ctx!.font = `7px 'Press Start 2P'`;
             ctx!.textAlign = "left";
-            ctx!.fillText("CONTACTAR", hx - bubbleW / 2 + 28, hy + 3);
+            ctx!.fillText("USAR", hx + 32, hy + 3);
           }
+        } else {
+          ctx!.fillStyle = "#B39DDB";
+          ctx!.fillRect(hx - bubbleW / 2 + 6, hy - 9, 18, 16);
+          ctx!.fillStyle = "#2D2D3A";
+          ctx!.font = `bold 9px 'Press Start 2P'`;
+          ctx!.textAlign = "center";
+          ctx!.fillText("E", hx - bubbleW / 2 + 15, hy + 3);
 
-          if (nearObjectRef.current !== obj.id) {
-            nearObjectRef.current = obj.id;
-            setNearObject(obj.id as any);
-          }
-          return;
+          ctx!.fillStyle = "#F0E8FF";
+          ctx!.font = `7px 'Press Start 2P'`;
+          ctx!.textAlign = "left";
+          ctx!.fillText("CONTACTAR", hx - bubbleW / 2 + 28, hy + 3);
         }
+
+        if (nearObjectRef.current !== activeObj.id) {
+          nearObjectRef.current = activeObj.id;
+          setNearObject(activeObj.id as any);
+        }
+        return;
       }
+
       if (nearObjectRef.current !== null) {
         nearObjectRef.current = null;
         setNearObject(null);
