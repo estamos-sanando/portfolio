@@ -412,8 +412,8 @@ export default function GameContainer() {
       const now = performance.now();
 
       // Responsive heights scaled to viewport height
-      const targetHeight = Math.min(460, canvas!.height * 0.44);
-      const dogTargetHeight = Math.min(240, canvas!.height * 0.24);
+      const targetHeight = Math.min(520, canvas!.height * 0.50);
+      const dogTargetHeight = Math.min(270, canvas!.height * 0.26);
 
       // 1. Draw Antonella
       const px = player.x - currentCamX;
