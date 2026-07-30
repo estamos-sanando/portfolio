@@ -20,9 +20,9 @@ const PROJECTS = [
     problem:
       "Muchas personas no tienen acceso a herramientas digitales que aborden el procesamiento emocional post-encuentros sexoafectivos de forma empática y no invasiva.",
     process:
-      "Investigación de usuarios → Prototipado en papel → Testing con usuarios reales → Iteración en Figma → Desarrollo con IA (ChatGPT, Gemini, Antigravity) → Despliegue en Vercel.",
-    role: "UX Researcher, UI Designer & Co-Developer (IA)",
-    tools: ["ChatGPT", "Gemini", "Antigravity", "Figma", "FigJam", "Next.js"],
+      "Desarrollo impulsado por Inteligencia Artificial (ChatGPT, Gemini, Antigravity) → Despliegue en Vercel.",
+    role: "Diseño y Desarrollo con IA",
+    tools: ["ChatGPT", "Gemini", "Antigravity"],
     prototype: "https://despues20.vercel.app/",
   },
   {
@@ -37,9 +37,9 @@ const PROJECTS = [
     problem:
       "La falta de información accesible y el miedo provocan que muchas mujeres pospongan sus controles ginecológicos preventivos.",
     process:
-      "Análisis de necesidades → Diseño de flujo de usuario → Ilustración de componentes → Prototipado interactivo → Desarrollo con IA (ChatGPT, Gemini, Antigravity) → Despliegue en Vercel.",
-    role: "Diseño UX/UI, Ilustración & Co-Developer (IA)",
-    tools: ["ChatGPT", "Gemini", "Antigravity", "Figma", "Illustrator", "Prototipado"],
+      "Desarrollo impulsado por Inteligencia Artificial (ChatGPT, Gemini, Antigravity) → Despliegue en Vercel.",
+    role: "Diseño y Desarrollo con IA",
+    tools: ["ChatGPT", "Gemini", "Antigravity"],
     prototype: "https://chequeate201.vercel.app/",
   },
   {
@@ -52,7 +52,7 @@ const PROJECTS = [
     problem: "Pocos espacios digitales combinan estética cuidada con contenido empático sobre salud mental.",
     process: "Branding → Producción de podcast → Estrategia de contenidos → Diseño de piezas gráficas.",
     role: "Fundadora, Diseñadora y Productora de Contenido",
-    tools: ["CapCut", "Figma", "Spotify for Podcasters", "Photoshop"],
+    tools: ["CapCut", "Spotify for Podcasters", "Photoshop"],
     prototype: "#",
   },
 ];
@@ -332,7 +332,7 @@ function ProjectCard({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={project.gif as string}
-              alt={`Animación ${project.name}`}
+              alt={`Vista previa ${project.name}`}
               style={{
                 width: "100%",
                 maxHeight: 220,
@@ -340,22 +340,6 @@ function ProjectCard({
                 display: "block",
               }}
             />
-            <div
-              style={{
-                position: "absolute",
-                bottom: 6,
-                right: 6,
-                background: "rgba(0,0,0,0.75)",
-                color: "#F2A7BB",
-                padding: "2px 8px",
-                borderRadius: 4,
-                fontFamily: "VT323, monospace",
-                fontSize: 13,
-                border: "1px solid rgba(242,167,187,0.4)",
-              }}
-            >
-              ▶ GIF Animado
-            </div>
           </div>
         ) : (
           <div
