@@ -42,19 +42,6 @@ const PROJECTS = [
     tools: ["ChatGPT", "Gemini", "Antigravity"],
     prototype: "https://chequeate201.vercel.app/",
   },
-  {
-    id: "estamos_sanando",
-    name: "Estamos Sanando",
-    icon: "🌿",
-    color: "#A8C5A0",
-    description:
-      "Proyecto personal que combina podcasts, diseño y redes sociales para abordar la salud mental y emocional.",
-    problem: "Pocos espacios digitales combinan estética cuidada con contenido empático sobre salud mental.",
-    process: "Branding → Producción de podcast → Estrategia de contenidos → Diseño de piezas gráficas.",
-    role: "Fundadora, Diseñadora y Productora de Contenido",
-    tools: ["CapCut", "Spotify for Podcasters", "Photoshop"],
-    prototype: "#",
-  },
 ];
 
 // ---- Estamos Sanando ----
@@ -524,7 +511,7 @@ function AplicacionesWindow({ onClose }: { onClose: () => void }) {
             background: "#C0C0C0",
           }}
         >
-          3 elementos — Doble clic para abrir
+          {PROJECTS.length} elementos — Doble clic para abrir
         </div>
       </PixelWindow>
 
