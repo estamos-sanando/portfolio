@@ -384,7 +384,13 @@ function HabilidadesScreen() {
       title: "Diseño & UX",
       icon: "🎨",
       color: "var(--px-green-dark)",
-      skills: ["UX/UI", "Wireframes", "Prototipado", "Arquitectura Info", "Interfaces"],
+      skills: [
+        "Diseño de interfaces",
+        "Prototipado",
+        "Arquitectura de información",
+        "Flujos de navegación",
+        "Experiencia de usuario",
+      ],
     },
     {
       title: "Gestión & Educación",
