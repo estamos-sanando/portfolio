@@ -139,9 +139,9 @@ export default function GameContainer() {
         { id: "floor_bottom", x: 0, y: h * 0.95, w: w, h: h * 0.05 },
       ];
       interactables = [
-        { id: "phone", x: w * 0.28, y: h * 0.70, w: w * 0.12, h: h * 0.30, label: "CELULAR" },
-        { id: "computer", x: w * 0.45, y: h * 0.70, w: w * 0.30, h: h * 0.30, label: "COMPUTADORA" },
-        { id: "door", x: w * 0.85, y: h * 0.70, w: w * 0.12, h: h * 0.30, label: "PUERTA" },
+        { id: "phone", x: 0, y: h * 0.35, w: w * 0.16, h: h * 0.50, label: "CELULAR" },
+        { id: "computer", x: w * 0.22, y: h * 0.08, w: w * 0.35, h: h * 0.65, label: "COMPUTADORA" },
+        { id: "door", x: w * 0.73, y: h * 0.05, w: w * 0.15, h: h * 0.75, label: "PUERTA" },
       ];
 
       if (dogUnlockedRef.current) {
@@ -228,11 +228,8 @@ export default function GameContainer() {
     function handlePowerToggle() {
       for (let i = 0; i < interactables.length; i++) {
         const obj = interactables[i];
-        const dist = Math.hypot(
-          player.x + player.w / 2 - (obj.x + obj.w / 2),
-          player.y + player.h / 2 - (obj.y + obj.h / 2)
-        );
-        if (dist < 180) {
+        const distX = Math.abs(player.x + player.w / 2 - (obj.x + obj.w / 2));
+        if (distX < 140) {
           if (obj.id === "computer") {
             const turningOn = !isPcOnRef.current;
             togglePcPower();
@@ -279,11 +276,8 @@ export default function GameContainer() {
 
       for (let i = 0; i < interactables.length; i++) {
         const obj = interactables[i];
-        const dist = Math.hypot(
-          player.x + player.w / 2 - (obj.x + obj.w / 2),
-          player.y + player.h / 2 - (obj.y + obj.h / 2)
-        );
-        if (dist < 180) {
+        const distX = Math.abs(player.x + player.w / 2 - (obj.x + obj.w / 2));
+        if (distX < 140) {
           if (obj.id === "phone") {
             if (isPhoneOnRef.current) {
               audioEngine.interact();
@@ -563,10 +557,10 @@ export default function GameContainer() {
 
       ctx!.save();
 
-      // 1. CELULAR (above phone)
+      // 1. CELULAR (directly above nightstand smartphone on the far left)
       {
-        const px = w * 0.34;
-        const py = h * 0.60 + bounceY;
+        const px = w * 0.08;
+        const py = h * 0.36 + bounceY;
         const isDone = visitedPhoneRef.current;
 
         const label = isDone ? "CELULAR [OK]" : "MISION: CELULAR";
@@ -585,15 +579,15 @@ export default function GameContainer() {
         ctx!.fillStyle = isDone ? "#2ECC71" : "#F2A7BB";
         ctx!.fillText(label, px, py - 20);
 
-        // Subtle arrow pointing down
+        // Subtle arrow pointing down onto smartphone
         ctx!.font = "bold 11px 'Press Start 2P', monospace";
         ctx!.fillText("▼", px, py - 4);
       }
 
-      // 2. COMPUTADORA (above PC)
+      // 2. COMPUTADORA (directly above PC monitor top bezel)
       {
-        const px = w * 0.60;
-        const py = h * 0.58 + bounceY;
+        const px = w * 0.38;
+        const py = h * 0.08 + bounceY;
         const isDone = visitedPCRef.current;
 
         const label = isDone ? "COMPUTADORA [OK]" : "MISION: PC";
@@ -612,15 +606,15 @@ export default function GameContainer() {
         ctx!.fillStyle = isDone ? "#2ECC71" : "#F2A7BB";
         ctx!.fillText(label, px, py - 20);
 
-        // Subtle arrow pointing down
+        // Subtle arrow pointing down onto PC monitor
         ctx!.font = "bold 11px 'Press Start 2P', monospace";
         ctx!.fillText("▼", px, py - 4);
       }
 
-      // 3. PUERTA (right side of door pointing left towards door)
+      // 3. PUERTA (on the right side of the door pointing left towards the door)
       {
-        const px = w * 0.93 + bounceX;
-        const py = h * 0.77;
+        const px = w * 0.88 + bounceX;
+        const py = h * 0.32;
         const isDone = visitedDoorRef.current;
 
         const label = isDone ? "CONTACTO [OK]" : "MISION: CONTACTO";
@@ -688,11 +682,8 @@ export default function GameContainer() {
         const obj = interactables[i];
         if (obj.id === "pet_dog") continue; // Handled directly above
 
-        const dist = Math.hypot(
-          player.x + player.w / 2 - (obj.x + obj.w / 2),
-          player.y + player.h / 2 - (obj.y + obj.h / 2)
-        );
-        if (dist < 180) {
+        const distX = Math.abs(player.x + player.w / 2 - (obj.x + obj.w / 2));
+        if (distX < 140) {
           const hx = obj.x + obj.w / 2;
           const hy = obj.y - 25;
 
