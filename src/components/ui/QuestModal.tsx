@@ -20,7 +20,9 @@ export default function QuestModal() {
   const completedCount =
     (visitedPhone ? 1 : 0) + (visitedPC ? 1 : 0) + (visitedDoor ? 1 : 0);
 
-  const handleOpen = () => {
+  const handleOpen = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    e?.preventDefault();
     audioEngine.click();
     openQuestModal();
   };

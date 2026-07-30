@@ -7,7 +7,11 @@ export default function AudioControls() {
 
   return (
     <button
-      onClick={toggleMute}
+      onClick={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        toggleMute();
+      }}
       style={{
         position: "fixed",
         top: 12,

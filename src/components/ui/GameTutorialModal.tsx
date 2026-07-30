@@ -12,7 +12,9 @@ export default function GameTutorialModal() {
     closeGuideModal();
   };
 
-  const handleOpen = () => {
+  const handleOpen = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    e?.preventDefault();
     audioEngine.click();
     openGuideModal();
   };
