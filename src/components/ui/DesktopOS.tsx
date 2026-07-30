@@ -294,6 +294,14 @@ function ProjectCard({
   onClose: () => void;
 }) {
   const [isZoomed, setIsZoomed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 640);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   return (
     <>
@@ -309,7 +317,7 @@ function ProjectCard({
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "250px 1fr",
+            gridTemplateColumns: isMobile ? "1fr" : "250px 1fr",
             gap: 14,
             alignItems: "start",
           }}

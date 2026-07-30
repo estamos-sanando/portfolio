@@ -68,6 +68,10 @@ interface GameState {
   showQuestModal: boolean;
   showUnlockBanner: boolean;
 
+  // Camera tracking
+  cameraX: number;
+  setCameraX: (x: number) => void;
+
   // Actions
   setLoading: (loading: boolean) => void;
   setLoadProgress: (progress: number) => void;
@@ -142,6 +146,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   activeCharacter: "antonella" as "antonella" | "dog",
   showQuestModal: false,
   showUnlockBanner: false,
+  cameraX: 0,
+  setCameraX: (x) => set({ cameraX: x }),
 
   setLoading: (loading) => set({ isLoading: loading }),
   setLoadProgress: (progress) => set({ loadProgress: progress }),

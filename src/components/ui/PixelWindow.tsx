@@ -79,18 +79,28 @@ export default function PixelWindow({
     return () => window.removeEventListener("keydown", handleKey);
   }, [onClose]);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   if (style === "win95") {
     return (
       <motion.div
         ref={windowRef}
         className="win95-window window-animate-in"
         style={{
-          left: pos.x,
-          top: pos.y,
-          width,
-          minHeight,
+          left: isMobile ? "3vw" : pos.x,
+          top: isMobile ? "3vh" : pos.y,
+          width: isMobile ? "94vw" : width,
+          maxWidth: "94vw",
+          minHeight: isMobile ? undefined : minHeight,
           zIndex: isActive ? 60 : 30,
-          position: contained ? "absolute" : "fixed",
+          position: isMobile ? "fixed" : contained ? "absolute" : "fixed",
           cursor: isDragging ? "grabbing" : "default",
           userSelect: isDragging ? "none" : "auto",
         }}
@@ -110,7 +120,7 @@ export default function PixelWindow({
             <button className="win95-btn" onClick={onClose} aria-label="Cerrar">✕</button>
           </div>
         </div>
-        <div style={{ padding: "8px", overflowY: "auto", maxHeight: contained ? 490 : "75vh" }}>
+        <div style={{ padding: "8px", overflowY: "auto", maxHeight: isMobile ? "82vh" : contained ? 490 : "75vh" }}>
           {children}
         </div>
       </motion.div>
@@ -123,12 +133,13 @@ export default function PixelWindow({
       ref={windowRef}
       className="pixel-window window-animate-in"
       style={{
-        left: pos.x,
-        top: pos.y,
-        width,
-        minHeight,
+        left: isMobile ? "3vw" : pos.x,
+        top: isMobile ? "3vh" : pos.y,
+        width: isMobile ? "94vw" : width,
+        maxWidth: "94vw",
+        minHeight: isMobile ? undefined : minHeight,
         zIndex: isActive ? 60 : 30,
-        position: contained ? "absolute" : "fixed",
+        position: isMobile ? "fixed" : contained ? "absolute" : "fixed",
         cursor: isDragging ? "grabbing" : "default",
         userSelect: isDragging ? "none" : "auto",
       }}

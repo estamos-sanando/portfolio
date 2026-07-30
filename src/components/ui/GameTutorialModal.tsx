@@ -27,6 +27,7 @@ export default function GameTutorialModal() {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 50, scale: 0.8 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            className="docked-guide-bar"
             style={{
               position: "fixed",
               top: 72,
@@ -360,6 +361,19 @@ export default function GameTutorialModal() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .docked-guide-bar {
+            top: 10px !important;
+            right: 50px !important;
+          }
+          .docked-guide-bar button {
+            padding: 4px 8px !important;
+            font-size: 8px !important;
+          }
+        }
+      `}</style>
     </>
   );
 }

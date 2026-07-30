@@ -1,11 +1,8 @@
 "use client";
 
 import { useGameStore } from "@/hooks/useGameStore";
-import { useAudio } from "@/hooks/useAudio";
 
 export default function MobileControls() {
-  const { isMuted } = useGameStore();
-
   const dispatch = (key: string, pressed: boolean) => {
     const event = new KeyboardEvent(pressed ? "keydown" : "keyup", { key });
     window.dispatchEvent(event);
@@ -23,135 +20,196 @@ export default function MobileControls() {
 
   return (
     <>
-      {/* D-PAD */}
+      {/* D-PAD (Bottom Left) */}
       <div
         className="dpad-container"
         style={{
           position: "fixed",
-          bottom: 40,
-          left: 24,
-          zIndex: 20,
+          bottom: 16,
+          left: 16,
+          zIndex: 40,
           userSelect: "none",
+          touchAction: "none",
         }}
       >
-        <div style={{ display: "grid", gridTemplateColumns: "44px 44px 44px", gridTemplateRows: "44px 44px 44px", gap: 4 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "38px 38px 38px",
+            gridTemplateRows: "38px 38px 38px",
+            gap: 4,
+            padding: 6,
+            background: "rgba(20, 16, 32, 0.65)",
+            backdropFilter: "blur(8px)",
+            borderRadius: 16,
+            border: "1px solid rgba(242, 167, 187, 0.3)",
+            boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+          }}
+        >
           {/* Up */}
           <div style={{ gridColumn: 2, gridRow: 1 }}>
             <button
-              className="dpad-btn"
+              className="mobile-pad-btn"
               onPointerDown={() => dispatch("ArrowUp", true)}
               onPointerUp={() => dispatch("ArrowUp", false)}
               onPointerLeave={() => dispatch("ArrowUp", false)}
               aria-label="Mover arriba"
-            >▲</button>
+            >
+              ▲
+            </button>
           </div>
           {/* Left */}
           <div style={{ gridColumn: 1, gridRow: 2 }}>
             <button
-              className="dpad-btn"
+              className="mobile-pad-btn"
               onPointerDown={() => dispatch("ArrowLeft", true)}
               onPointerUp={() => dispatch("ArrowLeft", false)}
               onPointerLeave={() => dispatch("ArrowLeft", false)}
               aria-label="Mover izquierda"
-            >◀</button>
+            >
+              ◀
+            </button>
           </div>
           {/* Center */}
           <div style={{ gridColumn: 2, gridRow: 2 }}>
-            <div className="dpad-btn" style={{ background: "rgba(45,45,58,0.6)", cursor: "default" }}>+</div>
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "12px",
+                color: "rgba(242,167,187,0.5)",
+                fontFamily: "var(--font-pixel)",
+              }}
+            >
+              +
+            </div>
           </div>
           {/* Right */}
           <div style={{ gridColumn: 3, gridRow: 2 }}>
             <button
-              className="dpad-btn"
+              className="mobile-pad-btn"
               onPointerDown={() => dispatch("ArrowRight", true)}
               onPointerUp={() => dispatch("ArrowRight", false)}
               onPointerLeave={() => dispatch("ArrowRight", false)}
               aria-label="Mover derecha"
-            >▶</button>
+            >
+              ▶
+            </button>
           </div>
           {/* Down */}
           <div style={{ gridColumn: 2, gridRow: 3 }}>
             <button
-              className="dpad-btn"
+              className="mobile-pad-btn"
               onPointerDown={() => dispatch("ArrowDown", true)}
               onPointerUp={() => dispatch("ArrowDown", false)}
               onPointerLeave={() => dispatch("ArrowDown", false)}
               aria-label="Mover abajo"
-            >▼</button>
+            >
+              ▼
+            </button>
           </div>
         </div>
       </div>
 
-      {/* ACTION BUTTONS (mobile) */}
+      {/* ACTION BUTTONS (Bottom Right) */}
       <div
+        className="mobile-interact-btn"
         style={{
           position: "fixed",
-          bottom: 44,
-          right: 20,
-          zIndex: 20,
-          display: "none",
+          bottom: 16,
+          right: 16,
+          zIndex: 40,
+          display: "flex",
           flexDirection: "row",
-          gap: 12,
+          gap: 10,
+          touchAction: "none",
         }}
-        className="mobile-interact-btn"
       >
         {/* POWER BUTTON */}
         <button
           onClick={handlePower}
           style={{
-            width: 58,
-            height: 58,
-            background: "rgba(231,76,60,0.85)",
-            border: "3px solid #C0392B",
+            width: 52,
+            height: 52,
+            background: "linear-gradient(135deg, rgba(231, 76, 60, 0.85), rgba(192, 57, 43, 0.95))",
+            border: "2px solid #FFF",
             color: "#FFF",
             fontFamily: "var(--font-pixel)",
-            fontSize: "10px",
+            fontSize: "8px",
             cursor: "pointer",
-            boxShadow: "3px 3px 0 rgba(0,0,0,0.4)",
+            boxShadow: "0 6px 16px rgba(0,0,0,0.5)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
             gap: 2,
-            touchAction: "manipulation",
-            borderRadius: 8,
+            borderRadius: "50%",
+            backdropFilter: "blur(6px)",
           }}
           aria-label="Prender o apagar"
         >
-          <span style={{ fontSize: "18px" }}>⏻</span>
-          <span style={{ fontSize: "6px" }}>ON/OFF [F]</span>
+          <span style={{ fontSize: "16px" }}>⏻</span>
+          <span>F</span>
         </button>
 
         {/* INTERACT BUTTON */}
         <button
           onClick={handleInteract}
           style={{
-            width: 58,
-            height: 58,
-            background: "rgba(242,167,187,0.9)",
-            border: "3px solid var(--px-rose-dark)",
-            color: "var(--px-dark)",
+            width: 52,
+            height: 52,
+            background: "linear-gradient(135deg, rgba(242, 167, 187, 0.95), rgba(212, 116, 138, 0.95))",
+            border: "2px solid #FFF",
+            color: "#161022",
             fontFamily: "var(--font-pixel)",
-            fontSize: "10px",
+            fontSize: "8px",
+            fontWeight: "bold",
             cursor: "pointer",
-            boxShadow: "3px 3px 0 rgba(0,0,0,0.4)",
+            boxShadow: "0 6px 16px rgba(0,0,0,0.5)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
             gap: 2,
-            touchAction: "manipulation",
-            borderRadius: 8,
+            borderRadius: "50%",
+            backdropFilter: "blur(6px)",
           }}
           aria-label="Interactuar"
         >
-          <span style={{ fontSize: "18px" }}>⚡</span>
-          <span style={{ fontSize: "6px" }}>USAR [E]</span>
+          <span style={{ fontSize: "16px" }}>⚡</span>
+          <span>E</span>
         </button>
       </div>
 
-      {/* Show mobile interact on small screens via CSS */}
+      {/* Global CSS for touch controls */}
       <style>{`
+        .mobile-pad-btn {
+          width: 38px;
+          height: 38px;
+          background: rgba(45, 38, 64, 0.85);
+          border: 1.5px solid rgba(242, 167, 187, 0.5);
+          color: #FFF8EF;
+          border-radius: 8px;
+          font-size: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          touch-action: manipulation;
+          transition: background 0.1s ease, transform 0.1s ease;
+        }
+        .mobile-pad-btn:active {
+          background: var(--px-rose);
+          color: #120C1A;
+          transform: scale(0.92);
+        }
+        @media (min-width: 769px) {
+          .dpad-container { display: none !important; }
+          .mobile-interact-btn { display: none !important; }
+        }
         @media (max-width: 768px) {
           .dpad-container { display: block !important; }
           .mobile-interact-btn { display: flex !important; }

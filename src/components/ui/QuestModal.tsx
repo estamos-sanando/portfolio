@@ -34,6 +34,7 @@ export default function QuestModal() {
     <>
       {/* 1. TOP BADGE WIDGET */}
       <div
+        className="docked-quest-bar"
         style={{
           position: "fixed",
           top: 16,
@@ -335,6 +336,23 @@ export default function QuestModal() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .docked-quest-bar {
+            top: 10px !important;
+            left: 10px !important;
+          }
+          .docked-quest-bar button {
+            padding: 5px 10px !important;
+            font-size: 8px !important;
+            max-width: calc(100vw - 195px) !important;
+          }
+          .docked-quest-bar span {
+            font-size: 8px !important;
+          }
+        }
+      `}</style>
     </>
   );
 }

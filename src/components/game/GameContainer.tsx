@@ -35,6 +35,7 @@ export default function GameContainer() {
     togglePhonePower,
     dogUnlocked,
     activeCharacter,
+    setCameraX,
   } = useGameStore();
 
   const nearObjectRef = useRef<string | null>(null);
@@ -98,15 +99,19 @@ export default function GameContainer() {
     let petTimer = 0;
     const petHearts: Array<{x: number; y: number; vy: number; alpha: number; icon: string; size: number}> = [];
 
+    // ---- Virtual Room & Camera Setup ----
+    let roomWidth = Math.max(canvas.width, canvas.height * 1.7778);
+    let currentCamX = 0;
+
     // ---- Player & Dog State ----
     const player = {
-      x: canvas.width * 0.5,
+      x: roomWidth * 0.5,
       y: canvas.height * 0.82,
       w: 28,
       h: 44,
       vx: 0,
       vy: 0,
-      speed: 3.5,
+      speed: 4.0,
       facing: "down" as "up" | "down" | "left" | "right",
       frame: 0,
       frameTimer: 0,
@@ -115,7 +120,7 @@ export default function GameContainer() {
     };
 
     const dog = {
-      x: canvas.width * 0.22, // Static position right in front of the bed
+      x: roomWidth * 0.22, // Static position right in front of the bed
       y: canvas.height * 0.85,
       w: 32,
       h: 32,
@@ -127,7 +132,8 @@ export default function GameContainer() {
     let interactables: RoomObject[] = [];
 
     const updateObjects = () => {
-      const w = canvas.width;
+      roomWidth = Math.max(canvas.width, canvas.height * 1.7778);
+      const w = roomWidth;
       const h = canvas.height;
       dog.x = w * 0.22;
       dog.y = h * 0.85;
@@ -161,12 +167,12 @@ export default function GameContainer() {
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      updateObjects();
       if (!initialPositionSet) {
-        player.x = canvas.width * 0.65;
+        player.x = roomWidth * 0.65;
         player.y = canvas.height * 0.85;
         initialPositionSet = true;
       }
-      updateObjects();
     };
     resize();
     window.addEventListener("resize", resize);
@@ -226,16 +232,16 @@ export default function GameContainer() {
 
     // ---- Active Object Resolver based on Specific Interaction Spots ----
     function getActiveObjectAtPlayerPos(): RoomObject | null {
-      const relX = player.x / canvas!.width;
-      // 1. Phone / Nightstand spot (Image 1)
+      const relX = player.x / roomWidth;
+      // 1. Phone / Nightstand spot
       if (relX >= 0.16 && relX <= 0.30) {
         return interactables.find((o) => o.id === "phone") || null;
       }
-      // 2. PC / Desk Chair spot (Image 2)
+      // 2. PC / Desk Chair spot
       if (relX >= 0.42 && relX <= 0.58) {
         return interactables.find((o) => o.id === "computer") || null;
       }
-      // 3. Door / Rug spot (Image 3)
+      // 3. Door / Rug spot
       if (relX >= 0.76 && relX <= 0.90) {
         return interactables.find((o) => o.id === "door") || null;
       }
@@ -315,7 +321,8 @@ export default function GameContainer() {
       const rect = canvas.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const clickY = e.clientY - rect.top;
-      const relX = clickX / canvas.width;
+      const worldClickX = clickX + currentCamX;
+      const relX = worldClickX / roomWidth;
 
       if (relX < 0.22) {
         if (isPhoneOnRef.current) {
@@ -335,7 +342,7 @@ export default function GameContainer() {
         audioEngine.interact();
         openWindow("door");
       } else if (dogUnlockedRef.current) {
-        const distToDog = Math.hypot(clickX - dog.x, clickY - dog.y);
+        const distToDog = Math.hypot(worldClickX - dog.x, clickY - dog.y);
         if (distToDog < 120) {
           audioEngine.click();
           petTimer = 180;
@@ -404,8 +411,12 @@ export default function GameContainer() {
     function drawCharacter() {
       const now = performance.now();
 
+      // Responsive heights scaled to viewport height
+      const targetHeight = Math.min(460, canvas!.height * 0.44);
+      const dogTargetHeight = Math.min(240, canvas!.height * 0.24);
+
       // 1. Draw Antonella
-      const px = player.x;
+      const px = player.x - currentCamX;
       const py = player.y;
       ctx!.save();
 
@@ -432,7 +443,6 @@ export default function GameContainer() {
         const frameIdx = Math.floor((now / 150) % totalFrames);
         const frameX = frameIdx * frameW;
 
-        const targetHeight = 504;
         const dh = targetHeight;
         const dw = dh * (frameW / frameH);
 
@@ -457,7 +467,6 @@ export default function GameContainer() {
         ctx!.restore();
       } else if (!player.isMoving && idleLoaded) {
         const breatheBob = 0;
-        const targetHeight = 515;
         const dh = targetHeight;
         const dw = dh * (idleImg.width / idleImg.height);
 
@@ -482,7 +491,7 @@ export default function GameContainer() {
 
       // 2. Draw Dog Character (when unlocked)
       if (dogUnlockedRef.current && dogLoaded) {
-        const dx = dog.x;
+        const dx = dog.x - currentCamX;
         const dy = dog.y;
         ctx!.save();
 
@@ -494,8 +503,7 @@ export default function GameContainer() {
 
         if (petTimer > 0 && dogHappyLoaded) {
           petTimer--;
-          const targetH = 270;
-          const dh = targetH;
+          const dh = dogTargetHeight;
           const dw = dh * (dogHappyImg.width / dogHappyImg.height);
           const happyBob = Math.sin(now / 150) * 3;
 
@@ -507,8 +515,7 @@ export default function GameContainer() {
           ctx!.drawImage(dogHappyImg, -dw / 2, -dh + 32, dw, dh);
         } else {
           // Attentive sitting pose - completely solid on floor
-          const targetH = 270;
-          const dh = targetH;
+          const dh = dogTargetHeight;
           const dw = dh * (dogImg.width / dogImg.height);
 
           ctx!.translate(dx, dy);
@@ -529,7 +536,7 @@ export default function GameContainer() {
         const alpha = Math.sin((p.life / p.maxLife) * Math.PI) * 0.4;
         ctx!.globalAlpha = alpha;
         ctx!.fillStyle = p.color;
-        ctx!.fillRect(Math.round(p.x), Math.round(p.y), 2, 2);
+        ctx!.fillRect(Math.round(p.x - currentCamX), Math.round(p.y), 2, 2);
       }
       ctx!.globalAlpha = 1.0;
 
@@ -545,12 +552,10 @@ export default function GameContainer() {
         ctx!.save();
         ctx!.globalAlpha = Math.max(0, h.alpha);
         ctx!.font = `${h.size}px sans-serif`;
-        ctx!.fillText(h.icon, h.x, h.y);
+        ctx!.fillText(h.icon, h.x - currentCamX, h.y);
         ctx!.restore();
       }
     }
-
-
 
     // ---- Draw Hint Labels ----
     function drawHints() {
@@ -558,8 +563,8 @@ export default function GameContainer() {
       if (dogUnlockedRef.current) {
         const distToDog = Math.hypot(player.x - dog.x, player.y - dog.y);
         if (distToDog < 240) {
-          const hx = dog.x;
-          const hy = dog.y - 275; // Positioned cleanly above ears & face
+          const hx = dog.x - currentCamX;
+          const hy = dog.y - 250;
           const bubbleW = 110;
           const bubbleH = 26;
 
@@ -596,8 +601,9 @@ export default function GameContainer() {
         const isOn = isPc ? isPcOnRef.current : isPhone ? isPhoneOnRef.current : true;
 
         // Position hint box right near Antonella's right hand
-        const handOffsetX = player.x > canvas!.width - 220 ? -90 : 90;
-        const hx = player.x + handOffsetX;
+        const screenPlayerX = player.x - currentCamX;
+        const handOffsetX = screenPlayerX > canvas!.width - 220 ? -90 : 90;
+        const hx = screenPlayerX + handOffsetX;
         const hy = player.y - 140;
 
         const bubbleW = isPc || isPhone ? 150 : 110;
@@ -734,13 +740,19 @@ export default function GameContainer() {
       if (!checkCollision(player.x, ny)) player.y = ny;
 
       player.x = Math.max(
-        player.w / 2,
-        Math.min(canvas.width - player.w * 1.5, player.x)
+        player.w / 2 + roomWidth * 0.03,
+        Math.min(roomWidth - player.w * 1.5 - roomWidth * 0.03, player.x)
       );
       player.y = Math.max(
         canvas.height * 0.72,
         Math.min(canvas.height * 0.9, player.y)
       );
+
+      // Camera tracking update
+      const maxCamX = Math.max(0, roomWidth - canvas.width);
+      const targetCamX = Math.max(0, Math.min(maxCamX, player.x - canvas.width * 0.5));
+      currentCamX += (targetCamX - currentCamX) * 0.14;
+      setCameraX(Math.round(currentCamX));
 
       // Frame animation
       if (player.isMoving) {

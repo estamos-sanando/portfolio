@@ -4,20 +4,22 @@ import { useGameStore } from "@/hooks/useGameStore";
 
 /**
  * PixelRoom — Renderiza el fondo de la habitación según el estado de la PC y Celular.
- * Conmutación directa y nítida de las imágenes originales enviadas por el usuario.
+ * Acompaña al personaje con panning horizontal suave en pantallas estrechas / móviles.
  */
 export default function PixelRoom() {
-  const { isPcOn, isPhoneOn } = useGameStore();
+  const { isPcOn, isPhoneOn, cameraX } = useGameStore();
 
   const commonStyle: React.CSSProperties = {
     position: "absolute",
     top: 0,
     left: 0,
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    objectPosition: "center bottom",
+    height: "100vh",
+    width: "calc(100vh * 1.7778)", // 16:9 native aspect ratio of room image
+    minWidth: "100vw",
+    objectFit: "fill",
     pointerEvents: "none",
+    transform: `translate3d(-${cameraX}px, 0, 0)`,
+    willChange: "transform",
   };
 
   return (
