@@ -16,7 +16,7 @@ const PROJECTS = [
     gif: "/trabajos/despues/despues.gif",
     video: "/trabajos/despues/despues.mp4",
     description:
-      "App de acompañamiento para situaciones de violencia sexoafectiva. Ayuda a usuarias a procesar emocionalmente sus experiencias, tomar decisiones y transformar su historia. Desarrollada con ChatGPT, Gemini y Antigravity.",
+      "Después es una aplicación de acompañamiento y prevención frente a situaciones de violencia sexoafectiva. Está pensada para ayudar a reconocer señales de alerta, comprender los propios límites y acceder a información clara sobre consentimiento, vínculos saludables y educación sexual. La aplicación reúne recursos de orientación, herramientas para registrar situaciones y un botón de salida rápida que permite abandonar la pantalla de manera discreta. Su objetivo es ofrecer un espacio seguro y accesible para informarse, identificar conductas que muchas veces se naturalizan y tomar decisiones con mayor autonomía.",
     problem:
       "Muchas personas no tienen acceso a herramientas digitales que aborden el procesamiento emocional post-encuentros sexoafectivos de forma empática y no invasiva.",
     process:
@@ -33,7 +33,7 @@ const PROJECTS = [
     gif: "/trabajos/chequeate/chequeate.gif",
     video: "/trabajos/chequeate/chequeate.mp4",
     description:
-      "Herramienta interactiva para la concientización sobre la salud mamaria y la importancia de los chequeos preventivos. Desarrollada con ChatGPT, Gemini y Antigravity.",
+      "Chequéate es una aplicación de salud pensada para que cada persona pueda llevar un control más consciente y organizado de su propio cuerpo. Permite centralizar el historial médico, registrar controles y estudios, gestionar turnos y recibir recordatorios para no postergar chequeos importantes. Además de facilitar el seguimiento de la salud, brinda información preventiva y ayuda a detectar hábitos, antecedentes o controles pendientes. Su objetivo es que cada usuario pueda conocer mejor su cuerpo, tomar decisiones informadas y adoptar una actitud más activa frente al cuidado de su salud.",
     problem:
       "La falta de información accesible y el miedo provocan que muchas mujeres pospongan sus controles ginecológicos preventivos.",
     process:
