@@ -95,11 +95,12 @@ export default function PixelWindow({
         className="win95-window window-animate-in"
         style={{
           left: isMobile ? "3vw" : pos.x,
-          top: isMobile ? "3vh" : pos.y,
+          top: isMobile ? "64px" : pos.y,
           width: isMobile ? "94vw" : width,
           maxWidth: "94vw",
-          minHeight: isMobile ? undefined : minHeight,
-          zIndex: isActive ? 60 : 30,
+          height: isMobile ? "calc(100vh - 84px)" : undefined,
+          maxHeight: isMobile ? "calc(100vh - 84px)" : "85vh",
+          zIndex: isActive ? 210 : 200,
           position: isMobile ? "fixed" : contained ? "absolute" : "fixed",
           cursor: isDragging ? "grabbing" : "default",
           userSelect: isDragging ? "none" : "auto",
@@ -109,18 +110,16 @@ export default function PixelWindow({
         exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.15 } }}
         onClick={onClick}
       >
-        <div className="win95-titlebar" onMouseDown={handleMouseDown}>
+        <div className="win95-titlebar" onMouseDown={handleMouseDown} style={{ padding: "4px 8px" }}>
           <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <span>{icon}</span>
             {title}
           </span>
-          <div style={{ display: "flex", gap: 2 }}>
-            <button className="win95-btn" aria-label="Minimizar">_</button>
-            <button className="win95-btn" aria-label="Maximizar">□</button>
-            <button className="win95-btn" onClick={onClose} aria-label="Cerrar">✕</button>
+          <div style={{ display: "flex", gap: 4 }}>
+            <button className="win95-btn" onClick={onClose} aria-label="Cerrar" style={{ background: "#C0392B", color: "#FFF", fontWeight: "bold", padding: "2px 8px" }}>✕</button>
           </div>
         </div>
-        <div style={{ padding: "8px", overflowY: "auto", maxHeight: isMobile ? "82vh" : contained ? 490 : "75vh" }}>
+        <div style={{ padding: "8px", overflowY: "auto", height: isMobile ? "calc(100% - 36px)" : undefined, maxHeight: contained ? 490 : "75vh" }}>
           {children}
         </div>
       </motion.div>
@@ -134,11 +133,12 @@ export default function PixelWindow({
       className="pixel-window window-animate-in"
       style={{
         left: isMobile ? "3vw" : pos.x,
-        top: isMobile ? "3vh" : pos.y,
+        top: isMobile ? "64px" : pos.y,
         width: isMobile ? "94vw" : width,
         maxWidth: "94vw",
-        minHeight: isMobile ? undefined : minHeight,
-        zIndex: isActive ? 60 : 30,
+        height: isMobile ? "calc(100vh - 84px)" : undefined,
+        maxHeight: isMobile ? "calc(100vh - 84px)" : "85vh",
+        zIndex: isActive ? 210 : 200,
         position: isMobile ? "fixed" : contained ? "absolute" : "fixed",
         cursor: isDragging ? "grabbing" : "default",
         userSelect: isDragging ? "none" : "auto",
@@ -149,7 +149,7 @@ export default function PixelWindow({
       onClick={onClick}
     >
       {/* Title bar */}
-      <div className="pixel-window-titlebar" onMouseDown={handleMouseDown}>
+      <div className="pixel-window-titlebar" onMouseDown={handleMouseDown} style={{ padding: "6px 10px" }}>
         <span
           style={{
             fontFamily: "var(--font-pixel)",
@@ -164,12 +164,11 @@ export default function PixelWindow({
           {icon} {title}
         </span>
         <div style={{ display: "flex", gap: 4 }}>
-          <button className="pixel-btn pixel-btn-min" aria-label="Minimizar">─</button>
-          <button className="pixel-btn pixel-btn-max" aria-label="Maximizar">□</button>
           <button
             className="pixel-btn pixel-btn-close"
             onClick={onClose}
             aria-label="Cerrar"
+            style={{ background: "#C0392B", color: "#FFF", fontWeight: "bold", padding: "2px 8px" }}
           >
             ✕
           </button>
@@ -179,9 +178,10 @@ export default function PixelWindow({
       {/* Content */}
       <div
         style={{
-          padding: "12px",
+          padding: "10px",
           overflowY: "auto",
-          maxHeight: contained ? 490 : "78vh",
+          height: isMobile ? "calc(100% - 38px)" : undefined,
+          maxHeight: contained ? 490 : "75vh",
           background: "var(--px-window-bg)",
           fontFamily: "var(--font-body)",
           fontSize: "18px",

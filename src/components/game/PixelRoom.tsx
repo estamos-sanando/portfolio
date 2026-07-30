@@ -13,11 +13,14 @@ export default function PixelRoom() {
     position: "absolute",
     top: 0,
     left: 0,
-    width: "100%",
     height: "100%",
+    width: "max(100%, calc(100vh * 1.7778))", // Native 16:9 aspect ratio width for panning
+    minWidth: "100%",
     objectFit: "cover",
-    objectPosition: "center bottom",
+    objectPosition: "left bottom",
     pointerEvents: "none",
+    transform: `translate3d(-${cameraX}px, 0, 0)`,
+    willChange: "transform",
   };
 
   return (
