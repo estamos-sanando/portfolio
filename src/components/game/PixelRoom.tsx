@@ -13,13 +13,11 @@ export default function PixelRoom() {
     position: "absolute",
     top: 0,
     left: 0,
-    height: "100vh",
-    width: "calc(100vh * 1.7778)", // 16:9 native aspect ratio of room image
-    minWidth: "100vw",
-    objectFit: "fill",
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    objectPosition: "center bottom",
     pointerEvents: "none",
-    transform: `translate3d(-${cameraX}px, 0, 0)`,
-    willChange: "transform",
   };
 
   return (

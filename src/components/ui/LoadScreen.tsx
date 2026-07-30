@@ -132,15 +132,15 @@ export default function LoadScreen() {
               />
             ))}
 
-            {/* ---- 2. SEMI-CENTERED & ENLARGED TITLE & LOADING CARD ---- */}
-            <div className="absolute inset-y-0 left-[25%] right-[5%] flex flex-col items-center justify-center text-center z-20 pointer-events-auto">
+            {/* ---- 2. CENTERED & RESPONSIVE TITLE & LOADING CARD ---- */}
+            <div className="absolute inset-0 px-4 flex flex-col items-center justify-center text-center z-20 pointer-events-auto md:inset-y-0 md:left-[18%] md:right-[4%] md:px-0">
               
               {/* Prominent Name Badge */}
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="px-10 py-3 rounded-full flex items-center gap-4 shadow-2xl mb-4"
+                className="px-6 sm:px-10 py-2 sm:py-3 rounded-full flex items-center justify-center gap-3 shadow-2xl mb-3 sm:mb-4 max-w-[92vw]"
                 style={{
                   background: "linear-gradient(135deg, #FFF0F5, #F2A7BB, #D4748A)",
                   border: "3px solid #FFFFFF",
@@ -148,7 +148,7 @@ export default function LoadScreen() {
                 }}
               >
                 <span
-                  className="font-black text-3xl md:text-4xl tracking-[0.32em] text-[#1D1424] uppercase"
+                  className="font-black text-xl sm:text-3xl md:text-4xl tracking-[0.2em] sm:tracking-[0.32em] text-[#1D1424] uppercase"
                   style={{ fontFamily: "var(--font-body)", textShadow: "0 1px 2px rgba(255,255,255,0.8)" }}
                 >
                   ANTONELLA COSTA
@@ -160,13 +160,13 @@ export default function LoadScreen() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.1, duration: 0.5 }}
-                className="text-8xl md:text-9xl font-black text-white text-center leading-none"
+                className="text-4xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white text-center leading-tight max-w-[94vw]"
                 style={{
                   fontFamily: "'Pixelify Sans', var(--font-display), sans-serif",
-                  letterSpacing: "0.05em",
+                  letterSpacing: "0.04em",
                   color: "#FFF5FA",
                   textShadow:
-                    "0 0 45px rgba(242,167,187,0.95), 0 8px 25px rgba(0,0,0,0.95), 5px 5px 0px #8A3B58",
+                    "0 0 45px rgba(242,167,187,0.95), 0 8px 25px rgba(0,0,0,0.95), 4px 4px 0px #8A3B58",
                 }}
               >
                 CREATIVA DIGITAL
@@ -177,7 +177,7 @@ export default function LoadScreen() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="text-3xl md:text-4xl font-black tracking-[0.5em] uppercase mt-3 text-[#E8D5B7] text-center"
+                className="text-base sm:text-2xl md:text-4xl font-black tracking-[0.3em] sm:tracking-[0.5em] uppercase mt-2 sm:mt-3 text-[#E8D5B7] text-center"
                 style={{ textShadow: "0 3px 15px rgba(0,0,0,0.95), 0 0 10px rgba(232,213,183,0.4)" }}
               >
                 PORTFOLIO
@@ -188,7 +188,7 @@ export default function LoadScreen() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
-                className="flex items-center gap-4 mt-6 px-8 py-3 rounded-2xl shadow-xl"
+                className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mt-4 sm:mt-6 px-4 sm:px-8 py-2 sm:py-3 rounded-2xl shadow-xl max-w-[94vw]"
                 style={{
                   background: "rgba(28, 18, 38, 0.88)",
                   border: "2px solid rgba(242,167,187,0.5)",
@@ -197,14 +197,14 @@ export default function LoadScreen() {
                 }}
               >
                 {["COMUNICACIÓN", "CONTENIDOS", "DISEÑO", "IA"].map((item, idx) => (
-                  <div key={item} className="flex items-center gap-4">
+                  <div key={item} className="flex items-center gap-2 sm:gap-4">
                     <span
-                      className="font-black text-sm md:text-base tracking-[0.22em]"
+                      className="font-black text-xs sm:text-sm md:text-base tracking-[0.14em] sm:tracking-[0.22em]"
                       style={{ color: "#FFF8EF", fontFamily: "var(--font-body)" }}
                     >
                       {item}
                     </span>
-                    {idx < 3 && <span className="text-[#F2A7BB] text-sm">✦</span>}
+                    {idx < 3 && <span className="text-[#F2A7BB] text-xs sm:text-sm">✦</span>}
                   </div>
                 ))}
               </motion.div>
@@ -214,7 +214,7 @@ export default function LoadScreen() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35 }}
-                className="mt-8 px-12 py-7 rounded-3xl flex flex-col items-center gap-4 text-center shadow-2xl w-full max-w-xl"
+                className="mt-5 sm:mt-8 px-6 sm:px-12 py-5 sm:py-7 rounded-3xl flex flex-col items-center gap-3 sm:gap-4 text-center shadow-2xl w-[92vw] max-w-xl"
                 style={{
                   background: "rgba(36, 24, 46, 0.94)",
                   border: "3px solid #F2A7BB",
