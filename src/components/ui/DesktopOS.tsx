@@ -13,30 +13,34 @@ const PROJECTS = [
     name: "Después",
     icon: "🌸",
     color: "#B39DDB",
+    gif: "/trabajos/despues/despues.gif",
+    video: "/trabajos/despues/despues.mp4",
     description:
-      "App de acompañamiento para situaciones de violencia sexoafectiva. Ayuda a usuarias a procesar emocionalmente sus experiencias, tomar decisiones y transformar su historia.",
+      "App de acompañamiento para situaciones de violencia sexoafectiva. Ayuda a usuarias a procesar emocionalmente sus experiencias, tomar decisiones y transformar su historia. Desarrollada con ChatGPT, Gemini y Antigravity.",
     problem:
       "Muchas personas no tienen acceso a herramientas digitales que aborden el procesamiento emocional post-encuentros sexoafectivos de forma empática y no invasiva.",
     process:
-      "Investigación de usuarios → Prototipado en papel → Testing con usuarios reales → Iteración en Figma → Prototipo funcional en FigJam.",
-    role: "UX Researcher & UI Designer principal",
-    tools: ["Figma", "FigJam", "User Testing"],
-    prototype: "https://www.figma.com",
+      "Investigación de usuarios → Prototipado en papel → Testing con usuarios reales → Iteración en Figma → Desarrollo con IA (ChatGPT, Gemini, Antigravity) → Despliegue en Vercel.",
+    role: "UX Researcher, UI Designer & Co-Developer (IA)",
+    tools: ["ChatGPT", "Gemini", "Antigravity", "Figma", "FigJam", "Next.js"],
+    prototype: "https://despues20.vercel.app/",
   },
   {
     id: "chequeate",
     name: "Chequéate",
     icon: "🏥",
     color: "#F2A7BB",
+    gif: "/trabajos/chequeate/chequeate.gif",
+    video: "/trabajos/chequeate/chequeate.mp4",
     description:
-      "Herramienta interactiva para la concientización sobre la salud mamaria y la importancia de los chequeos preventivos.",
+      "Herramienta interactiva para la concientización sobre la salud mamaria y la importancia de los chequeos preventivos. Desarrollada con ChatGPT, Gemini y Antigravity.",
     problem:
       "La falta de información accesible y el miedo provocan que muchas mujeres pospongan sus controles ginecológicos preventivos.",
     process:
-      "Análisis de necesidades → Diseño de flujo de usuario → Ilustración de componentes → Prototipado interactivo.",
-    role: "Diseño UX/UI, Ilustración y Prototipado",
-    tools: ["Figma", "Illustrator", "Prototipado"],
-    prototype: "https://www.figma.com",
+      "Análisis de necesidades → Diseño de flujo de usuario → Ilustración de componentes → Prototipado interactivo → Desarrollo con IA (ChatGPT, Gemini, Antigravity) → Despliegue en Vercel.",
+    role: "Diseño UX/UI, Ilustración & Co-Developer (IA)",
+    tools: ["ChatGPT", "Gemini", "Antigravity", "Figma", "Illustrator", "Prototipado"],
+    prototype: "https://chequeate201.vercel.app/",
   },
   {
     id: "estamos_sanando",
@@ -49,18 +53,6 @@ const PROJECTS = [
     process: "Branding → Producción de podcast → Estrategia de contenidos → Diseño de piezas gráficas.",
     role: "Fundadora, Diseñadora y Productora de Contenido",
     tools: ["CapCut", "Figma", "Spotify for Podcasters", "Photoshop"],
-    prototype: "#",
-  },
-  {
-    id: "creacion_contenido",
-    name: "Creación de Contenido",
-    icon: "📹",
-    color: "#E8D5B7",
-    description: "Piezas audiovisuales, animaciones y contenido para redes sociales creados para distintas campañas.",
-    problem: "—",
-    process: "—",
-    role: "—",
-    tools: [],
     prototype: "#",
   },
 ];
@@ -325,20 +317,61 @@ function ProjectCard({
       contained={true}
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        {/* Hero */}
-        <div
-          style={{
-            height: 120,
-            background: `linear-gradient(135deg, ${project.color}40, ${project.color}80)`,
-            border: `2px solid ${project.color}`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "48px",
-          }}
-        >
-          {project.icon}
-        </div>
+        {/* Hero / GIF Preview */}
+        {"gif" in project && project.gif ? (
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              borderRadius: 6,
+              overflow: "hidden",
+              border: "2px inset #999",
+              background: "#000",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={project.gif as string}
+              alt={`Animación ${project.name}`}
+              style={{
+                width: "100%",
+                maxHeight: 220,
+                objectFit: "contain",
+                display: "block",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                bottom: 6,
+                right: 6,
+                background: "rgba(0,0,0,0.75)",
+                color: "#F2A7BB",
+                padding: "2px 8px",
+                borderRadius: 4,
+                fontFamily: "VT323, monospace",
+                fontSize: 13,
+                border: "1px solid rgba(242,167,187,0.4)",
+              }}
+            >
+              ▶ GIF Animado
+            </div>
+          </div>
+        ) : (
+          <div
+            style={{
+              height: 120,
+              background: `linear-gradient(135deg, ${project.color}40, ${project.color}80)`,
+              border: `2px solid ${project.color}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "48px",
+            }}
+          >
+            {project.icon}
+          </div>
+        )}
 
         {/* Description */}
         <Section title="Descripción">
@@ -375,20 +408,25 @@ function ProjectCard({
             target="_blank"
             rel="noopener noreferrer"
             style={{
-              display: "block",
-              padding: "10px",
-              background: project.color,
-              border: `2px solid rgba(0,0,0,0.2)`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 6,
+              padding: "10px 16px",
+              background: "linear-gradient(135deg, #B39DDB, #8E24AA)",
+              border: `2px outset #fff`,
+              borderRadius: 6,
               textAlign: "center",
-              fontFamily: "var(--font-pixel)",
-              fontSize: "7px",
-              color: "var(--px-dark)",
+              fontFamily: "VT323, monospace",
+              fontSize: "18px",
+              color: "#fff",
               textDecoration: "none",
-              boxShadow: "3px 3px 0 rgba(0,0,0,0.3)",
+              fontWeight: "bold",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
               cursor: "pointer",
             }}
           >
-            Ver prototipo →
+            🌐 Abrir Aplicación Web ({project.prototype.replace("https://", "")}) →
           </a>
         )}
       </div>
@@ -508,16 +546,14 @@ function AplicacionesWindow({ onClose }: { onClose: () => void }) {
   );
 }
 
-
-
-// ---- Spot Publicitario ----
-function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
+// ---- PRODUCCIONES ----
+function ProduccionesWindow({ onClose }: { onClose: () => void }) {
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [videoError, setVideoError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const { play } = useAudio();
 
-  const handleOpenModal = () => {
+  const handleOpenVideo = () => {
     play("click");
     setVideoError(false);
     setShowVideoModal(true);
@@ -534,94 +570,149 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
   return (
     <>
       <PixelWindow
-        id="spot"
-        title="🎬 Spot Publicitario — DonaxVida"
+        id="producciones"
+        title="🎬 PRODUCCIONES"
         onClose={onClose}
         defaultX={40}
         defaultY={20}
-        width={480}
+        width={490}
         style="win95"
         icon="🎬"
         contained={true}
       >
-        <div style={{ padding: 8, background: "#D4D0C8" }}>
-          {/* Video Thumbnail & Action Card */}
+        <div style={{ padding: 12, background: "#D4D0C8", display: "flex", flexDirection: "column", gap: 12 }}>
+          {/* PRODUCCIÓN 1: Spot Publicitario */}
           <div
             style={{
-              width: "100%",
-              height: 160,
-              background: "linear-gradient(135deg, #1C1828, #2A2438)",
+              background: "#E4E0D8",
+              border: "2px outset #fff",
               borderRadius: 6,
-              border: "2px inset #999",
+              padding: 12,
               display: "flex",
               flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 10,
-              padding: 16,
-              marginBottom: 12,
-              boxShadow: "inset 0 0 20px rgba(0,0,0,0.5)",
+              gap: 8,
             }}
           >
-            <div
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ fontSize: 24 }}>🎬</span>
+              <div style={{ fontFamily: "VT323, monospace", fontSize: 18, fontWeight: "bold", color: "#000" }}>
+                DonaxVida — Spot Publicitario
+              </div>
+            </div>
+            <p style={{ fontFamily: "VT323, monospace", fontSize: 15, color: "#2D2D3A", margin: 0, lineHeight: 1.4 }}>
+              Spot publicitario de concientización para la campaña &quot;DonaxVida&quot;. Edición y postproducción audiovisual realizada con CapCut.
+            </p>
+            <div style={{ fontSize: 14, fontFamily: "VT323, monospace", color: "#444" }}>
+              <strong>Rol:</strong> Dirección creativa, guión, producción y edición audiovisual.
+            </div>
+            <button
+              onClick={handleOpenVideo}
               style={{
+                marginTop: 4,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
+                padding: "8px 14px",
+                background: "linear-gradient(135deg, #B39DDB, #8E24AA)",
+                border: "2px outset #fff",
+                borderRadius: 6,
+                color: "white",
                 fontFamily: "VT323, monospace",
-                fontSize: "18px",
-                color: "#F2A7BB",
-                letterSpacing: "0.05em",
-                textShadow: "0 2px 4px rgba(0,0,0,0.6)",
+                fontSize: "16px",
+                cursor: "pointer",
+                fontWeight: "bold",
               }}
             >
-              DONAXVIDA — SPOT PUBLICITARIO
-            </div>
-
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
-              <button
-                onClick={handleOpenModal}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "10px 18px",
-                  background: "linear-gradient(135deg, #B39DDB, #8E24AA)",
-                  border: "2px outset #fff",
-                  borderRadius: 8,
-                  color: "white",
-                  fontFamily: "VT323, monospace",
-                  fontSize: "18px",
-                  cursor: "pointer",
-                  fontWeight: 700,
-                  boxShadow: "0 4px 14px rgba(0,0,0,0.4)",
-                }}
-              >
-                ▶ VER SPOT PUBLICITARIO
-              </button>
-            </div>
+              ▶ VER SPOT PUBLICITARIO
+            </button>
           </div>
 
-          <Section title="Descripción">
-            <p style={{ lineHeight: 1.6, fontFamily: "VT323, monospace", fontSize: 16 }}>
-              Spot publicitario de concientización para la campaña "DonaxVida". Edición y postproducción audiovisual realizada con CapCut.
-            </p>
-          </Section>
-
-          <br />
-          <Section title="Mi Rol">
-            <p style={{ fontFamily: "VT323, monospace", fontSize: 16 }}>
-              Dirección creativa, guión, producción y edición audiovisual.
-            </p>
-          </Section>
-
-          <br />
-          <Section title="Herramientas">
-            <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 4 }}>
-              {["CapCut"].map((tool) => (
-                <span key={tool} className="skill-tag">
-                  {tool}
-                </span>
-              ))}
+          {/* PRODUCCIÓN 2: Videojuego Women Game Jam 2025 */}
+          <div
+            style={{
+              background: "#E4E0D8",
+              border: "2px outset #fff",
+              borderRadius: 6,
+              padding: 12,
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ fontSize: 24 }}>🎮</span>
+              <div style={{ fontFamily: "VT323, monospace", fontSize: 18, fontWeight: "bold", color: "#000" }}>
+                Videojuego — Women Game Jam 2025
+              </div>
             </div>
-          </Section>
+
+            {/* Cover Image */}
+            <div
+              style={{
+                width: "100%",
+                borderRadius: 6,
+                overflow: "hidden",
+                border: "2px inset #999",
+                background: "#000",
+                maxHeight: 180,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/trabajos/PRODUCCIONES/theafter.jpeg"
+                alt="Portada del Videojuego - Women Game Jam 2025"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </div>
+
+            <p style={{ fontFamily: "VT323, monospace", fontSize: 15, color: "#2D2D3A", margin: 0, lineHeight: 1.4 }}>
+              Videojuego desarrollado en la Women Game Jam 2025. Participación en el diseño del juego y en la creación de la narrativa interactiva.
+            </p>
+            <div style={{ fontSize: 14, fontFamily: "VT323, monospace", color: "#444" }}>
+              <strong>Mi Rol:</strong> Game design / Narrativa
+            </div>
+            <a
+              href="https://itch.io/jam/women-game-jam-2025/rate/3802081#google_vignette"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => play("click")}
+              style={{
+                marginTop: 4,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
+                padding: "8px 14px",
+                background: "linear-gradient(135deg, #FF7043, #D84315)",
+                border: "2px outset #fff",
+                borderRadius: 6,
+                color: "white",
+                fontFamily: "VT323, monospace",
+                fontSize: "16px",
+                textDecoration: "none",
+                fontWeight: "bold",
+              }}
+            >
+              🎮 Ver / Calificar Videojuego en itch.io →
+            </a>
+          </div>
+        </div>
+
+        <div
+          style={{
+            borderTop: "1px solid #999",
+            padding: "4px 8px",
+            fontFamily: "VT323, monospace",
+            fontSize: "14px",
+            color: "#000",
+            background: "#C0C0C0",
+          }}
+        >
+          2 producciones disponibles
         </div>
       </PixelWindow>
 
@@ -712,7 +803,7 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
                 >
                   <p>Hubo un inconveniente al cargar el reproductor incorporado.</p>
                   <a
-                    href="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4"
+                    href="/trabajos/PRODUCCIONES/SPOTDONAXVIDA.mp4"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
@@ -743,7 +834,7 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
                     background: "#000",
                   }}
                 >
-                  <source src="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4" type="video/mp4" />
+                  <source src="/trabajos/PRODUCCIONES/SPOTDONAXVIDA.mp4" type="video/mp4" />
                   Tu navegador no soporta el reproductor de video.
                 </video>
               )}
@@ -756,7 +847,7 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
                 }}
               >
                 <a
-                  href="/trabajos/spot_publicitario/SPOTDONAXVIDA.mp4"
+                  href="/trabajos/PRODUCCIONES/SPOTDONAXVIDA.mp4"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
@@ -777,123 +868,6 @@ function SpotPublicitarioWindow({ onClose }: { onClose: () => void }) {
     </>
   );
 }
-
-// ---- Creación de Contenido ----
-function CreacionContenidoWindow({ onClose }: { onClose: () => void }) {
-  const [playing, setPlaying] = useState<string | null>(null);
-  const { play } = useAudio();
-
-  return (
-    <>
-      <PixelWindow
-        id="contenido"
-        title="📹 Creación de Contenido"
-        onClose={onClose}
-        defaultX={60}
-        defaultY={20}
-        width={440}
-        style="win95"
-        icon="📹"
-        contained={true}
-      >
-        <div style={{ padding: 8, background: "#D4D0C8" }}>
-          <p
-            style={{
-              fontFamily: "VT323, monospace",
-              fontSize: 16,
-              marginBottom: 12,
-              color: "#2D2D3A",
-            }}
-          >
-            Videos y piezas de contenido para redes sociales.
-          </p>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: 8,
-            }}
-          >
-            {CONTENT_ITEMS.map((item) => (
-              <button
-                key={item.id}
-                className="gallery-thumb"
-                onClick={() => {
-                  play("click");
-                  setPlaying(item.id);
-                }}
-                style={{
-                  background: item.color + "60",
-                  border: "2px inset #999",
-                  cursor: "pointer",
-                  padding: 0,
-                  height: 70,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 4,
-                }}
-              >
-                <span style={{ fontSize: 24 }}>{item.icon}</span>
-                <span
-                  style={{
-                    fontFamily: "VT323, monospace",
-                    fontSize: 13,
-                    color: "#000",
-                  }}
-                >
-                  {item.label}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </PixelWindow>
-
-      <AnimatePresence>
-        {playing && (
-          <PixelWindow
-            id="video-player"
-            title="▶ Reproductor"
-            onClose={() => setPlaying(null)}
-            defaultX={340}
-            defaultY={100}
-            width={340}
-          >
-            <div
-              style={{
-                width: "100%",
-                height: 180,
-                background: "#000",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "column",
-                gap: 12,
-              }}
-            >
-              <div style={{ fontSize: 48, color: "white" }}>▶</div>
-              <div
-                style={{
-                  fontFamily: "var(--font-pixel)",
-                  fontSize: "8px",
-                  color: "var(--px-rose)",
-                }}
-              >
-                Adjuntá tus videos
-                <br />
-                en /public/videos/
-              </div>
-            </div>
-          </PixelWindow>
-        )}
-      </AnimatePresence>
-    </>
-  );
-}
-
-
 
 // ---- Main Desktop OS ----
 export default function DesktopOS({ onClose }: { onClose: () => void }) {
@@ -929,9 +903,8 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
 
   const FOLDERS = [
     { id: "aplicaciones", label: "Aplicaciones", icon: "📁", x: 20, y: 20 },
-    { id: "estamos_sanando", label: "Estamos Sanando", icon: "📁", x: 120, y: 20 },
-    { id: "spot", label: "Spot Publicitario", icon: "📁", x: 220, y: 20 },
-    { id: "contenido", label: "Creación de Contenido", icon: "📁", x: 20, y: 120 },
+    { id: "estamos_sanando", label: "Estamos Sanando", icon: "📁", x: 130, y: 20 },
+    { id: "producciones", label: "PRODUCCIONES", icon: "🎬", x: 240, y: 20 },
   ];
 
   const openFolderHandler = (id: string) => {
@@ -1091,11 +1064,8 @@ export default function DesktopOS({ onClose }: { onClose: () => void }) {
               {openFolder === "estamos_sanando" && (
                 <EstamosSanandoWindow onClose={() => setOpenFolder(null)} />
               )}
-              {openFolder === "spot" && (
-                <SpotPublicitarioWindow onClose={() => setOpenFolder(null)} />
-              )}
-              {openFolder === "contenido" && (
-                <CreacionContenidoWindow onClose={() => setOpenFolder(null)} />
+              {openFolder === "producciones" && (
+                <ProduccionesWindow onClose={() => setOpenFolder(null)} />
               )}
             </AnimatePresence>
           </div>
