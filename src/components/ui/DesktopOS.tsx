@@ -293,125 +293,238 @@ function ProjectCard({
   project: (typeof PROJECTS)[0];
   onClose: () => void;
 }) {
+  const [isZoomed, setIsZoomed] = useState(false);
+
   return (
-    <PixelWindow
-      id={`project-${project.id}`}
-      title={`${project.icon} ${project.name}`}
-      onClose={onClose}
-      defaultX={20}
-      defaultY={10}
-      width={640}
-      contained={true}
-    >
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "240px 1fr",
-          gap: 14,
-          alignItems: "start",
-        }}
+    <>
+      <PixelWindow
+        id={`project-${project.id}`}
+        title={`${project.icon} ${project.name}`}
+        onClose={onClose}
+        defaultX={20}
+        defaultY={10}
+        width={780}
+        contained={true}
       >
-        {/* Left Column: GIF/Media & Link */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {"gif" in project && project.gif ? (
-            <div
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "250px 1fr",
+            gap: 14,
+            alignItems: "start",
+          }}
+        >
+          {/* Left Column: GIF/Media & Link */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {"gif" in project && project.gif ? (
+              <div
+                onClick={() => setIsZoomed(true)}
+                title="Haz clic para ampliar la vista previa"
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  borderRadius: 8,
+                  overflow: "hidden",
+                  border: "2px inset #999",
+                  background: "#000",
+                  cursor: "zoom-in",
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={project.gif as string}
+                  alt={`Vista previa ${project.name}`}
+                  style={{
+                    width: "100%",
+                    maxHeight: 180,
+                    objectFit: "contain",
+                    display: "block",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 6,
+                    right: 6,
+                    background: "rgba(18, 12, 26, 0.88)",
+                    color: "#FFF8EF",
+                    fontFamily: "var(--font-pixel)",
+                    fontSize: "7px",
+                    padding: "3px 8px",
+                    borderRadius: 6,
+                    border: "1px solid rgba(242,167,187,0.5)",
+                    backdropFilter: "blur(4px)",
+                    pointerEvents: "none",
+                  }}
+                >
+                  🔍 AMPLIA VISTA PREVIA
+                </div>
+              </div>
+            ) : (
+              <div
+                style={{
+                  height: 120,
+                  background: `linear-gradient(135deg, ${project.color}40, ${project.color}80)`,
+                  border: `2px solid ${project.color}`,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "48px",
+                }}
+              >
+                {project.icon}
+              </div>
+            )}
+
+            {project.prototype !== "#" && (
+              <a
+                href={project.prototype}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6,
+                  padding: "8px 12px",
+                  background: "linear-gradient(135deg, #B39DDB, #8E24AA)",
+                  border: `2px outset #fff`,
+                  borderRadius: 6,
+                  textAlign: "center",
+                  fontFamily: "VT323, monospace",
+                  fontSize: "17px",
+                  color: "#fff",
+                  textDecoration: "none",
+                  fontWeight: "bold",
+                  boxShadow: "0 3px 8px rgba(0,0,0,0.3)",
+                  cursor: "pointer",
+                }}
+              >
+                🌐 Abrir App Web →
+              </a>
+            )}
+          </div>
+
+          {/* Right Column: Info & Details */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+            <Section title="Descripción">
+              <p style={{ lineHeight: 1.35, margin: 0 }}>{project.description}</p>
+            </Section>
+
+            <Section title="Problema">
+              <p style={{ lineHeight: 1.35, margin: 0 }}>{project.problem}</p>
+            </Section>
+
+            <Section title="Proceso">
+              <p style={{ lineHeight: 1.35, margin: 0 }}>{project.process}</p>
+            </Section>
+
+            <Section title="Mi Rol">
+              <p style={{ lineHeight: 1.35, margin: 0 }}>{project.role}</p>
+            </Section>
+
+            {project.tools.length > 0 && (
+              <Section title="Herramientas">
+                <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 4 }}>
+                  {project.tools.map((tool) => (
+                    <span key={tool} className="skill-tag" style={{ background: project.color }}>
+                      {tool}
+                    </span>
+                  ))}
+                </div>
+              </Section>
+            )}
+          </div>
+        </div>
+      </PixelWindow>
+
+      {/* Lightbox / Zoom Modal for GIF */}
+      <AnimatePresence>
+        {isZoomed && "gif" in project && project.gif && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 9999,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "rgba(10, 8, 16, 0.88)",
+              backdropFilter: "blur(10px)",
+              padding: 24,
+            }}
+            onClick={() => setIsZoomed(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
               style={{
-                width: "100%",
-                borderRadius: 6,
-                overflow: "hidden",
-                border: "2px inset #999",
-                background: "#000",
+                position: "relative",
+                maxWidth: "92vw",
+                maxHeight: "88vh",
+                background: "#161022",
+                border: "3px solid var(--px-rose)",
+                borderRadius: 18,
+                padding: 16,
+                boxShadow: "0 25px 70px rgba(0,0,0,0.85), 0 0 35px rgba(242,167,187,0.4)",
               }}
+              onClick={(e) => e.stopPropagation()}
             >
+              <button
+                onClick={() => setIsZoomed(false)}
+                style={{
+                  position: "absolute",
+                  top: -14,
+                  right: -14,
+                  width: 34,
+                  height: 34,
+                  borderRadius: "50%",
+                  background: "var(--px-rose)",
+                  border: "2px solid #FFF",
+                  color: "#120C1A",
+                  fontWeight: "bold",
+                  fontSize: "14px",
+                  cursor: "pointer",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+                }}
+              >
+                ✕
+              </button>
+
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={project.gif as string}
-                alt={`Vista previa ${project.name}`}
+                alt={`GIF Ampliado ${project.name}`}
                 style={{
-                  width: "100%",
-                  maxHeight: 180,
-                  objectFit: "contain",
+                  maxWidth: "100%",
+                  maxHeight: "75vh",
+                  borderRadius: 10,
                   display: "block",
+                  objectFit: "contain",
                 }}
               />
-            </div>
-          ) : (
-            <div
-              style={{
-                height: 120,
-                background: `linear-gradient(135deg, ${project.color}40, ${project.color}80)`,
-                border: `2px solid ${project.color}`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "48px",
-              }}
-            >
-              {project.icon}
-            </div>
-          )}
-
-          {project.prototype !== "#" && (
-            <a
-              href={project.prototype}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 6,
-                padding: "8px 12px",
-                background: "linear-gradient(135deg, #B39DDB, #8E24AA)",
-                border: `2px outset #fff`,
-                borderRadius: 6,
-                textAlign: "center",
-                fontFamily: "VT323, monospace",
-                fontSize: "17px",
-                color: "#fff",
-                textDecoration: "none",
-                fontWeight: "bold",
-                boxShadow: "0 3px 8px rgba(0,0,0,0.3)",
-                cursor: "pointer",
-              }}
-            >
-              🌐 Abrir App Web →
-            </a>
-          )}
-        </div>
-
-        {/* Right Column: Info & Details */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <Section title="Descripción">
-            <p style={{ lineHeight: 1.4, margin: 0 }}>{project.description}</p>
-          </Section>
-
-          <Section title="Problema">
-            <p style={{ lineHeight: 1.4, margin: 0 }}>{project.problem}</p>
-          </Section>
-
-          <Section title="Proceso">
-            <p style={{ lineHeight: 1.4, margin: 0 }}>{project.process}</p>
-          </Section>
-
-          <Section title="Mi Rol">
-            <p style={{ lineHeight: 1.4, margin: 0 }}>{project.role}</p>
-          </Section>
-
-          {project.tools.length > 0 && (
-            <Section title="Herramientas">
-              <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 4 }}>
-                {project.tools.map((tool) => (
-                  <span key={tool} className="skill-tag" style={{ background: project.color }}>
-                    {tool}
-                  </span>
-                ))}
+              <div
+                style={{
+                  marginTop: 12,
+                  textAlign: "center",
+                  fontFamily: "var(--font-pixel)",
+                  fontSize: "10px",
+                  color: "var(--px-rose)",
+                  letterSpacing: "0.04em",
+                }}
+              >
+                {project.name} — VISTA PREVIA AMPLIADA
               </div>
-            </Section>
-          )}
-        </div>
-      </div>
-    </PixelWindow>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -429,14 +542,14 @@ function Section({
           fontFamily: "var(--font-pixel)",
           fontSize: "7px",
           color: "var(--px-rose-dark)",
-          marginBottom: 6,
+          marginBottom: 2,
           borderBottom: "1px solid var(--px-beige)",
-          paddingBottom: 4,
+          paddingBottom: 2,
         }}
       >
         {title}
       </div>
-      <div style={{ fontFamily: "var(--font-body)", fontSize: "17px", color: "var(--px-dark)" }}>
+      <div style={{ fontFamily: "var(--font-body)", fontSize: "13.5px", color: "var(--px-dark)" }}>
         {children}
       </div>
     </div>
