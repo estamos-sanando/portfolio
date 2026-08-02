@@ -132,15 +132,15 @@ export default function LoadScreen() {
               />
             ))}
 
-            {/* ---- 2. CENTERED & RESPONSIVE TITLE & LOADING CARD ---- */}
-            <div className="absolute inset-0 px-4 flex flex-col items-center justify-center text-center z-20 pointer-events-auto md:inset-y-0 md:left-[18%] md:right-[4%] md:px-0">
+            {/* ---- 2. CENTERED & RESPONSIVE TITLE & PLAY BUTTON ---- */}
+            <div className="absolute inset-0 px-6 py-8 sm:px-12 sm:py-12 flex flex-col items-center justify-center text-center z-20 pointer-events-auto md:left-[16%] md:right-[4%] gap-6 sm:gap-8 md:gap-10 max-w-full overflow-y-auto">
               
-              {/* Prominent Name Badge */}
+              {/* 1. Prominent Name Badge: ANTONELLA COSTA */}
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="px-6 sm:px-10 py-2 sm:py-3 rounded-full flex items-center justify-center gap-3 shadow-2xl mb-3 sm:mb-4 max-w-[92vw]"
+                className="px-6 sm:px-10 py-2.5 sm:py-3.5 rounded-full flex items-center justify-center shadow-2xl max-w-[90vw]"
                 style={{
                   background: "linear-gradient(135deg, #FFF0F5, #F2A7BB, #D4748A)",
                   border: "3px solid #FFFFFF",
@@ -148,22 +148,27 @@ export default function LoadScreen() {
                 }}
               >
                 <span
-                  className="font-black text-xl sm:text-3xl md:text-4xl tracking-[0.2em] sm:tracking-[0.32em] text-[#1D1424] uppercase"
-                  style={{ fontFamily: "var(--font-body)", textShadow: "0 1px 2px rgba(255,255,255,0.8)" }}
+                  className="font-black text-lg sm:text-2xl md:text-3xl tracking-[0.25em] sm:tracking-[0.38em] text-[#1D1424] uppercase"
+                  style={{
+                    fontFamily: "var(--font-body)",
+                    textShadow: "0 1px 2px rgba(255,255,255,0.8)",
+                    wordSpacing: "0.35em",
+                  }}
                 >
                   ANTONELLA COSTA
                 </span>
               </motion.div>
 
-              {/* Main Title */}
+              {/* 2. Main Title: CREATIVA DIGITAL */}
               <motion.h1
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.1, duration: 0.5 }}
-                className="text-4xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white text-center leading-tight max-w-[94vw]"
+                className="text-3xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white text-center leading-tight max-w-[90vw]"
                 style={{
                   fontFamily: "'Pixelify Sans', var(--font-display), sans-serif",
-                  letterSpacing: "0.04em",
+                  letterSpacing: "0.06em",
+                  wordSpacing: "0.35em",
                   color: "#FFF5FA",
                   textShadow:
                     "0 0 45px rgba(242,167,187,0.95), 0 8px 25px rgba(0,0,0,0.95), 4px 4px 0px #8A3B58",
@@ -172,126 +177,81 @@ export default function LoadScreen() {
                 CREATIVA DIGITAL
               </motion.h1>
 
-              {/* Subtitle */}
+              {/* 3. Subtitle: PORTFOLIO */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="text-base sm:text-2xl md:text-4xl font-black tracking-[0.3em] sm:tracking-[0.5em] uppercase mt-2 sm:mt-3 text-[#E8D5B7] text-center"
-                style={{ textShadow: "0 3px 15px rgba(0,0,0,0.95), 0 0 10px rgba(232,213,183,0.4)" }}
+                className="text-base sm:text-2xl md:text-4xl font-black tracking-[0.35em] sm:tracking-[0.55em] uppercase text-[#E8D5B7] text-center max-w-[90vw]"
+                style={{
+                  textShadow: "0 3px 15px rgba(0,0,0,0.95), 0 0 10px rgba(232,213,183,0.4)",
+                  wordSpacing: "0.4em",
+                }}
               >
                 PORTFOLIO
               </motion.div>
 
-              {/* Sub-pills */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
-                className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mt-4 sm:mt-6 px-4 sm:px-8 py-2 sm:py-3 rounded-2xl shadow-xl max-w-[94vw]"
-                style={{
-                  background: "rgba(28, 18, 38, 0.88)",
-                  border: "2px solid rgba(242,167,187,0.5)",
-                  backdropFilter: "blur(12px)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
-                }}
-              >
-                {["COMUNICACIÓN", "CONTENIDOS", "DISEÑO", "IA"].map((item, idx) => (
-                  <div key={item} className="flex items-center gap-2 sm:gap-4">
-                    <span
-                      className="font-black text-xs sm:text-sm md:text-base tracking-[0.14em] sm:tracking-[0.22em]"
-                      style={{ color: "#FFF8EF", fontFamily: "var(--font-body)" }}
-                    >
-                      {item}
-                    </span>
-                    {idx < 3 && <span className="text-[#F2A7BB] text-xs sm:text-sm">✦</span>}
-                  </div>
-                ))}
-              </motion.div>
-
-              {/* Centered Loading Box Card */}
+              {/* 4. Play Button */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 }}
-                className="mt-5 sm:mt-8 px-6 sm:px-12 py-5 sm:py-7 rounded-3xl flex flex-col items-center gap-3 sm:gap-4 text-center shadow-2xl w-[92vw] max-w-xl"
-                style={{
-                  background: "rgba(36, 24, 46, 0.94)",
-                  border: "3px solid #F2A7BB",
-                  boxShadow:
-                    "0 20px 50px rgba(0,0,0,0.7), inset 0 0 25px rgba(242,167,187,0.2)",
-                  backdropFilter: "blur(14px)",
-                }}
+                transition={{ delay: 0.3 }}
+                className="pt-2 sm:pt-4"
               >
-                {/* Header text */}
-                <div className="flex items-center gap-2">
-                  <span
-                    className="font-black text-base tracking-[0.2em] uppercase text-[#FFF8EF]"
-                    style={{ fontFamily: "var(--font-body)" }}
-                  >
-                    {!hintReady ? "Cargando contenido..." : "¡CONOCÉ MI TRABAJO!"}
-                  </span>
-                </div>
-
-                {/* Animated Progress Bar */}
-                <div className="w-full flex items-center gap-4">
-                  <div
-                    className="flex-1 h-6 rounded-full p-1 relative overflow-hidden"
-                    style={{
-                      background: "rgba(18, 12, 26, 0.9)",
-                      border: "2px solid #D4748A",
-                    }}
-                  >
-                    <motion.div
-                      className="h-full rounded-full relative overflow-hidden"
-                      style={{
-                        background:
-                          "linear-gradient(90deg, #D4748A 0%, #F2A7BB 50%, #B39DDB 100%)",
-                        boxShadow: "0 0 16px rgba(242,167,187,0.9)",
-                      }}
-                      initial={{ width: "0%" }}
-                      animate={{ width: `${loadProgress}%` }}
-                      transition={{ ease: "easeOut" }}
-                    />
-                  </div>
-                  <span
-                    className="font-black text-base w-14 text-right"
-                    style={{ color: "#F2A7BB" }}
-                  >
-                    {loadProgress}%
-                  </span>
-                </div>
-
-                {/* Keypress message */}
-                <div className="h-9 flex items-center justify-center mt-1">
-                  {!hintReady ? (
-                    <span className="text-sm text-purple-200/75 italic tracking-wide">
-                      Preparando el estudio creativo...
-                    </span>
-                  ) : (
-                    <motion.div
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="cursor-pointer"
-                    >
-                      <motion.span
-                        animate={{
-                          scale: [1, 1.05, 1],
+                <motion.button
+                  onClick={handleStart}
+                  disabled={!hintReady}
+                  whileHover={hintReady ? { scale: 1.08 } : {}}
+                  whileTap={hintReady ? { scale: 0.95 } : {}}
+                  animate={
+                    hintReady
+                      ? {
                           boxShadow: [
-                            "0 0 12px rgba(242,167,187,0.5)",
-                            "0 0 30px rgba(242,167,187,0.95)",
-                            "0 0 12px rgba(242,167,187,0.5)",
+                            "0 10px 30px rgba(242,167,187,0.5), 0 0 20px rgba(255,255,255,0.6)",
+                            "0 10px 45px rgba(242,167,187,0.9), 0 0 35px rgba(255,255,255,0.9)",
+                            "0 10px 30px rgba(242,167,187,0.5), 0 0 20px rgba(255,255,255,0.6)",
                           ],
-                        }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                        className="font-black text-sm md:text-base tracking-wider px-8 py-3 rounded-full inline-block text-[#1D1424] bg-gradient-to-r from-[#F2A7BB] to-[#B39DDB]"
-                      >
-                        Presioná cualquier tecla para comenzar
-                      </motion.span>
-                    </motion.div>
+                        }
+                      : {}
+                  }
+                  transition={
+                    hintReady
+                      ? { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                      : {}
+                  }
+                  className="relative group px-10 sm:px-16 py-4 sm:py-5 rounded-full flex items-center justify-center gap-4 transition-all duration-300 cursor-pointer overflow-hidden max-w-[90vw]"
+                  style={{
+                    background: hintReady
+                      ? "linear-gradient(135deg, #F2A7BB 0%, #D4748A 50%, #8A3B58 100%)"
+                      : "rgba(40, 25, 50, 0.8)",
+                    border: "3px solid #FFFFFF",
+                  }}
+                >
+                  {/* Glossy top highlight */}
+                  <div className="absolute inset-x-0 top-0 h-1/2 bg-white/25 pointer-events-none rounded-t-full" />
+
+                  {!hintReady ? (
+                    <div className="flex items-center gap-3 text-white/90 font-bold tracking-[0.2em] text-sm sm:text-base">
+                      <span className="animate-spin text-lg sm:text-xl">🌸</span>
+                      <span style={{ wordSpacing: "0.2em" }}>CARGANDO {loadProgress}%</span>
+                    </div>
+                  ) : (
+                    <div
+                      className="flex items-center gap-3 sm:gap-5 text-white font-black text-xl sm:text-3xl md:text-4xl tracking-[0.3em] sm:tracking-[0.45em] uppercase"
+                      style={{
+                        textShadow: "0 2px 10px rgba(0,0,0,0.5)",
+                        wordSpacing: "0.3em",
+                      }}
+                    >
+                      <span className="text-2xl sm:text-4xl transform group-hover:scale-125 transition-transform duration-200">
+                        ▶
+                      </span>
+                      <span>PLAY</span>
+                    </div>
                   )}
-                </div>
+                </motion.button>
               </motion.div>
+
             </div>
           </motion.div>
         )}
